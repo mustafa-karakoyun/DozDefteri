@@ -173,4 +173,51 @@
 
     <!-- Settings -->
     <string name="debug_section_title" translatable="false">Developer</string>
+
+    <!-- Export and backup -->
+    <string name="all_profiles">All profiles</string>
+    <string name="pro_required">Requires Pro</string>
+    <string name="export_profile">Profile</string>
+    <string name="export_range">Date range</string>
+    <string name="export_range_value">%1$s – %2$s</string>
+    <string name="range_7">Last 7 days</string>
+    <string name="range_30">Last 30 days</string>
+    <string name="range_90">Last 90 days</string>
+    <string name="range_custom">Custom</string>
+    <string name="export_csv">Save as CSV</string>
+    <string name="export_pdf">Create PDF report</string>
+    <string name="export_pdf_simple_hint">The PDF report lists your medications and doses. Pro adds adherence per medication.</string>
+    <string name="export_pdf_detailed_hint">The PDF report includes adherence per medication and overall.</string>
+    <string name="export_failed">Could not save the file. Please try again.</string>
+    <string name="file_saved">File saved</string>
+    <string name="share">Share</string>
+    <string name="backup_section">Backup</string>
+    <string name="backup_hint">Your data is stored only on this phone. Save a backup file somewhere safe (for example cloud storage) to move or recover it.</string>
+    <string name="backup_create">Back up</string>
+    <string name="backup_restore">Restore from backup</string>
+    <string name="backup_restore_confirm_title">Restore this backup?</string>
+    <string name="backup_restore_confirm_text">All current data will be deleted and replaced with the data in the backup.</string>
+    <string name="backup_restored">Backup restored</string>
+    <string name="backup_error_invalid">This file is not a DozDefteri backup.</string>
+    <string name="backup_error_version">This backup was made with a newer version of DozDefteri. Update the app and try again.</string>
+    <string name="csv_date">date</string>
+    <string name="csv_planned_time">planned_time</string>
+    <string name="csv_medication">medication</string>
+    <string name="csv_dose">dose</string>
+    <string name="csv_unit">unit</string>
+    <string name="csv_status">status</string>
+    <string name="csv_action_time">action_time</string>
+    <string name="csv_profile">profile</string>
+    <string name="pdf_title">Medication report</string>
+    <string name="pdf_profile">Profile: %1$s</string>
+    <string name="pdf_range">Date range: %1$s – %2$s</string>
+    <string name="pdf_generated">Created: %1$s</string>
+    <string name="pdf_medications">Medications</string>
+    <string name="pdf_schedule">Schedule</string>
+    <string name="pdf_doses">Doses</string>
+    <string name="pdf_time">Time</string>
+    <string name="pdf_adherence">Adherence</string>
+    <string name="pdf_overall_adherence">Overall adherence: %1$s</string>
+    <string name="pdf_empty">No records</string>
+    <string name="pdf_page">%1$d/%2$d</string>
 </resources>

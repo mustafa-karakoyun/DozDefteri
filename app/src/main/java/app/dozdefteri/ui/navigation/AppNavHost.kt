@@ -35,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.dozdefteri.MainActivity
 import app.dozdefteri.R
+import app.dozdefteri.ui.export.ExportScreen
 import app.dozdefteri.ui.history.HistoryScreen
 import app.dozdefteri.ui.medications.MedicationEditScreen
 import app.dozdefteri.ui.medications.MedicationsScreen
@@ -134,7 +135,9 @@ fun AppNavHost(
             composable<History> { HistoryScreen() }
             composable<Settings> { SettingsScreen() }
             composable<BatteryGuide> { Placeholder(R.string.battery_guide_title) }
-            composable<Export> { Placeholder(R.string.export_title) }
+            composable<Export> {
+                ExportScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
+            }
             composable<Pro> { Placeholder(R.string.pro_title) }
         }
     }

@@ -34,6 +34,15 @@ class MedicationRepository @Inject constructor(
 
     suspend fun count(): Int = medicationDao.count()
 
+    /** Non-archived medications with their schedule, of one profile or of all profiles when [profileId] is null. */
+    suspend fun getActiveWithSchedules(profileId: Long?): List<MedicationWithSchedule> {
+        val schedules = scheduleDao.getAll().groupBy { it.medicationId }
+        return medicationDao.getAll()
+            .filter { !it.isArchived && (profileId == null || it.profileId == profileId) }
+            .sortedBy { it.name.lowercase() }
+            .map { MedicationWithSchedule(it, schedules[it.id]?.firstOrNull()) }
+    }
+
     /**
      * Inserts or updates a medication with its single schedule (MVP UI manages one schedule per medication),
      * records manual stock changes and regenerates future doses. Returns the medication id.

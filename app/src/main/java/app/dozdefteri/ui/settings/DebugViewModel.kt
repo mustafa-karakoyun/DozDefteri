@@ -1,4 +1,4 @@
-package app.dozdefteri.ui.today
+package app.dozdefteri.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -140,4 +140,37 @@
     <string name="error_interval_range">Choose between %1$d and %2$d days</string>
     <string name="error_end_before_start">End date cannot be before the start date</string>
     <string name="error_number_invalid">Enter 0 or more, with at most 2 decimals</string>
+
+    <!-- Today -->
+    <string name="status_taken">Taken</string>
+    <string name="status_missed">Missed</string>
+    <string name="status_skipped">Skipped</string>
+    <string name="status_snoozed">Snoozed</string>
+    <string name="status_pending">Pending</string>
+    <string name="warning_exact_alarms">Reminders may be late</string>
+    <string name="fix">Fix</string>
+    <string name="warning_notifications_off">Notifications are off</string>
+    <string name="turn_on">Turn on</string>
+    <string name="no_doses_today">No doses today</string>
+    <string name="section_as_needed">As needed</string>
+    <string name="switch_profile">Switch profile</string>
+    <string name="overdue">Late</string>
+    <string name="long_press_to_snooze">Long press to snooze</string>
+    <string name="undo">Undo</string>
+    <string name="take_now">Taken now</string>
+    <string name="low_stock_card_title">Running low</string>
+
+    <!-- History -->
+    <string name="monthly_adherence">Adherence this month: %1$s</string>
+    <string name="no_value">—</string>
+    <string name="percent_value">%1$d%%</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="day_all_taken">All taken</string>
+    <string name="day_partial">Partly taken</string>
+    <string name="day_missed">Missed dose</string>
+    <string name="day_no_doses">No doses</string>
+
+    <!-- Settings -->
+    <string name="debug_section_title" translatable="false">Developer</string>
 </resources>

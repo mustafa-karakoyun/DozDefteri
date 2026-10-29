@@ -134,4 +134,34 @@
     <string name="error_interval_range">%1$d ile %2$d gün arasında seç</string>
     <string name="error_end_before_start">Bitiş tarihi başlangıçtan önce olamaz</string>
     <string name="error_number_invalid">0 veya daha büyük, en fazla 2 ondalıklı bir sayı gir</string>
+
+    <!-- Bugün -->
+    <string name="status_taken">Alındı</string>
+    <string name="status_missed">Kaçırıldı</string>
+    <string name="status_skipped">Atlandı</string>
+    <string name="status_snoozed">Ertelendi</string>
+    <string name="status_pending">Bekliyor</string>
+    <string name="warning_exact_alarms">Hatırlatmalar gecikebilir</string>
+    <string name="fix">Düzelt</string>
+    <string name="warning_notifications_off">Bildirimler kapalı</string>
+    <string name="turn_on">Aç</string>
+    <string name="no_doses_today">Bugün için doz yok</string>
+    <string name="section_as_needed">Gerektiğinde</string>
+    <string name="switch_profile">Profil değiştir</string>
+    <string name="overdue">Gecikti</string>
+    <string name="long_press_to_snooze">Ertelemek için uzun bas</string>
+    <string name="undo">Geri al</string>
+    <string name="take_now">Şimdi aldım</string>
+    <string name="low_stock_card_title">Stoku azalanlar</string>
+
+    <!-- Geçmiş -->
+    <string name="monthly_adherence">Bu ayki uyum: %1$s</string>
+    <string name="no_value">—</string>
+    <string name="percent_value">%%%1$d</string>
+    <string name="previous_month">Önceki ay</string>
+    <string name="next_month">Sonraki ay</string>
+    <string name="day_all_taken">Tümü alındı</string>
+    <string name="day_partial">Kısmen alındı</string>
+    <string name="day_missed">Kaçırılan doz var</string>
+    <string name="day_no_doses">Doz yok</string>
 </resources>

@@ -33,17 +33,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.hilt.navigation.compose.hiltViewModel
-import app.dozdefteri.BuildConfig
 import app.dozdefteri.MainActivity
-import app.dozdefteri.ui.today.DebugViewModel
 import app.dozdefteri.R
+import app.dozdefteri.ui.history.HistoryScreen
 import app.dozdefteri.ui.medications.MedicationEditScreen
 import app.dozdefteri.ui.medications.MedicationsScreen
 import app.dozdefteri.ui.onboarding.OnboardingScreen
+import app.dozdefteri.ui.settings.SettingsScreen
+import app.dozdefteri.ui.today.TodayScreen
 import kotlinx.coroutines.launch
 
 private data class TopLevelTab(val route: Any, @StringRes val label: Int, val icon: ImageVector)
@@ -115,7 +112,9 @@ fun AppNavHost(
                     onOpenBatteryGuide = { navController.navigate(BatteryGuide) }
                 )
             }
-            composable<Today> { TodayPlaceholder() }
+            composable<Today> {
+                TodayScreen(onAddMedication = { navController.navigate(MedicationEdit()) })
+            }
             composable<Medications> {
                 MedicationsScreen(
                     onAdd = { navController.navigate(MedicationEdit()) },
@@ -132,8 +131,8 @@ fun AppNavHost(
                     onBack = { navController.popBackStack() }
                 )
             }
-            composable<History> { Placeholder(R.string.tab_history) }
-            composable<Settings> { Placeholder(R.string.tab_settings) }
+            composable<History> { HistoryScreen() }
+            composable<Settings> { SettingsScreen() }
             composable<BatteryGuide> { Placeholder(R.string.battery_guide_title) }
             composable<Export> { Placeholder(R.string.export_title) }
             composable<Pro> { Placeholder(R.string.pro_title) }
@@ -147,23 +146,6 @@ private fun NavHostController.navigateToTab(route: Any) {
         popUpTo<Today> { saveState = true }
         launchSingleTop = true
         restoreState = true
-    }
-}
-
-@Composable
-private fun TodayPlaceholder(debugViewModel: DebugViewModel = hiltViewModel()) {
-    val testName = stringResource(R.string.debug_test_medication_name)
-    Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(stringResource(R.string.tab_today))
-        if (BuildConfig.DEBUG) {
-            Button(onClick = { debugViewModel.createTestDose(testName) }) {
-                Text(stringResource(R.string.debug_create_test_dose))
-            }
-        }
     }
 }
 

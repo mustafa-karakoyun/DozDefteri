@@ -1,15 +1,13 @@
 package app.dozdefteri.ui.navigation
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Today
+import androidx.compose.material.icons.filled.Settings as SettingsIcon
+import androidx.compose.material.icons.filled.Today as TodayIcon
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -41,6 +38,7 @@ import app.dozdefteri.ui.history.HistoryScreen
 import app.dozdefteri.ui.medications.MedicationEditScreen
 import app.dozdefteri.ui.medications.MedicationsScreen
 import app.dozdefteri.ui.onboarding.OnboardingScreen
+import app.dozdefteri.ui.pro.ProScreen
 import app.dozdefteri.ui.profiles.ProfilesScreen
 import app.dozdefteri.ui.settings.SettingsScreen
 import app.dozdefteri.ui.today.TodayScreen
@@ -49,10 +47,10 @@ import kotlinx.coroutines.launch
 private data class TopLevelTab(val route: Any, @StringRes val label: Int, val icon: ImageVector)
 
 private val topLevelTabs = listOf(
-    TopLevelTab(Today, R.string.tab_today, Icons.Filled.Today),
+    TopLevelTab(Today, R.string.tab_today, Icons.Filled.TodayIcon),
     TopLevelTab(Medications, R.string.tab_medications, Icons.AutoMirrored.Filled.List),
     TopLevelTab(History, R.string.tab_history, Icons.Filled.CalendarMonth),
-    TopLevelTab(Settings, R.string.tab_settings, Icons.Filled.Settings)
+    TopLevelTab(Settings, R.string.tab_settings, Icons.Filled.SettingsIcon)
 )
 
 @Composable
@@ -150,7 +148,7 @@ fun AppNavHost(
             composable<Export> {
                 ExportScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
             }
-            composable<Pro> { Placeholder(R.string.pro_title) }
+            composable<Pro> { ProScreen(onBack = { navController.popBackStack() }) }
         }
     }
 }
@@ -161,12 +159,5 @@ private fun NavHostController.navigateToTab(route: Any) {
         popUpTo<Today> { saveState = true }
         launchSingleTop = true
         restoreState = true
-    }
-}
-
-@Composable
-private fun Placeholder(@StringRes title: Int) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(stringResource(title))
     }
 }

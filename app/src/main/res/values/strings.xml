@@ -287,4 +287,23 @@
     <string name="battery_steps_huawei">1. Settings > Battery > App launch.\n2. Find DozDefteri, turn off \"Manage automatically\".\n3. Turn on \"Auto-launch\", \"Secondary launch\" and \"Run in background\".</string>
     <string name="battery_steps_oppo">1. Settings > Battery > More settings > Optimize battery use: choose \"Don\'t optimize\" for DozDefteri.\n2. Settings > Apps > DozDefteri > Battery usage: allow background activity and auto launch.</string>
     <string name="battery_steps_vivo">1. Settings > Battery > Background power consumption management.\n2. Allow high background power use for DozDefteri.\n3. Settings > Apps > Autostart: turn on DozDefteri.</string>
+
+    <!-- Pro -->
+    <string name="pro_headline">Support DozDefteri with a one-time purchase</string>
+    <string name="pro_feature_profiles">Unlimited profiles for family members</string>
+    <string name="pro_feature_widget">Home screen widget with your next dose</string>
+    <string name="pro_feature_pdf">Detailed PDF report with adherence per medication</string>
+    <string name="pro_feature_colors">Extra accent colors</string>
+    <string name="pro_feature_all_profiles">Export all profiles together</string>
+    <string name="pro_price">One-time price: %1$s</string>
+    <string name="pro_price_unavailable">Price could not be loaded. Check that Google Play is available and try again later.</string>
+    <string name="pro_buy">Buy</string>
+    <string name="pro_restore">Restore purchase</string>
+    <string name="pro_always_free">Reminders and the number of medications are always free.</string>
+    <string name="pro_active_thanks">Pro is active. Thank you!</string>
+    <string name="pro_message_purchased">Pro unlocked. Thank you!</string>
+    <string name="pro_message_pending">Payment pending. Pro unlocks once the payment completes.</string>
+    <string name="pro_message_restored">Purchase restored</string>
+    <string name="pro_message_nothing">No previous purchase found for this Google account</string>
+    <string name="pro_message_error">Could not reach Google Play. Please try again.</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import app.dozdefteri.alarm.DoseNotifier
 import app.dozdefteri.alarm.DoseSync
 import app.dozdefteri.alarm.MaintenanceWorker
+import app.dozdefteri.billing.BillingManager
 import app.dozdefteri.core.di.ApplicationScope
 import app.dozdefteri.data.repository.ProfileRepository
 import dagger.hilt.android.HiltAndroidApp
@@ -26,6 +27,8 @@ class DozDefteriApp : Application(), Configuration.Provider {
 
     @Inject lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject lateinit var billingManager: BillingManager
+
     @Inject lateinit var clock: Clock
 
     @Inject
@@ -39,6 +42,7 @@ class DozDefteriApp : Application(), Configuration.Provider {
         super.onCreate()
         doseNotifier.createChannels()
         MaintenanceWorker.schedule(WorkManager.getInstance(this))
+        billingManager.start()
         appScope.launch {
             profileRepository.ensureDefaultProfile(getString(R.string.profile_default_name), clock.instant())
             doseSync.run("app_start")

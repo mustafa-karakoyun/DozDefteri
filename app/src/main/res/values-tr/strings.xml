@@ -277,4 +277,23 @@
     <string name="battery_steps_huawei">1. Ayarlar > Pil > Uygulama başlatma.\n2. DozDefteri\'ni bul, \"Otomatik yönet\"i kapat.\n3. \"Otomatik başlatma\", \"İkincil başlatma\" ve \"Arka planda çalış\"ı aç.</string>
     <string name="battery_steps_oppo">1. Ayarlar > Pil > Diğer ayarlar > Pil kullanımını optimize et: DozDefteri için \"Optimize etme\"yi seç.\n2. Ayarlar > Uygulamalar > DozDefteri > Pil kullanımı: arka plan etkinliğine ve otomatik başlatmaya izin ver.</string>
     <string name="battery_steps_vivo">1. Ayarlar > Pil > Arka plan güç tüketimi yönetimi.\n2. DozDefteri için yüksek arka plan güç kullanımına izin ver.\n3. Ayarlar > Uygulamalar > Otomatik başlatma: DozDefteri\'ni aç.</string>
+
+    <!-- Pro -->
+    <string name="pro_headline">DozDefteri\'ni tek seferlik bir satın almayla destekle</string>
+    <string name="pro_feature_profiles">Aile üyeleri için sınırsız profil</string>
+    <string name="pro_feature_widget">Sıradaki dozu gösteren ana ekran widget\'ı</string>
+    <string name="pro_feature_pdf">İlaç bazında uyum yüzdeli detaylı PDF rapor</string>
+    <string name="pro_feature_colors">Ek vurgu renkleri</string>
+    <string name="pro_feature_all_profiles">Tüm profilleri birlikte dışa aktarma</string>
+    <string name="pro_price">Tek seferlik fiyat: %1$s</string>
+    <string name="pro_price_unavailable">Fiyat yüklenemedi. Google Play\'in erişilebilir olduğundan emin olup daha sonra tekrar dene.</string>
+    <string name="pro_buy">Satın al</string>
+    <string name="pro_restore">Satın alımı geri yükle</string>
+    <string name="pro_always_free">Hatırlatmalar ve ilaç sayısı her zaman ücretsizdir.</string>
+    <string name="pro_active_thanks">Pro etkin. Teşekkürler!</string>
+    <string name="pro_message_purchased">Pro açıldı. Teşekkürler!</string>
+    <string name="pro_message_pending">Ödeme bekleniyor. Ödeme tamamlanınca Pro açılır.</string>
+    <string name="pro_message_restored">Satın alım geri yüklendi</string>
+    <string name="pro_message_nothing">Bu Google hesabında önceki bir satın alım bulunamadı</string>
+    <string name="pro_message_error">Google Play\'e ulaşılamadı. Lütfen tekrar dene.</string>
 </resources>

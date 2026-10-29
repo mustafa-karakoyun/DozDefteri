@@ -1,15 +1,15 @@
 package app.dozdefteri.core.di
 
+import app.dozdefteri.alarm.DoseNotifier
 import app.dozdefteri.data.repository.LowStockNotifier
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NotifierModule {
-    // Replaced by the real notification implementation in phase 2.
-    @Provides
-    fun provideLowStockNotifier(): LowStockNotifier = LowStockNotifier { }
+abstract class NotifierModule {
+    @Binds
+    abstract fun bindLowStockNotifier(notifier: DoseNotifier): LowStockNotifier
 }

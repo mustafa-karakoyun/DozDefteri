@@ -28,7 +28,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import app.dozdefteri.BuildConfig
 import app.dozdefteri.R
+import app.dozdefteri.ui.today.DebugViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 
 private data class TopLevelTab(val route: Any, @StringRes val label: Int, val icon: ImageVector)
 
@@ -73,10 +79,27 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             startDestination = Today,
             modifier = Modifier.padding(padding)
         ) {
-            composable<Today> { Placeholder(R.string.tab_today) }
+            composable<Today> { TodayPlaceholder() }
             composable<Medications> { Placeholder(R.string.tab_medications) }
             composable<History> { Placeholder(R.string.tab_history) }
             composable<Settings> { Placeholder(R.string.tab_settings) }
+        }
+    }
+}
+
+@Composable
+private fun TodayPlaceholder(debugViewModel: DebugViewModel = hiltViewModel()) {
+    val testName = stringResource(R.string.debug_test_medication_name)
+    Column(
+        Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(stringResource(R.string.tab_today))
+        if (BuildConfig.DEBUG) {
+            Button(onClick = { debugViewModel.createTestDose(testName) }) {
+                Text(stringResource(R.string.debug_create_test_dose))
+            }
         }
     }
 }

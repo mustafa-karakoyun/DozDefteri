@@ -41,6 +41,16 @@ class DoseRepository @Inject constructor(
 
     suspend fun nextOpenForProfile(profileId: Long): DoseEventDetails? = doseDao.getNextOpenForProfile(profileId)
 
+    /** Earliest `scheduledAt` of an open dose that has not been notified yet. */
+    suspend fun nextUnnotifiedTime(): Long? = doseDao.nextUnnotifiedTime()
+
+    /** Open, not yet notified doses scheduled at or before [limit]. */
+    suspend fun dueUnnotified(limit: Instant): List<DoseEventDetails> = doseDao.getDueUnnotified(limit.toEpochMilli())
+
+    suspend fun markNotified(eventIds: List<Long>, now: Instant) {
+        if (eventIds.isNotEmpty()) doseDao.markNotified(eventIds, now.toEpochMilli())
+    }
+
     /**
      * Creates the dose events of every non-archived schedule in `[now - 1 min, now + 48 h)`.
      * Existing events are kept untouched thanks to the unique `(scheduleId, originalScheduledAt)` index.

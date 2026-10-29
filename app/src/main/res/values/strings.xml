@@ -8,4 +8,24 @@
     <string name="tab_settings">Settings</string>
 
     <string name="profile_default_name">Me</string>
+
+    <!-- Notifications -->
+    <string name="channel_dose_reminders">Dose reminders</string>
+    <string name="channel_stock_alerts">Stock alerts</string>
+    <string name="channel_backup_reminders">Backup reminders</string>
+    <string name="action_taken">Taken</string>
+    <string name="action_snooze">Snooze</string>
+    <string name="action_skip">Skip</string>
+    <plurals name="dose_summary_title">
+        <item quantity="one">%d dose waiting</item>
+        <item quantity="other">%d doses waiting</item>
+    </plurals>
+    <string name="low_stock_notification_title">%1$s is running low</string>
+    <string name="low_stock_notification_text">%1$s left. Time to refill.</string>
+    <string name="backup_reminder_title">Back up your data</string>
+    <string name="backup_reminder_text">Your data lives only on this phone. Save a backup file to keep it safe.</string>
+
+    <!-- Debug -->
+    <string name="debug_create_test_dose" translatable="false">Create test dose in 1 minute</string>
+    <string name="debug_test_medication_name" translatable="false">Test dose</string>
 </resources>

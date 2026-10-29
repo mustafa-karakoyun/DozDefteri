@@ -6,4 +6,20 @@
     <string name="tab_settings">Ayarlar</string>
 
     <string name="profile_default_name">Ben</string>
+
+    <!-- Bildirimler -->
+    <string name="channel_dose_reminders">Doz hatırlatmaları</string>
+    <string name="channel_stock_alerts">Stok uyarıları</string>
+    <string name="channel_backup_reminders">Yedek hatırlatmaları</string>
+    <string name="action_taken">Aldım</string>
+    <string name="action_snooze">Ertele</string>
+    <string name="action_skip">Atla</string>
+    <plurals name="dose_summary_title">
+        <item quantity="one">%d doz bekliyor</item>
+        <item quantity="other">%d doz bekliyor</item>
+    </plurals>
+    <string name="low_stock_notification_title">%1$s azalıyor</string>
+    <string name="low_stock_notification_text">%1$s kaldı. Yenileme zamanı.</string>
+    <string name="backup_reminder_title">Verilerini yedekle</string>
+    <string name="backup_reminder_text">Verilerin yalnızca bu telefonda. Güvende tutmak için bir yedek dosyası kaydet.</string>
 </resources>

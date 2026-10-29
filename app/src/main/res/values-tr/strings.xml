@@ -211,4 +211,70 @@
     <string name="pdf_overall_adherence">Genel uyum: %1$s</string>
     <string name="pdf_empty">Kayıt yok</string>
     <string name="pdf_page">%1$d/%2$d</string>
+
+    <!-- Ayarlar -->
+    <string name="settings_appearance">Görünüm</string>
+    <string name="settings_theme">Tema</string>
+    <string name="theme_system">Sistem varsayılanı</string>
+    <string name="theme_light">Açık</string>
+    <string name="theme_dark">Koyu</string>
+    <string name="settings_accent">Vurgu rengi</string>
+    <string name="settings_accent_pro_hint">Pro ile daha fazla renk</string>
+    <string name="accent_teal">Petrol mavisi</string>
+    <string name="accent_indigo">Çivit</string>
+    <string name="accent_orange">Turuncu</string>
+    <string name="accent_green">Yeşil</string>
+    <string name="settings_reminders">Hatırlatmalar</string>
+    <string name="settings_snooze">Erteleme süresi</string>
+    <string name="settings_missed_after">Kaçırıldı sayılma süresi</string>
+    <string name="settings_exact_alarms">Tam zamanlı hatırlatma</string>
+    <string name="settings_notifications">Bildirim ayarları</string>
+    <string name="settings_allowed">İzin verildi</string>
+    <string name="settings_not_allowed">İzin yok, düzeltmek için dokun</string>
+    <string name="settings_data">Veri</string>
+    <string name="settings_pro_status">Durum</string>
+    <string name="settings_pro_active">Pro etkin</string>
+    <string name="settings_pro_inactive">Ücretsiz sürüm</string>
+    <string name="settings_about">Hakkında</string>
+    <string name="settings_version">Sürüm</string>
+    <string name="settings_privacy_policy">Gizlilik politikası</string>
+    <plurals name="minutes">
+        <item quantity="one">%d dakika</item>
+        <item quantity="other">%d dakika</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d saat</item>
+        <item quantity="other">%d saat</item>
+    </plurals>
+
+    <!-- Profiller -->
+    <string name="profiles_title">Profiller</string>
+    <string name="profile_add">Profil ekle</string>
+    <string name="profile_edit">Profili düzenle</string>
+    <string name="profile_edit_named">%1$s düzenle</string>
+    <string name="profile_delete_named">%1$s sil</string>
+    <string name="profile_active">Aktif</string>
+    <string name="profile_name">Ad</string>
+    <string name="profile_color">Renk</string>
+    <string name="profile_color_option">Renk %1$d</string>
+    <string name="profile_delete_title">%1$s silinsin mi?</string>
+    <string name="profile_delete_text">Bu profilin tüm ilaçları, geçmişi ve stok kayıtları kalıcı olarak silinecek.</string>
+    <string name="profiles_pro_hint">Ücretsiz sürüm bir profil içerir. Aile üyelerini Pro ile ekleyebilirsin.</string>
+    <string name="delete">Sil</string>
+
+    <!-- Pil rehberi -->
+    <string name="battery_intro">Bazı telefonlar pil tasarrufu için uygulamaları arka planda durdurur; bu da hatırlatmaları geciktirebilir veya engelleyebilir. DozDefteri\'nin pil kısıtlaması olmadan çalışmasına izin vermek hatırlatmaların zamanında gelmesini sağlar.</string>
+    <string name="battery_open_settings">Pil optimizasyonu ayarlarını aç</string>
+    <string name="battery_brand_generic">Genel adımlar</string>
+    <string name="battery_brand_xiaomi">Xiaomi, Redmi, POCO</string>
+    <string name="battery_brand_samsung">Samsung</string>
+    <string name="battery_brand_huawei">Huawei, Honor</string>
+    <string name="battery_brand_oppo">OPPO, realme, OnePlus</string>
+    <string name="battery_brand_vivo">vivo</string>
+    <string name="battery_steps_generic">1. Ayarlar > Uygulamalar > DozDefteri > Pil bölümünü aç.\n2. \"Kısıtlanmamış\" veya \"Optimize etme\" seçeneğini seç.\n3. DozDefteri için bildirimlerin açık olduğundan emin ol.</string>
+    <string name="battery_steps_xiaomi">1. Ayarlar > Uygulamalar > Uygulamaları yönet > DozDefteri.\n2. \"Otomatik başlatma\"yı aç.\n3. Pil tasarrufu > \"Kısıtlama yok\".\n4. Son uygulamalarda DozDefteri\'ne uzun basıp kilit simgesine dokun.</string>
+    <string name="battery_steps_samsung">1. Ayarlar > Pil > Arka plan kullanım sınırları.\n2. DozDefteri\'nin \"Uyuyan uygulamalar\" veya \"Derin uyuyan uygulamalar\" listesinde olmadığından emin ol.\n3. Ayarlar > Uygulamalar > DozDefteri > Pil > \"Kısıtlanmamış\".</string>
+    <string name="battery_steps_huawei">1. Ayarlar > Pil > Uygulama başlatma.\n2. DozDefteri\'ni bul, \"Otomatik yönet\"i kapat.\n3. \"Otomatik başlatma\", \"İkincil başlatma\" ve \"Arka planda çalış\"ı aç.</string>
+    <string name="battery_steps_oppo">1. Ayarlar > Pil > Diğer ayarlar > Pil kullanımını optimize et: DozDefteri için \"Optimize etme\"yi seç.\n2. Ayarlar > Uygulamalar > DozDefteri > Pil kullanımı: arka plan etkinliğine ve otomatik başlatmaya izin ver.</string>
+    <string name="battery_steps_vivo">1. Ayarlar > Pil > Arka plan güç tüketimi yönetimi.\n2. DozDefteri için yüksek arka plan güç kullanımına izin ver.\n3. Ayarlar > Uygulamalar > Otomatik başlatma: DozDefteri\'ni aç.</string>
 </resources>

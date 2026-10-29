@@ -35,11 +35,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.dozdefteri.MainActivity
 import app.dozdefteri.R
+import app.dozdefteri.ui.battery.BatteryGuideScreen
 import app.dozdefteri.ui.export.ExportScreen
 import app.dozdefteri.ui.history.HistoryScreen
 import app.dozdefteri.ui.medications.MedicationEditScreen
 import app.dozdefteri.ui.medications.MedicationsScreen
 import app.dozdefteri.ui.onboarding.OnboardingScreen
+import app.dozdefteri.ui.profiles.ProfilesScreen
 import app.dozdefteri.ui.settings.SettingsScreen
 import app.dozdefteri.ui.today.TodayScreen
 import kotlinx.coroutines.launch
@@ -133,8 +135,18 @@ fun AppNavHost(
                 )
             }
             composable<History> { HistoryScreen() }
-            composable<Settings> { SettingsScreen() }
-            composable<BatteryGuide> { Placeholder(R.string.battery_guide_title) }
+            composable<Settings> {
+                SettingsScreen(
+                    onBatteryGuide = { navController.navigate(BatteryGuide) },
+                    onExport = { navController.navigate(Export) },
+                    onProfiles = { navController.navigate(Profiles) },
+                    onPro = { navController.navigate(Pro) }
+                )
+            }
+            composable<Profiles> {
+                ProfilesScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
+            }
+            composable<BatteryGuide> { BatteryGuideScreen(onBack = { navController.popBackStack() }) }
             composable<Export> {
                 ExportScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
             }

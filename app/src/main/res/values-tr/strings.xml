@@ -4,4 +4,6 @@
     <string name="tab_medications">İlaçlar</string>
     <string name="tab_history">Geçmiş</string>
     <string name="tab_settings">Ayarlar</string>
+
+    <string name="profile_default_name">Ben</string>
 </resources>

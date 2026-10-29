@@ -66,7 +66,9 @@ class HistoryViewModel @Inject constructor(
     private fun today(): LocalDate = LocalDate.now(clock)
 
     private fun build(month: YearMonth, doses: List<DoseEventDetails>): HistoryUiState {
-        val byDay = doses.groupBy { Instant.ofEpochMilli(it.event.originalScheduledAt).atZone(clock.zone).toLocalDate() }
+        val byDay = doses.groupBy {
+            Instant.ofEpochMilli(it.event.originalScheduledAt).atZone(clock.zone).toLocalDate()
+        }
         val scheduled = doses.filter { it.scheduleType != ScheduleType.AS_NEEDED }
         return HistoryUiState(
             isLoading = false,

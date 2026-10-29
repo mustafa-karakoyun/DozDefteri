@@ -47,7 +47,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import app.dozdefteri.R
 import app.dozdefteri.ui.components.PermissionSnapshot
 import app.dozdefteri.ui.components.SystemSettings

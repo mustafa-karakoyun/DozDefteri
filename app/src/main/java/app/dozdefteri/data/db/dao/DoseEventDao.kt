@@ -70,19 +70,28 @@ interface DoseEventDao {
     @Query("SELECT id FROM dose_events WHERE status IN $OPEN AND scheduledAt < :threshold")
     suspend fun getOverdueOpenIds(threshold: Long): List<Long>
 
-    @Query("UPDATE dose_events SET status = 'MISSED', actionAt = :now WHERE status IN $OPEN AND scheduledAt < :threshold")
+    @Query(
+        "UPDATE dose_events SET status = 'MISSED', actionAt = :now " +
+            "WHERE status IN $OPEN AND scheduledAt < :threshold"
+    )
     suspend fun markOverdueMissed(threshold: Long, now: Long): Int
 
     @Query("SELECT MIN(scheduledAt) FROM dose_events WHERE status IN $OPEN AND notifiedAt IS NULL")
     suspend fun nextUnnotifiedTime(): Long?
 
-    @Query("$DETAILS_SELECT WHERE e.status IN $OPEN AND e.notifiedAt IS NULL AND e.scheduledAt <= :limit ORDER BY e.scheduledAt")
+    @Query(
+        "$DETAILS_SELECT WHERE e.status IN $OPEN AND e.notifiedAt IS NULL AND e.scheduledAt <= :limit " +
+            "ORDER BY e.scheduledAt"
+    )
     suspend fun getDueUnnotified(limit: Long): List<DoseEventDetails>
 
     @Query("UPDATE dose_events SET notifiedAt = :now WHERE id IN (:ids)")
     suspend fun markNotified(ids: List<Long>, now: Long)
 
-    @Query("SELECT id FROM dose_events WHERE medicationId = :medicationId AND status IN $OPEN AND notifiedAt IS NOT NULL")
+    @Query(
+        "SELECT id FROM dose_events WHERE medicationId = :medicationId AND status IN $OPEN " +
+            "AND notifiedAt IS NOT NULL"
+    )
     suspend fun getNotifiedOpenIdsForMedication(medicationId: Long): List<Long>
 
     @Query("SELECT id FROM dose_events WHERE profileId = :profileId AND status IN $OPEN AND notifiedAt IS NOT NULL")

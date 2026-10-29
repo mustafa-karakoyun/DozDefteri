@@ -152,7 +152,9 @@ class DoseNotifier @Inject constructor(
         if (!canPostNotifications()) return
         val summary = NotificationCompat.Builder(context, CHANNEL_DOSE)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(context.resources.getQuantityString(R.plurals.dose_summary_title, visibleDoses, visibleDoses))
+            .setContentTitle(
+                context.resources.getQuantityString(R.plurals.dose_summary_title, visibleDoses, visibleDoses)
+            )
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setGroup(GROUP_DOSE)
@@ -177,7 +179,9 @@ class DoseNotifier @Inject constructor(
     private fun openAppIntent(destination: String): PendingIntent {
         val intent = Intent(context, MainActivity::class.java)
             .putExtra(MainActivity.EXTRA_DESTINATION, destination)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            .addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            )
         return PendingIntent.getActivity(
             context,
             destination.hashCode(),

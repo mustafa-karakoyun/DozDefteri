@@ -53,7 +53,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.core.format.Formats
@@ -279,7 +279,11 @@ private fun DoseRow(dose: TodayDose, actions: TodayActions) {
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text(stringResource(visual.label), style = MaterialTheme.typography.labelLarge, color = visual.color)
+                    Text(
+                        stringResource(visual.label),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = visual.color
+                    )
                     if (dose.isOverdue) {
                         Text(
                             stringResource(R.string.overdue),

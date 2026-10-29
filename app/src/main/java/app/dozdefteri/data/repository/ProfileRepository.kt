@@ -41,7 +41,9 @@ class ProfileRepository @Inject constructor(
     suspend fun ensureDefaultProfile(defaultName: String, now: Instant) {
         val existing = profileDao.getAll()
         if (existing.isEmpty()) {
-            val id = profileDao.insert(ProfileEntity(name = defaultName, colorIndex = 0, createdAt = now.toEpochMilli()))
+            val id = profileDao.insert(
+                ProfileEntity(name = defaultName, colorIndex = 0, createdAt = now.toEpochMilli())
+            )
             settingsRepository.setActiveProfileId(id)
         } else if (existing.none { it.id == settingsRepository.current().activeProfileId }) {
             settingsRepository.setActiveProfileId(existing.first().id)

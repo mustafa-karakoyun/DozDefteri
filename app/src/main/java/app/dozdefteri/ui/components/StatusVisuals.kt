@@ -27,8 +27,16 @@ fun statusVisual(status: DoseStatus): StatusVisual = when (status) {
         MaterialTheme.colorScheme.onSurfaceVariant,
         R.string.status_skipped
     )
-    DoseStatus.SNOOZED -> StatusVisual(Icons.Filled.Snooze, MaterialTheme.colorScheme.onSurfaceVariant, R.string.status_snoozed)
-    DoseStatus.PENDING -> StatusVisual(Icons.Filled.Schedule, MaterialTheme.colorScheme.onSurfaceVariant, R.string.status_pending)
+    DoseStatus.SNOOZED -> StatusVisual(
+        Icons.Filled.Snooze,
+        MaterialTheme.colorScheme.onSurfaceVariant,
+        R.string.status_snoozed
+    )
+    DoseStatus.PENDING -> StatusVisual(
+        Icons.Filled.Schedule,
+        MaterialTheme.colorScheme.onSurfaceVariant,
+        R.string.status_pending
+    )
 }
 
 fun statusLabelRes(status: DoseStatus): Int = when (status) {

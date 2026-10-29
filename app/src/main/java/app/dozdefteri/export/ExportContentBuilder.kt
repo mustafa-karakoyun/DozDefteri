@@ -95,11 +95,17 @@ class ExportContentBuilder @Inject constructor(
                         R.string.pdf_overall_adherence,
                         percent(adherenceCalculator.calculate(scheduled.map { it.event }))
                     ),
-                    headers = listOf(context.getString(R.string.csv_medication), context.getString(R.string.pdf_adherence)),
+                    headers = listOf(
+                        context.getString(R.string.csv_medication),
+                        context.getString(R.string.pdf_adherence)
+                    ),
                     rows = scheduled.groupBy { it.event.medicationId }.values
                         .sortedBy { it.first().medicationName.lowercase() }
                         .map { list ->
-                            listOf(list.first().medicationName, percent(adherenceCalculator.calculate(list.map { it.event })))
+                            listOf(
+                                list.first().medicationName,
+                                percent(adherenceCalculator.calculate(list.map { it.event }))
+                            )
                         }
                 )
             } else {

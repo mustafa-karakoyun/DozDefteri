@@ -91,7 +91,8 @@ fun BatteryGuideContent(manufacturer: Manufacturer, onOpenSettings: () -> Unit, 
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        manufacturer.titleRes?.let { stringResource(it) } ?: stringResource(R.string.battery_brand_generic),
+                        manufacturer.titleRes?.let { stringResource(it) }
+                            ?: stringResource(R.string.battery_brand_generic),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.semantics { heading() }
                     )

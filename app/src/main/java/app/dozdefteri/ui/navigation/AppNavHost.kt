@@ -62,7 +62,9 @@ fun AppNavHost(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
-    val showBottomBar = topLevelTabs.any { tab -> destination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true }
+    val showBottomBar = topLevelTabs.any { tab ->
+        destination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true
+    }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     // Fixed for the lifetime of the host: changing it later would reset the back stack.

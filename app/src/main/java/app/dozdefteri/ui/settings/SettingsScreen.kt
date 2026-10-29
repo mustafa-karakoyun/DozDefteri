@@ -56,7 +56,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.BuildConfig
 import app.dozdefteri.R
@@ -183,7 +183,9 @@ fun SettingsContent(state: SettingsUiState, permissions: PermissionSnapshot, act
             SectionHeader(stringResource(R.string.pro_title))
             SettingRow(
                 title = stringResource(R.string.settings_pro_status),
-                value = stringResource(if (state.isPro) R.string.settings_pro_active else R.string.settings_pro_inactive),
+                value = stringResource(
+                    if (state.isPro) R.string.settings_pro_active else R.string.settings_pro_inactive
+                ),
                 onClick = actions.onPro
             )
             HorizontalDivider()
@@ -295,9 +297,18 @@ private fun SettingRow(
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyLarge)
             if (value != null) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    if (icon != null) Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(16.dp))
-                    Text(value, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (icon != null) {
+                        Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(16.dp))
+                    }
+                    Text(
+                        value,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
@@ -327,7 +338,11 @@ private fun AccentRow(selected: Int, isPro: Boolean, onSelect: (Int) -> Unit) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .size(48.dp)
-                        .selectable(selected = selected == index, onClick = { onSelect(index) }, role = Role.RadioButton)
+                        .selectable(
+                            selected = selected == index,
+                            onClick = { onSelect(index) },
+                            role = Role.RadioButton
+                        )
                         .semantics { contentDescription = description }
                 ) {
                     Box(
@@ -385,7 +400,11 @@ private fun <T> ChoiceDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 48.dp)
-                            .selectable(selected = value == selected, onClick = { onSelect(value) }, role = Role.RadioButton)
+                            .selectable(
+                                selected = value == selected,
+                                onClick = { onSelect(value) },
+                                role = Role.RadioButton
+                            )
                     ) {
                         RadioButton(selected = value == selected, onClick = null)
                         Text(label, modifier = Modifier.padding(start = 12.dp))

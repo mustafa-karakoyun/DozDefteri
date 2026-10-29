@@ -53,8 +53,9 @@ data class MedicationFormErrors(
     val note: FieldError? = null
 ) {
     val isValid: Boolean
-        get() = listOf(name, doseAmount, doseUnit, times, days, interval, endDate, stockQuantity, lowStockThreshold, note)
-            .all { it == null }
+        get() = listOf(
+            name, doseAmount, doseUnit, times, days, interval, endDate, stockQuantity, lowStockThreshold, note
+        ).all { it == null }
 }
 
 /** Validation rules of plan section 6.4. Pure Kotlin. */

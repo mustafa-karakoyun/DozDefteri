@@ -62,7 +62,15 @@ class BackupCodecTest {
                 quantity = 0.5
             )
         ),
-        stockLogs = listOf(StockLogEntity(id = 5, medicationId = 7, delta = -0.5, reason = StockChangeReason.DOSE_TAKEN, createdAt = 13))
+        stockLogs = listOf(
+            StockLogEntity(
+                id = 5,
+                medicationId = 7,
+                delta = -0.5,
+                reason = StockChangeReason.DOSE_TAKEN,
+                createdAt = 13
+            )
+        )
     )
 
     @Test

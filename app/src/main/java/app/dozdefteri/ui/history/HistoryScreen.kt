@@ -51,7 +51,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.core.format.Formats
@@ -244,7 +244,9 @@ private fun Legend() {
         listOf(DayStatus.ALL_TAKEN, DayStatus.PARTIAL, DayStatus.MISSED).forEach { status ->
             val visual = dayVisual(status)
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                visual.icon?.let { Icon(it, contentDescription = null, tint = visual.color, modifier = Modifier.size(16.dp)) }
+                visual.icon?.let {
+                    Icon(it, contentDescription = null, tint = visual.color, modifier = Modifier.size(16.dp))
+                }
                 Text(stringResource(visual.label), style = MaterialTheme.typography.bodySmall)
             }
         }

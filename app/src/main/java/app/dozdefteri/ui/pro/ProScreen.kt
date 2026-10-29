@@ -45,7 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.billing.BillingMessage
@@ -126,7 +126,10 @@ fun ProContent(
             Feature(Icons.Filled.SelectAll, stringResource(R.string.pro_feature_all_profiles))
 
             if (state.isPro) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = StatusTaken)
                     Text(stringResource(R.string.pro_active_thanks), style = MaterialTheme.typography.titleMedium)
                 }

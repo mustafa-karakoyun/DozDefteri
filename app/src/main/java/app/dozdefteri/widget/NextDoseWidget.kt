@@ -151,7 +151,9 @@ class NextDoseWidget : GlanceAppWidget() {
     private fun launchIntent(context: Context, destination: String): Intent =
         Intent(context, MainActivity::class.java)
             .putExtra(MainActivity.EXTRA_DESTINATION, destination)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            .addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            )
 
     companion object {
         private val SMALL = DpSize(110.dp, 40.dp)

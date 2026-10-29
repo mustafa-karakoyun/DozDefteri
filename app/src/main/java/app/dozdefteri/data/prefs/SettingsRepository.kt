@@ -49,9 +49,13 @@ class SettingsRepository @Inject constructor(
 
     suspend fun current(): AppSettings = settings.first()
 
-    suspend fun setOnboardingDone(done: Boolean) = dataStore.edit { it[ONBOARDING_DONE] = done }
+    suspend fun setOnboardingDone(done: Boolean) {
+        dataStore.edit { it[ONBOARDING_DONE] = done }
+    }
 
-    suspend fun setActiveProfileId(id: Long) = dataStore.edit { it[ACTIVE_PROFILE_ID] = id }
+    suspend fun setActiveProfileId(id: Long) {
+        dataStore.edit { it[ACTIVE_PROFILE_ID] = id }
+    }
 
     suspend fun setSnoozeMinutes(minutes: Int) {
         require(minutes in SNOOZE_OPTIONS)
@@ -63,13 +67,21 @@ class SettingsRepository @Inject constructor(
         dataStore.edit { it[MISSED_AFTER_MINUTES] = minutes }
     }
 
-    suspend fun setThemeMode(mode: ThemeMode) = dataStore.edit { it[THEME_MODE] = mode.name }
+    suspend fun setThemeMode(mode: ThemeMode) {
+        dataStore.edit { it[THEME_MODE] = mode.name }
+    }
 
-    suspend fun setAccentIndex(index: Int) = dataStore.edit { it[ACCENT_INDEX] = index }
+    suspend fun setAccentIndex(index: Int) {
+        dataStore.edit { it[ACCENT_INDEX] = index }
+    }
 
-    suspend fun setProCached(pro: Boolean) = dataStore.edit { it[PRO_CACHED] = pro }
+    suspend fun setProCached(pro: Boolean) {
+        dataStore.edit { it[PRO_CACHED] = pro }
+    }
 
-    suspend fun setLastBackupReminderAt(epochMillis: Long) = dataStore.edit { it[LAST_BACKUP_REMINDER_AT] = epochMillis }
+    suspend fun setLastBackupReminderAt(epochMillis: Long) {
+        dataStore.edit { it[LAST_BACKUP_REMINDER_AT] = epochMillis }
+    }
 
     companion object {
         const val DEFAULT_SNOOZE_MINUTES = 10

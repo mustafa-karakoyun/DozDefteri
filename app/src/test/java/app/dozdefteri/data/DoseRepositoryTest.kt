@@ -157,7 +157,8 @@ class DoseRepositoryTest {
         val event = db.doseEventDao().getById(eventId)
         assertThat(event?.status).isEqualTo(DoseStatus.PENDING)
         assertThat(event?.actionAt).isNull()
-        assertThat(db.stockLogDao().getByMedication(medicationId).last().reason).isEqualTo(StockChangeReason.DOSE_UNDONE)
+        assertThat(db.stockLogDao().getByMedication(medicationId).last().reason)
+            .isEqualTo(StockChangeReason.DOSE_UNDONE)
     }
 
     @Test
@@ -190,7 +191,8 @@ class DoseRepositoryTest {
 
     @Test
     fun takeAsNeeded_insertsTakenEvent() = runTest {
-        val (medicationId, scheduleId) = insertMedication(type = ScheduleType.AS_NEEDED, times = emptyList(), stock = 5.0)
+        val (medicationId, scheduleId) =
+            insertMedication(type = ScheduleType.AS_NEEDED, times = emptyList(), stock = 5.0)
         repository.ensureWindow(now)
         assertThat(db.doseEventDao().getAll()).isEmpty()
 

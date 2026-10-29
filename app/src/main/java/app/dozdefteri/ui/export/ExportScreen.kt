@@ -62,7 +62,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.data.db.entity.ProfileEntity
@@ -95,10 +95,12 @@ fun ExportScreen(onBack: () -> Unit, onOpenPro: () -> Unit, viewModel: ExportVie
     val snackbarHostState = remember { SnackbarHostState() }
     val allProfilesLabel = stringResource(R.string.all_profiles)
 
-    val csvLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_CSV)) {
+    val csvLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_CSV)) {
         it?.let(viewModel::exportCsv)
     }
-    val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_PDF)) {
+    val pdfLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_PDF)) {
         it?.let { uri -> viewModel.exportPdf(uri, allProfilesLabel) }
     }
     val backupLauncher =
@@ -138,7 +140,7 @@ fun ExportScreen(onBack: () -> Unit, onOpenPro: () -> Unit, viewModel: ExportVie
             onCsv = { csvLauncher.launch(viewModel.csvFileName()) },
             onPdf = { pdfLauncher.launch(viewModel.pdfFileName()) },
             onBackup = { backupLauncher.launch(viewModel.backupFileName()) },
-            onRestore = { restoreLauncher.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
+            onRestore = { restoreLauncher.launch(BACKUP_MIME_TYPES) },
             onConfirmRestore = viewModel::confirmRestore,
             onDismissRestore = viewModel::dismissRestore,
             onOpenPro = onOpenPro,
@@ -146,6 +148,8 @@ fun ExportScreen(onBack: () -> Unit, onOpenPro: () -> Unit, viewModel: ExportVie
         )
     )
 }
+
+private val BACKUP_MIME_TYPES = arrayOf("application/json", "text/plain", "application/octet-stream")
 
 private fun share(context: Context, uri: Uri, mimeType: String) {
     val send = Intent(Intent.ACTION_SEND)
@@ -196,7 +200,13 @@ fun ExportContent(state: ExportUiState, snackbarHostState: SnackbarHostState, ac
             SectionTitle(stringResource(R.string.backup_section))
             Text(stringResource(R.string.backup_hint), style = MaterialTheme.typography.bodyMedium)
             ActionButton(Icons.Filled.Backup, stringResource(R.string.backup_create), !state.busy, actions.onBackup)
-            ActionButton(Icons.Filled.Restore, stringResource(R.string.backup_restore), !state.busy, actions.onRestore, outlined = true)
+            ActionButton(
+                Icons.Filled.Restore,
+                stringResource(R.string.backup_restore),
+                !state.busy,
+                actions.onRestore,
+                outlined = true
+            )
         }
     }
 

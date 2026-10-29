@@ -112,7 +112,9 @@ class MedicationEditViewModel @Inject constructor(
     fun onFormChange(value: MedicationForm) = edit("form") { it.copy(form = value) }
     fun onScheduleTypeChange(value: ScheduleType) = edit("scheduleType") { it.copy(scheduleType = value) }
     fun onIntervalChange(value: Int) = edit("interval") {
-        it.copy(intervalDays = value.coerceIn(MedicationFormValidator.MIN_INTERVAL, MedicationFormValidator.MAX_INTERVAL))
+        it.copy(
+            intervalDays = value.coerceIn(MedicationFormValidator.MIN_INTERVAL, MedicationFormValidator.MAX_INTERVAL)
+        )
     }
     fun onStartDateChange(value: LocalDate) = edit("startDate") { it.copy(startDate = value) }
     fun onEndDateChange(value: LocalDate?) = edit("endDate") { it.copy(endDate = value) }
@@ -166,7 +168,11 @@ class MedicationEditViewModel @Inject constructor(
         }
     }
 
-    private fun buildEntities(form: MedicationFormState, profileId: Long, now: Long): Pair<MedicationEntity, ScheduleEntity> {
+    private fun buildEntities(
+        form: MedicationFormState,
+        profileId: Long,
+        now: Long
+    ): Pair<MedicationEntity, ScheduleEntity> {
         val stock = if (form.stockEnabled) MedicationFormValidator.parseDecimal(form.stockQuantity) else null
         val threshold = if (stock != null) MedicationFormValidator.parseDecimal(form.lowStockThreshold) else null
         val base = original

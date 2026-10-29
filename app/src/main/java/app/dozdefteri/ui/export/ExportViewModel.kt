@@ -129,7 +129,8 @@ class ExportViewModel @Inject constructor(
     }
 
     /** [profileId] null selects "All profiles". */
-    fun selectProfile(profileId: Long?) = selection.update { it.copy(profileId = profileId, allProfiles = profileId == null) }
+    fun selectProfile(profileId: Long?) =
+        selection.update { it.copy(profileId = profileId, allProfiles = profileId == null) }
 
     fun selectRange(option: RangeOption) = selection.update { it.copy(range = option) }
 

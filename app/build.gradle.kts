@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "app.dozdefteri"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "app.dozdefteri"
@@ -84,7 +84,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
 

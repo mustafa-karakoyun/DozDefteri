@@ -43,7 +43,8 @@ class MedicationFormValidatorTest {
 
     @Test
     fun unit_isRequired_andLimitedTo20() {
-        assertThat(MedicationFormValidator.validate(valid.copy(doseUnit = "")).doseUnit).isEqualTo(FieldError.UNIT_REQUIRED)
+        assertThat(MedicationFormValidator.validate(valid.copy(doseUnit = "")).doseUnit)
+            .isEqualTo(FieldError.UNIT_REQUIRED)
         assertThat(MedicationFormValidator.validate(valid.copy(doseUnit = "x".repeat(21))).doseUnit)
             .isEqualTo(FieldError.UNIT_TOO_LONG)
     }
@@ -52,9 +53,8 @@ class MedicationFormValidatorTest {
     fun times_requiredExceptAsNeeded_andAtMost12() {
         assertThat(MedicationFormValidator.validate(valid.copy(times = emptyList())).times)
             .isEqualTo(FieldError.TIMES_REQUIRED)
-        assertThat(
-            MedicationFormValidator.validate(valid.copy(times = emptyList(), scheduleType = ScheduleType.AS_NEEDED)).isValid
-        ).isTrue()
+        val asNeeded = valid.copy(times = emptyList(), scheduleType = ScheduleType.AS_NEEDED)
+        assertThat(MedicationFormValidator.validate(asNeeded).isValid).isTrue()
         val thirteen = (0..12).map { LocalTime.of(it, 0) }
         assertThat(MedicationFormValidator.validate(valid.copy(times = thirteen)).times)
             .isEqualTo(FieldError.TIMES_TOO_MANY)
@@ -91,9 +91,11 @@ class MedicationFormValidatorTest {
         assertThat(MedicationFormValidator.validate(enabled.copy(stockQuantity = "")).stockQuantity)
             .isEqualTo(FieldError.STOCK_INVALID)
         assertThat(MedicationFormValidator.validate(enabled.copy(stockQuantity = "0")).stockQuantity).isNull()
-        assertThat(MedicationFormValidator.validate(enabled.copy(stockQuantity = "5", lowStockThreshold = "-1")).lowStockThreshold)
+        val negativeThreshold = enabled.copy(stockQuantity = "5", lowStockThreshold = "-1")
+        assertThat(MedicationFormValidator.validate(negativeThreshold).lowStockThreshold)
             .isEqualTo(FieldError.THRESHOLD_INVALID)
-        assertThat(MedicationFormValidator.validate(enabled.copy(stockQuantity = "5", lowStockThreshold = "")).isValid).isTrue()
+        val noThreshold = enabled.copy(stockQuantity = "5", lowStockThreshold = "")
+        assertThat(MedicationFormValidator.validate(noThreshold).isValid).isTrue()
     }
 
     @Test

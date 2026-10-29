@@ -56,7 +56,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.data.db.entity.ProfileEntity
@@ -218,7 +218,10 @@ private fun ProfileRow(
         }
         if (canDelete) {
             IconButton(onClick = onDelete) {
-                Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.profile_delete_named, profile.name))
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = stringResource(R.string.profile_delete_named, profile.name)
+                )
             }
         }
     }
@@ -233,7 +236,9 @@ private fun ColorDot(color: Color, selected: Boolean = false, size: Int = 24) {
             .then(if (selected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, CircleShape) else Modifier),
         contentAlignment = Alignment.Center
     ) {
-        if (selected) Icon(Icons.Filled.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+        if (selected) {
+            Icon(Icons.Filled.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+        }
     }
 }
 
@@ -263,7 +268,10 @@ private fun ProfileDialog(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(stringResource(R.string.profile_color), style = MaterialTheme.typography.labelLarge)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     ProfileColors.forEachIndexed { index, swatch ->
                         val description = stringResource(R.string.profile_color_option, index + 1)
                         Box(

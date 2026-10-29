@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MedicationDao {
-    @Query("SELECT * FROM medications WHERE profileId = :profileId AND isArchived = :archived ORDER BY name COLLATE NOCASE")
+    @Query(
+        "SELECT * FROM medications WHERE profileId = :profileId AND isArchived = :archived " +
+            "ORDER BY name COLLATE NOCASE"
+    )
     fun observeByProfile(profileId: Long, archived: Boolean): Flow<List<MedicationEntity>>
 
     @Query("SELECT * FROM medications WHERE id = :id")

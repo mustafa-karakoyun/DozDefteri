@@ -118,10 +118,12 @@ object BackupCodec {
             json.decodeFromString(BackupFile.serializer(), text)
         } catch (e: Exception) {
             val looksLikeOtherJson = runCatching { json.parseToJsonElement(text) }.isSuccess
-            throw InvalidBackupException(
-                if (looksLikeOtherJson) InvalidBackupException.Reason.WRONG_FORMAT else InvalidBackupException.Reason.NOT_JSON,
-                e
-            )
+            val reason = if (looksLikeOtherJson) {
+                InvalidBackupException.Reason.WRONG_FORMAT
+            } else {
+                InvalidBackupException.Reason.NOT_JSON
+            }
+            throw InvalidBackupException(reason, e)
         }
         if (file.format != FORMAT) throw InvalidBackupException(InvalidBackupException.Reason.WRONG_FORMAT)
         if (file.schemaVersion != SCHEMA_VERSION) {
@@ -197,7 +199,9 @@ object BackupCodec {
                 quantity = it.quantity
             )
         },
-        stockLogs = data.stockLogs.map { BackupStockLog(it.id, it.medicationId, it.delta, it.reason.name, it.createdAt) }
+        stockLogs = data.stockLogs.map {
+            BackupStockLog(it.id, it.medicationId, it.delta, it.reason.name, it.createdAt)
+        }
     )
 
     private fun fromFile(file: BackupFile) = BackupData(

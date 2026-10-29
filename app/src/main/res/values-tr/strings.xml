@@ -22,4 +22,116 @@
     <string name="low_stock_notification_text">%1$s kaldı. Yenileme zamanı.</string>
     <string name="backup_reminder_title">Verilerini yedekle</string>
     <string name="backup_reminder_text">Verilerin yalnızca bu telefonda. Güvende tutmak için bir yedek dosyası kaydet.</string>
+
+    <!-- Ortak -->
+    <string name="ok">Tamam</string>
+    <string name="cancel">İptal</string>
+    <string name="save">Kaydet</string>
+    <string name="saved">Kaydedildi</string>
+    <string name="back">Geri</string>
+    <string name="more_options">Diğer seçenekler</string>
+    <string name="archive">Arşivle</string>
+    <string name="restore">Geri yükle</string>
+    <string name="open_settings">Ayarları aç</string>
+    <string name="decrease">Azalt</string>
+    <string name="increase">Artır</string>
+    <string name="character_count">%1$d/%2$d</string>
+    <string name="disclaimer">DozDefteri tıbbi tavsiye vermez ve doktorunuzun talimatlarının yerini tutmaz. İlaç kullanımınızla ilgili kararlar için doktorunuza veya eczacınıza danışın.</string>
+    <string name="battery_guide_title">Pil ayarları rehberi</string>
+    <string name="export_title">Dışa aktar ve yedekle</string>
+    <string name="pro_title">DozDefteri Pro</string>
+
+    <!-- Karşılama -->
+    <string name="onboarding_value_title">İlaçlarını unutma</string>
+    <string name="onboarding_value_body">İlaçların ve takviyelerin için sade hatırlatmalar.</string>
+    <string name="onboarding_point_no_subscription">Abonelik yok</string>
+    <string name="onboarding_point_no_account">Hesap yok</string>
+    <string name="onboarding_point_on_device">Verilerin telefonunda kalır</string>
+    <string name="onboarding_continue">Devam</string>
+    <string name="onboarding_notifications_title">Bildirimlere izin ver</string>
+    <string name="onboarding_notifications_body">Hatırlatmalar bildirim olarak gelir. Dozu doğrudan bildirimden alındı olarak işaretleyebilir, erteleyebilir veya atlayabilirsin.</string>
+    <string name="onboarding_notifications_denied">Bildirimler kapalı olduğu için hatırlatmalar gösterilemez. Ayarlardan açabilirsin.</string>
+    <string name="onboarding_allow">İzin ver</string>
+    <string name="onboarding_skip_for_now">Şimdilik geç</string>
+    <string name="onboarding_permission_granted">İzin verildi</string>
+    <string name="onboarding_exact_title">Tam zamanlı hatırlatma</string>
+    <string name="onboarding_exact_body">Seni tam dakikasında hatırlatabilmek için DozDefteri\'nin \"Alarmlar ve hatırlatıcılar\" iznine ihtiyacı var. Bu izin olmadan hatırlatmalar gecikebilir.</string>
+    <string name="onboarding_start">Başla</string>
+    <string name="battery_guide_link">Pil ayarları rehberi</string>
+
+    <!-- İlaçlar -->
+    <string name="tab_active">Aktif</string>
+    <string name="tab_archive">Arşiv</string>
+    <string name="add_medication">İlaç ekle</string>
+    <string name="empty_medications">Henüz ilaç yok</string>
+    <string name="empty_archive">Arşivlenmiş ilaç yok</string>
+    <string name="stock_left">%1$s kaldı</string>
+    <string name="stock_low_left">Stok az: %1$s kaldı</string>
+    <plurals name="days_left">
+        <item quantity="one">yaklaşık %d gün</item>
+        <item quantity="other">yaklaşık %d gün</item>
+    </plurals>
+    <string name="medication_add_title">İlaç ekle</string>
+    <string name="medication_edit_title">İlacı düzenle</string>
+    <string name="archive_confirm_title">Bu ilaç arşivlensin mi?</string>
+    <string name="archive_confirm_text">Hatırlatmalar durur ve gelecek dozlar kaldırılır. Geçmişi saklanır; Arşiv sekmesinden geri yükleyebilirsin.</string>
+    <string name="field_name">Ad</string>
+    <string name="field_dose_amount">Doz miktarı</string>
+    <string name="field_dose_unit">Birim</string>
+    <string name="field_form">Form</string>
+    <string name="field_days">Günler</string>
+    <string name="field_interval">Aralık</string>
+    <string name="field_times">Saatler</string>
+    <string name="field_start_date">Başlangıç</string>
+    <string name="field_end_date">Bitiş</string>
+    <string name="no_end_date">Bitiş yok</string>
+    <string name="clear_end_date">Bitiş tarihini temizle</string>
+    <string name="field_stock_tracking">Stok takibi</string>
+    <string name="field_stock_tracking_hint">Alınan her dozda azalır</string>
+    <string name="field_stock_quantity">Mevcut miktar</string>
+    <string name="field_low_stock_threshold">Uyarı eşiği</string>
+    <string name="field_low_stock_threshold_hint">İsteğe bağlı</string>
+    <string name="field_note">Not</string>
+    <string name="section_schedule">Plan</string>
+    <string name="add_time">Saat ekle</string>
+    <string name="remove_time">%1$s saatini kaldır</string>
+    <string name="unit_tablet">tablet</string>
+    <string name="unit_capsule">kapsül</string>
+    <string name="unit_mg">mg</string>
+    <string name="unit_ml">ml</string>
+    <string name="unit_drop">damla</string>
+    <string name="unit_puff">puf</string>
+    <string name="form_tablet">Tablet</string>
+    <string name="form_capsule">Kapsül</string>
+    <string name="form_liquid">Şurup / sıvı</string>
+    <string name="form_drops">Damla</string>
+    <string name="form_injection">İğne</string>
+    <string name="form_inhaler">İnhaler</string>
+    <string name="form_cream">Krem</string>
+    <string name="form_other">Diğer</string>
+    <string name="schedule_type_daily">Her gün</string>
+    <string name="schedule_type_weekdays">Belirli günler</string>
+    <string name="schedule_type_every_n_days">X günde bir</string>
+    <string name="schedule_type_as_needed">Gerektiğinde (hatırlatmasız)</string>
+    <plurals name="every_n_days">
+        <item quantity="one">%d günde bir</item>
+        <item quantity="other">%d günde bir</item>
+    </plurals>
+    <string name="schedule_summary_daily">Her gün · %1$s</string>
+    <string name="schedule_summary_weekdays">%1$s · %2$s</string>
+    <plurals name="schedule_summary_every_n_days">
+        <item quantity="one">%1$d günde bir · %2$s</item>
+        <item quantity="other">%1$d günde bir · %2$s</item>
+    </plurals>
+    <string name="schedule_summary_as_needed">Gerektiğinde</string>
+    <string name="error_name_required">Bir ad gir</string>
+    <string name="error_too_long">En fazla %1$d karakter</string>
+    <string name="error_amount_invalid">0\'dan büyük, en fazla 2 ondalıklı bir miktar gir</string>
+    <string name="error_unit_required">Bir birim gir</string>
+    <string name="error_times_required">En az bir saat ekle</string>
+    <string name="error_times_too_many">En fazla %1$d saat</string>
+    <string name="error_days_required">En az bir gün seç</string>
+    <string name="error_interval_range">%1$d ile %2$d gün arasında seç</string>
+    <string name="error_end_before_start">Bitiş tarihi başlangıçtan önce olamaz</string>
+    <string name="error_number_invalid">0 veya daha büyük, en fazla 2 ondalıklı bir sayı gir</string>
 </resources>

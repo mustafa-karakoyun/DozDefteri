@@ -28,4 +28,116 @@
     <!-- Debug -->
     <string name="debug_create_test_dose" translatable="false">Create test dose in 1 minute</string>
     <string name="debug_test_medication_name" translatable="false">Test dose</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="back">Back</string>
+    <string name="more_options">More options</string>
+    <string name="archive">Archive</string>
+    <string name="restore">Restore</string>
+    <string name="open_settings">Open settings</string>
+    <string name="decrease">Decrease</string>
+    <string name="increase">Increase</string>
+    <string name="character_count">%1$d/%2$d</string>
+    <string name="disclaimer">DozDefteri does not provide medical advice and does not replace your doctor\'s instructions. Consult your doctor or pharmacist about your medication.</string>
+    <string name="battery_guide_title">Battery settings guide</string>
+    <string name="export_title">Export and backup</string>
+    <string name="pro_title">DozDefteri Pro</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_value_title">Never miss a dose</string>
+    <string name="onboarding_value_body">Simple reminders for your medication and supplements.</string>
+    <string name="onboarding_point_no_subscription">No subscription</string>
+    <string name="onboarding_point_no_account">No account</string>
+    <string name="onboarding_point_on_device">Your data stays on your phone</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_notifications_title">Allow notifications</string>
+    <string name="onboarding_notifications_body">Reminders arrive as notifications. You can mark a dose as taken, snooze or skip it right from the notification.</string>
+    <string name="onboarding_notifications_denied">Notifications are off, so reminders cannot be shown. You can turn them on in settings.</string>
+    <string name="onboarding_allow">Allow</string>
+    <string name="onboarding_skip_for_now">Skip for now</string>
+    <string name="onboarding_permission_granted">Allowed</string>
+    <string name="onboarding_exact_title">On-time reminders</string>
+    <string name="onboarding_exact_body">To remind you at the exact minute, DozDefteri needs the \"Alarms &amp; reminders\" permission. Without it, reminders may be late.</string>
+    <string name="onboarding_start">Get started</string>
+    <string name="battery_guide_link">Battery settings guide</string>
+
+    <!-- Medications -->
+    <string name="tab_active">Active</string>
+    <string name="tab_archive">Archive</string>
+    <string name="add_medication">Add medication</string>
+    <string name="empty_medications">No medications yet</string>
+    <string name="empty_archive">No archived medications</string>
+    <string name="stock_left">%1$s left</string>
+    <string name="stock_low_left">Low stock: %1$s left</string>
+    <plurals name="days_left">
+        <item quantity="one">about %d day</item>
+        <item quantity="other">about %d days</item>
+    </plurals>
+    <string name="medication_add_title">Add medication</string>
+    <string name="medication_edit_title">Edit medication</string>
+    <string name="archive_confirm_title">Archive this medication?</string>
+    <string name="archive_confirm_text">Reminders stop and upcoming doses are removed. Its history is kept, and you can restore it from the Archive tab.</string>
+    <string name="field_name">Name</string>
+    <string name="field_dose_amount">Dose amount</string>
+    <string name="field_dose_unit">Unit</string>
+    <string name="field_form">Form</string>
+    <string name="field_days">Days</string>
+    <string name="field_interval">Interval</string>
+    <string name="field_times">Times</string>
+    <string name="field_start_date">Start date</string>
+    <string name="field_end_date">End date</string>
+    <string name="no_end_date">No end date</string>
+    <string name="clear_end_date">Clear end date</string>
+    <string name="field_stock_tracking">Track stock</string>
+    <string name="field_stock_tracking_hint">Counts down with every dose taken</string>
+    <string name="field_stock_quantity">Current amount</string>
+    <string name="field_low_stock_threshold">Alert below</string>
+    <string name="field_low_stock_threshold_hint">Optional</string>
+    <string name="field_note">Note</string>
+    <string name="section_schedule">Schedule</string>
+    <string name="add_time">Add time</string>
+    <string name="remove_time">Remove %1$s</string>
+    <string name="unit_tablet">tablet</string>
+    <string name="unit_capsule">capsule</string>
+    <string name="unit_mg">mg</string>
+    <string name="unit_ml">ml</string>
+    <string name="unit_drop">drop</string>
+    <string name="unit_puff">puff</string>
+    <string name="form_tablet">Tablet</string>
+    <string name="form_capsule">Capsule</string>
+    <string name="form_liquid">Liquid</string>
+    <string name="form_drops">Drops</string>
+    <string name="form_injection">Injection</string>
+    <string name="form_inhaler">Inhaler</string>
+    <string name="form_cream">Cream</string>
+    <string name="form_other">Other</string>
+    <string name="schedule_type_daily">Every day</string>
+    <string name="schedule_type_weekdays">Specific days of the week</string>
+    <string name="schedule_type_every_n_days">Every few days</string>
+    <string name="schedule_type_as_needed">As needed (no reminders)</string>
+    <plurals name="every_n_days">
+        <item quantity="one">Every %d day</item>
+        <item quantity="other">Every %d days</item>
+    </plurals>
+    <string name="schedule_summary_daily">Every day · %1$s</string>
+    <string name="schedule_summary_weekdays">%1$s · %2$s</string>
+    <plurals name="schedule_summary_every_n_days">
+        <item quantity="one">Every %1$d day · %2$s</item>
+        <item quantity="other">Every %1$d days · %2$s</item>
+    </plurals>
+    <string name="schedule_summary_as_needed">As needed</string>
+    <string name="error_name_required">Enter a name</string>
+    <string name="error_too_long">At most %1$d characters</string>
+    <string name="error_amount_invalid">Enter an amount greater than 0 with at most 2 decimals</string>
+    <string name="error_unit_required">Enter a unit</string>
+    <string name="error_times_required">Add at least one time</string>
+    <string name="error_times_too_many">At most %1$d times</string>
+    <string name="error_days_required">Pick at least one day</string>
+    <string name="error_interval_range">Choose between %1$d and %2$d days</string>
+    <string name="error_end_before_start">End date cannot be before the start date</string>
+    <string name="error_number_invalid">Enter 0 or more, with at most 2 decimals</string>
 </resources>

@@ -306,4 +306,12 @@
     <string name="pro_message_restored">Purchase restored</string>
     <string name="pro_message_nothing">No previous purchase found for this Google account</string>
     <string name="pro_message_error">Could not reach Google Play. Please try again.</string>
+
+    <!-- Widget -->
+    <string name="widget_name">Next dose</string>
+    <string name="widget_description">Shows your next dose and today\'s progress</string>
+    <string name="widget_locked">The widget is available with DozDefteri Pro. Tap to learn more.</string>
+    <string name="widget_no_more_doses">No more doses today</string>
+    <string name="widget_next_at">%1$s · %2$s</string>
+    <string name="widget_summary">%1$d/%2$d taken</string>
 </resources>

@@ -17,12 +17,15 @@ import javax.inject.Singleton
  */
 @Singleton
 class ProStatus @Inject constructor(
-    settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
     @ApplicationScope scope: CoroutineScope
 ) {
     val isPro: StateFlow<Boolean> = settingsRepository.settings
         .map { BuildConfig.DEBUG_FORCE_PRO || it.proCached }
         .stateIn(scope, SharingStarted.Eagerly, BuildConfig.DEBUG_FORCE_PRO)
+
+    /** Reads the stored state directly; use where the flow may not have loaded yet (e.g. widgets). */
+    suspend fun current(): Boolean = BuildConfig.DEBUG_FORCE_PRO || settingsRepository.current().proCached
 
     companion object {
         /** Number of profiles available without Pro. */

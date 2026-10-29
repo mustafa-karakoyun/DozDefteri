@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple capsule placeholder; replace with the final brand artwork. Safe zone: central 66dp of 108dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:rotation="-45">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M42,54 L42,40 A12,12 0 0,1 66,40 L66,54 Z" />
+        <path
+            android:fillColor="#B3E5E9"
+            android:pathData="M42,54 L66,54 L66,68 A12,12 0 0,1 42,68 Z" />
+    </group>
+</vector>

@@ -8,6 +8,8 @@ import app.dozdefteri.data.db.entity.ScheduleEntity
 import app.dozdefteri.data.repository.MedicationRepository
 import app.dozdefteri.data.repository.ProfileRepository
 import app.dozdefteri.domain.StockEstimator
+import app.dozdefteri.domain.model.ScheduleType
+import app.dozdefteri.ui.today.TodayViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,10 +25,14 @@ import javax.inject.Inject
 data class MedicationListItem(
     val medication: MedicationEntity,
     val schedule: ScheduleEntity?,
-    /** Estimated whole days of stock left; null when not tracked or not estimable. */
+    /** Estimated whole days of stock left; null when not tracked, as-needed or not estimable. */
     val remainingDays: Int?,
-    val isLowStock: Boolean
-)
+    val isLowStock: Boolean,
+    /** Stock bar fill, 0..1 (a full bar is a month of doses). */
+    val stockFraction: Float
+) {
+    val isAsNeeded: Boolean get() = schedule?.type == ScheduleType.AS_NEEDED
+}
 
 data class MedicationsUiState(
     val isLoading: Boolean = true,
@@ -70,15 +76,32 @@ class MedicationsViewModel @Inject constructor(
             doseSync.run("unarchive")
         }
     }
+
+    fun startStockTracking(medicationId: Long, amount: Double) {
+        viewModelScope.launch {
+            medicationRepository.startStockTracking(
+                medicationId,
+                amount,
+                MedicationFormValidator.DEFAULT_LOW_STOCK_DAYS,
+                clock.instant()
+            )
+        }
+    }
+
+    fun addStock(medicationId: Long, amount: Double) {
+        viewModelScope.launch { medicationRepository.addStock(medicationId, amount, clock.instant()) }
+    }
 }
 
 internal fun MedicationEntity.toItem(schedules: List<ScheduleEntity>): MedicationListItem {
     val stock = stockQuantity
     val threshold = lowStockThreshold
+    val days = StockEstimator.remainingDays(stock, schedules, doseAmount)
     return MedicationListItem(
         medication = this,
         schedule = schedules.firstOrNull(),
-        remainingDays = StockEstimator.remainingDays(stock, schedules, doseAmount),
-        isLowStock = stock != null && threshold != null && stock <= threshold
+        remainingDays = days,
+        isLowStock = stock != null && threshold != null && stock <= threshold,
+        stockFraction = stock?.let { TodayViewModel.stockFraction(days, it) } ?: 0f
     )
 }

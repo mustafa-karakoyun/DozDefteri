@@ -1,81 +1,94 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package app.dozdefteri.ui.history
 
 import android.text.format.DateFormat
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Contrast
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Contrast
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.core.format.Formats
+import app.dozdefteri.core.format.TurkishSuffix
 import app.dozdefteri.data.db.dao.DoseEventDetails
 import app.dozdefteri.domain.DayStatus
-import app.dozdefteri.ui.components.statusVisual
+import app.dozdefteri.domain.DoseCounts
+import app.dozdefteri.domain.model.DoseStatus
+import app.dozdefteri.ui.components.ChipKind
+import app.dozdefteri.ui.components.HeaderProfile
+import app.dozdefteri.ui.components.ScreenHeader
+import app.dozdefteri.ui.components.StatusChip
+import app.dozdefteri.ui.components.TakenTimeSheet
+import app.dozdefteri.ui.shell.LocalHeaderProfile
+import app.dozdefteri.ui.theme.Doz
 import app.dozdefteri.ui.theme.DozDefteriTheme
-import app.dozdefteri.ui.theme.StatusMissed
-import app.dozdefteri.ui.theme.StatusPartial
-import app.dozdefteri.ui.theme.StatusTaken
+import app.dozdefteri.ui.theme.DozPreviews
+import app.dozdefteri.ui.theme.DozShapes
+import app.dozdefteri.ui.theme.Space
+import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.time.format.TextStyle
-import java.time.temporal.WeekFields
 import java.util.Locale
 
 data class HistoryActions(
     val onPreviousMonth: () -> Unit = {},
     val onNextMonth: () -> Unit = {},
-    val onSelectDay: (LocalDate?) -> Unit = {}
+    val onSelectDay: (LocalDate) -> Unit = {},
+    val onMarkTakenAt: (DoseEventDetails, LocalTime) -> Unit = { _, _ -> },
+    val onMarkSkipped: (Long) -> Unit = {}
 )
 
 @Composable
@@ -83,68 +96,85 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     HistoryContent(
         state = state,
+        header = LocalHeaderProfile.current,
         actions = HistoryActions(
             onPreviousMonth = viewModel::previousMonth,
             onNextMonth = viewModel::nextMonth,
-            onSelectDay = viewModel::selectDay
+            onSelectDay = viewModel::selectDay,
+            onMarkTakenAt = viewModel::markTakenAt,
+            onMarkSkipped = viewModel::markSkipped
         )
     )
 }
 
 @Composable
-fun HistoryContent(state: HistoryUiState, actions: HistoryActions) {
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.tab_history)) }) }) { padding ->
+fun HistoryContent(state: HistoryUiState, header: HeaderProfile?, actions: HistoryActions) {
+    var editing by remember { mutableStateOf<DoseEventDetails?>(null) }
+    Scaffold(
+        containerColor = Doz.colors.bgApp,
+        topBar = { ScreenHeader(stringResource(R.string.tab_history), header) }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = Space.s16, vertical = Space.s8),
+            verticalArrangement = Arrangement.spacedBy(Space.s16)
         ) {
-            MonthSelector(state.month, actions)
-            Text(
-                stringResource(
-                    R.string.monthly_adherence,
-                    state.adherencePercent?.let { localizedPercent(it) } ?: stringResource(R.string.no_value)
-                ),
-                style = MaterialTheme.typography.titleMedium
-            )
-            CalendarGrid(state, onSelect = { actions.onSelectDay(it) })
+            MonthNavigator(state.month, actions)
+            SummaryCard(state.summary)
+            CalendarGrid(state, actions.onSelectDay)
             Legend()
+            state.selectedDay?.let { day ->
+                DayDetail(day, state.dosesByDay[day].orEmpty(), onEdit = { editing = it })
+            }
         }
     }
-    val selected = state.selectedDay
-    if (selected != null) {
-        ModalBottomSheet(onDismissRequest = { actions.onSelectDay(null) }) {
-            DayDetails(selected, state.dosesByDay[selected].orEmpty())
-        }
+    editing?.let { details ->
+        val zone = ZoneId.systemDefault()
+        val planned = Instant.ofEpochMilli(details.event.originalScheduledAt).atZone(zone).toLocalTime()
+        val taken = details.event.actionAt?.takeIf { details.event.status == DoseStatus.TAKEN }
+            ?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalTime() }
+        TakenTimeSheet(
+            medicationName = details.medicationName,
+            initial = taken ?: planned,
+            onSave = { time ->
+                editing = null
+                actions.onMarkTakenAt(details, time)
+            },
+            onDismiss = { editing = null },
+            onSkip = {
+                editing = null
+                actions.onMarkSkipped(details.event.id)
+            }
+        )
     }
 }
 
 @Composable
-private fun localizedPercent(value: Int): String = stringResource(R.string.percent_value, value)
-
-@Composable
-private fun MonthSelector(month: YearMonth, actions: HistoryActions) {
+private fun MonthNavigator(month: YearMonth, actions: HistoryActions) {
     val title = month.atDay(1).format(DateTimeFormatter.ofPattern("LLLL yyyy", Locale.getDefault()))
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        .replaceFirstChar { it.titlecase(Locale.getDefault()) }
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
         IconButton(onClick = actions.onPreviousMonth) {
             Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                 contentDescription = stringResource(R.string.previous_month)
             )
         }
         Text(
             title,
-            style = MaterialTheme.typography.titleLarge,
+            style = Doz.type.titleLarge,
+            color = Doz.colors.textPrimary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f).semantics { heading() }
+            modifier = Modifier
+                .weight(1f)
+                .semantics { heading() }
         )
         IconButton(onClick = actions.onNextMonth) {
             Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                 contentDescription = stringResource(R.string.next_month)
             )
         }
@@ -152,38 +182,77 @@ private fun MonthSelector(month: YearMonth, actions: HistoryActions) {
 }
 
 @Composable
+private fun SummaryCard(summary: DoseCounts) {
+    val c = Doz.colors
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(c.primaryContainer, DozShapes.card)
+            .padding(Space.s16),
+        verticalArrangement = Arrangement.spacedBy(Space.s4)
+    ) {
+        Text(
+            stringResource(
+                R.string.history_adherence,
+                summary.percent?.let { stringResource(R.string.percent_value, it) }
+                    ?: stringResource(R.string.no_value)
+            ),
+            style = Doz.type.titleLarge,
+            color = c.onPrimaryContainer
+        )
+        if (summary.planned > 0) {
+            Text(
+                pluralStringResource(
+                    R.plurals.history_counts,
+                    summary.planned,
+                    summary.planned,
+                    TurkishSuffix.countPossessive(summary.taken),
+                    summary.skipped,
+                    summary.missed
+                ),
+                style = Doz.type.bodyMedium,
+                color = c.onPrimaryContainer
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
 private fun CalendarGrid(state: HistoryUiState, onSelect: (LocalDate) -> Unit) {
     val locale = Locale.getDefault()
-    val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek
-    val weekDays = (0 until 7).map { firstDayOfWeek.plus(it.toLong()) }
-    val firstOfMonth = state.month.atDay(1)
-    val leadingBlanks = (firstOfMonth.dayOfWeek.value - firstDayOfWeek.value + 7) % 7
+    val first = state.month.atDay(1)
+    val leading = first.dayOfWeek.value - DayOfWeek.MONDAY.value
     val days = (1..state.month.lengthOfMonth()).map { state.month.atDay(it) }
-    val cells: List<LocalDate?> = List(leadingBlanks) { null } + days
-    val rows = cells.chunked(7)
-
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Row(Modifier.fillMaxWidth()) {
-            weekDays.forEach { day ->
+    val cells: List<LocalDate?> = List(leading) { null } + days
+    Column(verticalArrangement = Arrangement.spacedBy(Space.s8)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Space.s8)) {
+            DayOfWeek.entries.forEach { day ->
                 Text(
                     day.getDisplayName(TextStyle.SHORT, locale),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = Doz.type.caption,
+                    color = Doz.colors.textSecondary,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .clearAndSetSemantics { }
                 )
             }
         }
-        rows.forEach { week ->
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        cells.chunked(7).forEach { week ->
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Space.s8)) {
                 (0 until 7).forEach { index ->
-                    val date = week.getOrNull(index)
                     Box(Modifier.weight(1f)) {
-                        if (date != null) {
+                        week.getOrNull(index)?.let { date ->
                             DayCell(
                                 date = date,
-                                status = state.dayStatuses[date] ?: DayStatus.NONE,
-                                isToday = date == state.today,
+                                status = if (date.isAfter(state.today)) {
+                                    DayStatus.NONE
+                                } else {
+                                    state.dayStatuses[date] ?: DayStatus.NONE
+                                },
+                                counts = state.dayCounts[date] ?: DoseCounts(),
+                                selected = date == state.selectedDay,
                                 onClick = { onSelect(date) }
                             )
                         }
@@ -194,126 +263,193 @@ private fun CalendarGrid(state: HistoryUiState, onSelect: (LocalDate) -> Unit) {
     }
 }
 
-private data class DayVisual(val icon: ImageVector?, val color: Color, val label: Int)
+private data class CellStyle(val bg: Color?, val fg: Color, val icon: ImageVector?)
 
 @Composable
-private fun dayVisual(status: DayStatus): DayVisual = when (status) {
-    DayStatus.ALL_TAKEN -> DayVisual(Icons.Filled.CheckCircle, StatusTaken, R.string.day_all_taken)
-    DayStatus.PARTIAL -> DayVisual(Icons.Filled.Contrast, StatusPartial, R.string.day_partial)
-    DayStatus.MISSED -> DayVisual(Icons.Filled.Cancel, StatusMissed, R.string.day_missed)
-    DayStatus.NONE -> DayVisual(null, MaterialTheme.colorScheme.onSurfaceVariant, R.string.day_no_doses)
+private fun cellStyle(status: DayStatus): CellStyle {
+    val c = Doz.colors
+    return when (status) {
+        DayStatus.ALL_TAKEN -> CellStyle(c.taken.bg, c.taken.fg, Icons.Rounded.Check)
+        DayStatus.PARTIAL -> CellStyle(c.snoozed.bg, c.snoozed.fg, Icons.Rounded.Contrast)
+        DayStatus.MISSED -> CellStyle(c.missed.bg, c.missed.fg, Icons.Rounded.ErrorOutline)
+        DayStatus.NONE -> CellStyle(null, c.textSecondary, null)
+    }
 }
 
 @Composable
-private fun DayCell(date: LocalDate, status: DayStatus, isToday: Boolean, onClick: () -> Unit) {
-    val visual = dayVisual(status)
-    val description = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ", " +
-        stringResource(visual.label)
+private fun DayCell(
+    date: LocalDate,
+    status: DayStatus,
+    counts: DoseCounts,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    val style = cellStyle(status)
+    val description = dayDescription(date, counts)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(0.8f)
+            .aspectRatio(0.85f)
             .heightIn(min = 48.dp)
-            .then(
-                if (isToday) {
-                    Modifier.border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
-                } else {
-                    Modifier
-                }
-            )
+            .then(if (style.bg != null) Modifier.background(style.bg, DozShapes.small) else Modifier)
+            .then(if (selected) Modifier.border(2.dp, Doz.colors.primary, DozShapes.small) else Modifier)
             .clickable(onClick = onClick)
             .clearAndSetSemantics {
                 contentDescription = description
                 role = Role.Button
+                this.selected = selected
             }
     ) {
-        Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.bodyMedium)
-        if (visual.icon != null) {
-            Icon(visual.icon, contentDescription = null, tint = visual.color, modifier = Modifier.size(16.dp))
+        Text(date.dayOfMonth.toString(), style = Doz.type.labelMedium, color = Doz.colors.textPrimary)
+        if (style.icon != null) {
+            Icon(style.icon, contentDescription = null, tint = style.fg, modifier = Modifier.size(18.dp))
         } else {
-            Spacer(Modifier.size(16.dp))
+            Text("–", style = Doz.type.caption, color = style.fg)
         }
     }
 }
 
+/** "14 Ekim, 5 dozdan 4'ü alındı, 1 işaretlenmedi" */
+@Composable
+private fun dayDescription(date: LocalDate, counts: DoseCounts): String {
+    val dateText = date.format(DateTimeFormatter.ofPattern("d MMMM", Locale.getDefault()))
+    if (counts.total == 0) return stringResource(R.string.day_a11y_none, dateText)
+    val parts = mutableListOf(
+        pluralStringResource(
+            R.plurals.day_progress,
+            counts.total,
+            counts.total,
+            TurkishSuffix.countPossessive(counts.taken)
+        )
+    )
+    if (counts.missed > 0) parts += stringResource(R.string.day_a11y_missed, counts.missed)
+    if (counts.skipped > 0) parts += stringResource(R.string.day_a11y_skipped, counts.skipped)
+    return (listOf(dateText) + parts).joinToString(", ")
+}
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Legend() {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        listOf(DayStatus.ALL_TAKEN, DayStatus.PARTIAL, DayStatus.MISSED).forEach { status ->
-            val visual = dayVisual(status)
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                visual.icon?.let {
-                    Icon(it, contentDescription = null, tint = visual.color, modifier = Modifier.size(16.dp))
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(Space.s16),
+        verticalArrangement = Arrangement.spacedBy(Space.s8)
+    ) {
+        LegendItem(cellStyle(DayStatus.ALL_TAKEN), stringResource(R.string.legend_all_taken))
+        LegendItem(cellStyle(DayStatus.PARTIAL), stringResource(R.string.legend_partial))
+        LegendItem(cellStyle(DayStatus.MISSED), stringResource(R.string.legend_missed))
+        LegendItem(cellStyle(DayStatus.NONE), stringResource(R.string.legend_none))
+    }
+}
+
+@Composable
+private fun LegendItem(style: CellStyle, label: String) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s4)) {
+        if (style.icon != null) {
+            Icon(style.icon, contentDescription = null, tint = style.fg, modifier = Modifier.size(16.dp))
+        } else {
+            Text("–", style = Doz.type.caption, color = style.fg)
+        }
+        Text(label, style = Doz.type.caption, color = Doz.colors.textSecondary)
+    }
+}
+
+@Composable
+private fun DayDetail(day: LocalDate, doses: List<DoseEventDetails>, onEdit: (DoseEventDetails) -> Unit) {
+    val c = Doz.colors
+    val is24Hour = DateFormat.is24HourFormat(LocalContext.current)
+    val zone = ZoneId.systemDefault()
+    Surface(
+        shape = DozShapes.card,
+        color = c.surfaceDefault,
+        border = BorderStroke(1.dp, c.borderDefault),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(Modifier.padding(Space.s16)) {
+            Text(
+                day.format(DateTimeFormatter.ofPattern("d MMMM, EEEE", Locale.getDefault())),
+                style = Doz.type.titleMedium,
+                color = c.textPrimary,
+                modifier = Modifier
+                    .padding(bottom = Space.s8)
+                    .semantics { heading() }
+            )
+            if (doses.isEmpty()) {
+                Text(stringResource(R.string.day_no_doses), style = Doz.type.bodyMedium, color = c.textSecondary)
+            }
+            doses.forEachIndexed { index, dose ->
+                if (index > 0) HorizontalDivider(color = c.borderDefault)
+                val planned = Instant.ofEpochMilli(dose.event.originalScheduledAt).atZone(zone).toLocalTime()
+                val actual = actualTimeText(dose, zone, is24Hour)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Space.s16),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 64.dp)
+                        .padding(vertical = Space.s8)
+                ) {
+                    Text(Formats.time(planned, is24Hour), style = Doz.type.doseTime, color = c.textPrimary)
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.s4)) {
+                        Text(dose.medicationName, style = Doz.type.titleMedium, color = c.textPrimary)
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(Space.s8),
+                            verticalArrangement = Arrangement.spacedBy(Space.s4),
+                            itemVerticalAlignment = Alignment.CenterVertically
+                        ) {
+                            StatusChip(ChipKind.Dose(dose.event.status))
+                            if (actual != null) Text(actual, style = Doz.type.caption, color = c.textSecondary)
+                        }
+                    }
+                    IconButton(onClick = { onEdit(dose) }) {
+                        Icon(
+                            Icons.Rounded.Edit,
+                            contentDescription = stringResource(R.string.edit_dose, dose.medicationName),
+                            tint = c.textSecondary
+                        )
+                    }
                 }
-                Text(stringResource(visual.label), style = MaterialTheme.typography.bodySmall)
             }
         }
     }
 }
 
 @Composable
-private fun DayDetails(day: LocalDate, doses: List<DoseEventDetails>) {
-    val context = LocalContext.current
-    val is24Hour = DateFormat.is24HourFormat(context)
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics { heading() }
-        )
-        if (doses.isEmpty()) {
-            Text(stringResource(R.string.day_no_doses), style = MaterialTheme.typography.bodyMedium)
-        }
-        doses.forEach { dose ->
-            val visual = statusVisual(dose.event.status)
-            val time = Instant.ofEpochMilli(dose.event.originalScheduledAt).atZone(ZoneId.systemDefault()).toLocalTime()
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.heightIn(min = 48.dp)
-            ) {
-                Text(Formats.time(time, is24Hour), style = MaterialTheme.typography.labelLarge)
-                Column(Modifier.weight(1f)) {
-                    Text(dose.medicationName, style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        Formats.dose(dose.event.quantity, dose.doseUnit),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                Icon(visual.icon, contentDescription = null, tint = visual.color)
-                Text(stringResource(visual.label), color = visual.color, style = MaterialTheme.typography.labelLarge)
+private fun actualTimeText(dose: DoseEventDetails, zone: ZoneId, is24Hour: Boolean): String? {
+    val actionAt = dose.event.actionAt
+    return when (dose.event.status) {
+        DoseStatus.MISSED -> stringResource(R.string.not_marked)
+        DoseStatus.TAKEN, DoseStatus.SKIPPED -> actionAt?.let {
+            val time = Instant.ofEpochMilli(it).atZone(zone).toLocalTime()
+            val formatted = Formats.time(time, is24Hour)
+            if (TurkishSuffix.isTurkish()) {
+                TurkishSuffix.timeLocative(formatted, time)
+            } else {
+                stringResource(R.string.taken_at, formatted)
             }
-            HorizontalDivider()
         }
+        DoseStatus.PENDING, DoseStatus.SNOOZED -> null
     }
 }
 
-@Preview(showBackground = true)
-@Preview(showBackground = true, fontScale = 2f)
+@DozPreviews
 @Composable
 private fun HistoryPreview() {
-    val month = YearMonth.of(2026, 11)
+    val month = YearMonth.of(2026, 10)
     DozDefteriTheme {
         HistoryContent(
             state = HistoryUiState(
                 isLoading = false,
                 month = month,
-                today = month.atDay(10),
-                adherencePercent = 86,
-                dayStatuses = mapOf(
-                    month.atDay(1) to DayStatus.ALL_TAKEN,
-                    month.atDay(2) to DayStatus.PARTIAL,
-                    month.atDay(3) to DayStatus.MISSED
-                )
+                today = month.atDay(31),
+                summary = DoseCounts(taken = 136, skipped = 5, missed = 7),
+                dayStatuses = (1..31).associate {
+                    month.atDay(it) to if (it % 9 == 0) DayStatus.PARTIAL else DayStatus.ALL_TAKEN
+                } + mapOf(month.atDay(14) to DayStatus.MISSED),
+                selectedDay = month.atDay(14)
             ),
+            header = HeaderProfile("Ayşe", 0) {},
             actions = HistoryActions()
         )
     }

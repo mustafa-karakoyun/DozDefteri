@@ -117,7 +117,7 @@
         <item quantity="one">%d günde bir</item>
         <item quantity="other">%d günde bir</item>
     </plurals>
-    <string name="schedule_summary_daily">Her gün · %1$s</string>
+    <string name="schedule_summary_daily">Her gün %1$s</string>
     <string name="schedule_summary_weekdays">%1$s · %2$s</string>
     <plurals name="schedule_summary_every_n_days">
         <item quantity="one">%1$d günde bir · %2$s</item>
@@ -405,4 +405,28 @@
     <string name="taken_time_save">Alındı olarak kaydet</string>
     <string name="add_stock_title">Stok ekle · %1$s</string>
     <string name="add_stock_amount">Kaç %1$s eklendi?</string>
+
+    <!-- İlaçlarım v2 -->
+    <string name="tab_active_count">Aktif (%1$d)</string>
+    <string name="tab_archive_count">Arşiv (%1$d)</string>
+    <string name="empty_medications_body">Henüz ilaç yok. Bir ilaç ekle, DozDefteri saatinde hatırlatsın.</string>
+    <string name="empty_archive_body">Arşivde ilaç yok. Arşive taşınan ilaçların geçmişi korunur ve geri alınabilir.</string>
+    <string name="restore_to_active">Geri al</string>
+    <string name="stock_missing_add">Stok girilmemiş · ekle</string>
+
+    <!-- Geçmiş v2 -->
+    <string name="history_adherence">Bu ay uyum: %1$s</string>
+    <plurals name="history_counts">
+        <item quantity="one">%1$d planlı dozun %2$s alındı · %3$d atlandı · %4$d işaretlenmedi</item>
+        <item quantity="other">%1$d planlı dozun %2$s alındı · %3$d atlandı · %4$d işaretlenmedi</item>
+    </plurals>
+    <string name="day_a11y_none">%1$s, doz yok</string>
+    <string name="day_a11y_missed">%1$d işaretlenmedi</string>
+    <string name="day_a11y_skipped">%1$d atlandı</string>
+    <string name="legend_all_taken">Tamamı alındı</string>
+    <string name="legend_partial">Kısmi</string>
+    <string name="legend_missed">İşaretlenmedi</string>
+    <string name="legend_none">Doz yok</string>
+    <string name="edit_dose">%1$s dozunu düzenle</string>
+    <string name="not_marked">İşaretlenmedi</string>
 </resources>

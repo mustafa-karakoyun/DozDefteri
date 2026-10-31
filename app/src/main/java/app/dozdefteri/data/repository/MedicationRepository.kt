@@ -5,6 +5,7 @@ import app.dozdefteri.data.db.AppDatabase
 import app.dozdefteri.data.db.entity.MedicationEntity
 import app.dozdefteri.data.db.entity.ScheduleEntity
 import app.dozdefteri.data.db.entity.StockLogEntity
+import app.dozdefteri.domain.StockEstimator
 import app.dozdefteri.domain.model.StockChangeReason
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -122,6 +123,35 @@ class MedicationRepository @Inject constructor(
                 createdAt = now.toEpochMilli()
             )
         )
+    }
+
+    /**
+     * "Stok girilmemiş · ekle": starts stock tracking with [amount] and a [lowStockDays] alert, converting the days
+     * into an amount threshold with the schedule's daily average.
+     */
+    suspend fun startStockTracking(medicationId: Long, amount: Double, lowStockDays: Int, now: Instant) {
+        db.withTransaction {
+            val medication = medicationDao.getById(medicationId) ?: return@withTransaction
+            val schedules = scheduleDao.getByMedication(medicationId)
+            val average = StockEstimator.dailyAverage(schedules, medication.doseAmount)
+            medicationDao.update(
+                medication.copy(
+                    stockQuantity = amount,
+                    lowStockDays = lowStockDays,
+                    lowStockThreshold = if (average > 0.0) lowStockDays * average else null,
+                    lowStockNotified = false,
+                    updatedAt = now.toEpochMilli()
+                )
+            )
+            stockLogDao.insert(
+                StockLogEntity(
+                    medicationId = medicationId,
+                    delta = amount,
+                    reason = StockChangeReason.MANUAL_SET,
+                    createdAt = now.toEpochMilli()
+                )
+            )
+        }
     }
 
     /** See [DoseRepository.archiveMedication]. */

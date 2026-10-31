@@ -123,7 +123,7 @@
         <item quantity="one">Every %d day</item>
         <item quantity="other">Every %d days</item>
     </plurals>
-    <string name="schedule_summary_daily">Every day · %1$s</string>
+    <string name="schedule_summary_daily">Every day %1$s</string>
     <string name="schedule_summary_weekdays">%1$s · %2$s</string>
     <plurals name="schedule_summary_every_n_days">
         <item quantity="one">Every %1$d day · %2$s</item>
@@ -415,4 +415,28 @@
     <string name="taken_time_save">Save as taken</string>
     <string name="add_stock_title">Add stock · %1$s</string>
     <string name="add_stock_amount">How many %1$s did you add?</string>
+
+    <!-- Medications v2 -->
+    <string name="tab_active_count">Active (%1$d)</string>
+    <string name="tab_archive_count">Archive (%1$d)</string>
+    <string name="empty_medications_body">No medications yet. Add one and DozDefteri will remind you on time.</string>
+    <string name="empty_archive_body">No archived medications. Archived medications keep their history and can be brought back.</string>
+    <string name="restore_to_active">Bring back</string>
+    <string name="stock_missing_add">No stock entered · add</string>
+
+    <!-- History v2 -->
+    <string name="history_adherence">Adherence this month: %1$s</string>
+    <plurals name="history_counts">
+        <item quantity="one">%2$s of %1$d planned dose taken · %3$d skipped · %4$d not marked</item>
+        <item quantity="other">%2$s of %1$d planned doses taken · %3$d skipped · %4$d not marked</item>
+    </plurals>
+    <string name="day_a11y_none">%1$s, no doses</string>
+    <string name="day_a11y_missed">%1$d not marked</string>
+    <string name="day_a11y_skipped">%1$d skipped</string>
+    <string name="legend_all_taken">All taken</string>
+    <string name="legend_partial">Partial</string>
+    <string name="legend_missed">Not marked</string>
+    <string name="legend_none">No doses</string>
+    <string name="edit_dose">Edit %1$s dose</string>
+    <string name="not_marked">Not marked</string>
 </resources>

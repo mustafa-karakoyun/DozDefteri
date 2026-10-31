@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_today">Bugün</string>
-    <string name="tab_medications">İlaçlar</string>
+    <string name="tab_medications">İlaçlarım</string>
     <string name="tab_history">Geçmiş</string>
     <string name="tab_settings">Ayarlar</string>
 
@@ -326,4 +326,15 @@
     <string name="take_now_short">Şimdi al</string>
     <string name="low_stock_title">%1$s azalıyor</string>
     <string name="add_stock">Stok ekle</string>
+
+    <!-- Kabuk -->
+    <string name="switcher_title">Kimin ilaçları?</string>
+    <plurals name="switcher_next">
+        <item quantity="one">Sıradaki: %1$s · %2$d doz</item>
+        <item quantity="other">Sıradaki: %1$s · %2$d doz</item>
+    </plurals>
+    <string name="today_all_done">Bugünkü dozlar tamam</string>
+    <string name="switcher_no_doses">Bugün doz yok</string>
+    <string name="switcher_manage">Profilleri yönet</string>
+    <string name="switcher_switched">%1$s ilaçları gösteriliyor</string>
 </resources>

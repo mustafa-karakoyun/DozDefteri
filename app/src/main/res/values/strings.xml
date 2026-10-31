@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">DozDefteri</string>
 
     <string name="tab_today">Today</string>
-    <string name="tab_medications">Medications</string>
+    <string name="tab_medications">My medications</string>
     <string name="tab_history">History</string>
     <string name="tab_settings">Settings</string>
 
@@ -336,4 +336,15 @@
     <string name="take_now_short">Take now</string>
     <string name="low_stock_title">%1$s is running low</string>
     <string name="add_stock">Add stock</string>
+
+    <!-- Shell -->
+    <string name="switcher_title">Whose medications?</string>
+    <plurals name="switcher_next">
+        <item quantity="one">Next: %1$s · %2$d dose</item>
+        <item quantity="other">Next: %1$s · %2$d doses</item>
+    </plurals>
+    <string name="today_all_done">All of today\'s doses are done</string>
+    <string name="switcher_no_doses">No doses today</string>
+    <string name="switcher_manage">Manage profiles</string>
+    <string name="switcher_switched">Showing %1$s\'s medications</string>
 </resources>

@@ -3,18 +3,9 @@ package app.dozdefteri.ui.navigation
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Settings as SettingsIcon
-import androidx.compose.material.icons.filled.Today as TodayIcon
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,15 +33,30 @@ import app.dozdefteri.ui.pro.ProScreen
 import app.dozdefteri.ui.profiles.ProfilesScreen
 import app.dozdefteri.ui.settings.SettingsScreen
 import app.dozdefteri.ui.today.TodayScreen
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.dozdefteri.core.format.TurkishSuffix
+import app.dozdefteri.ui.components.BottomTab
+import app.dozdefteri.ui.components.DozBottomBar
+import app.dozdefteri.ui.components.DozNavIcons
+import app.dozdefteri.ui.components.HeaderProfile
+import app.dozdefteri.ui.shell.LocalHeaderProfile
+import app.dozdefteri.ui.shell.ProfileSwitcherSheet
+import app.dozdefteri.ui.shell.ShellViewModel
+import app.dozdefteri.ui.theme.Doz
 import kotlinx.coroutines.launch
 
 private data class TopLevelTab(val route: Any, @StringRes val label: Int, val icon: ImageVector)
 
 private val topLevelTabs = listOf(
-    TopLevelTab(Today, R.string.tab_today, Icons.Filled.TodayIcon),
-    TopLevelTab(Medications, R.string.tab_medications, Icons.AutoMirrored.Filled.List),
-    TopLevelTab(History, R.string.tab_history, Icons.Filled.CalendarMonth),
-    TopLevelTab(Settings, R.string.tab_settings, Icons.Filled.SettingsIcon)
+    TopLevelTab(Today, R.string.tab_today, DozNavIcons.Today),
+    TopLevelTab(Medications, R.string.tab_medications, DozNavIcons.Medications),
+    TopLevelTab(History, R.string.tab_history, DozNavIcons.History),
+    TopLevelTab(Settings, R.string.tab_settings, DozNavIcons.Settings)
 )
 
 @Composable
@@ -58,7 +64,8 @@ fun AppNavHost(
     onboardingDone: Boolean,
     pendingDestination: String?,
     onDestinationHandled: () -> Unit,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    shellViewModel: ShellViewModel = hiltViewModel()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
@@ -71,6 +78,17 @@ fun AppNavHost(
     val startDestination: Any = remember { if (onboardingDone) Today else Onboarding }
     val savedMessage = stringResource(R.string.saved)
     val showSaved: () -> Unit = { scope.launch { snackbarHostState.showSnackbar(savedMessage) } }
+    val switchedFormat = stringResource(R.string.switcher_switched)
+
+    val activeProfile by shellViewModel.activeProfile.collectAsStateWithLifecycle()
+    val summaries by shellViewModel.summaries.collectAsStateWithLifecycle()
+    var switcherOpen by rememberSaveable { mutableStateOf(false) }
+    val headerProfile = activeProfile?.let { profile ->
+        HeaderProfile(profile.name, profile.colorIndex) {
+            shellViewModel.loadSummaries()
+            switcherOpen = true
+        }
+    }
 
     LaunchedEffect(pendingDestination, onboardingDone) {
         if (pendingDestination == null || !onboardingDone) return@LaunchedEffect
@@ -82,75 +100,104 @@ fun AppNavHost(
         onDestinationHandled()
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = {
-            if (showBottomBar) {
-                NavigationBar {
-                    topLevelTabs.forEach { tab ->
-                        val selected = destination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = { navController.navigateToTab(tab.route) },
-                            icon = { Icon(tab.icon, contentDescription = null) },
-                            label = { Text(stringResource(tab.label)) }
-                        )
+    if (switcherOpen) {
+        ProfileSwitcherSheet(
+            summaries = summaries,
+            activeId = activeProfile?.id,
+            onSelect = { profile ->
+                switcherOpen = false
+                if (profile.id != activeProfile?.id) {
+                    shellViewModel.switchTo(profile.id)
+                    val owner = if (TurkishSuffix.isTurkish()) {
+                        TurkishSuffix.nameGenitive(profile.name)
+                    } else {
+                        profile.name
                     }
+                    scope.launch { snackbarHostState.showSnackbar(String.format(switchedFormat, owner)) }
+                }
+            },
+            onManage = {
+                switcherOpen = false
+                navController.navigate(Profiles)
+            },
+            onDismiss = { switcherOpen = false }
+        )
+    }
+
+    CompositionLocalProvider(LocalHeaderProfile provides headerProfile) {
+        Scaffold(
+            containerColor = Doz.colors.bgApp,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            bottomBar = {
+                if (showBottomBar) {
+                    DozBottomBar(
+                        topLevelTabs.map { tab ->
+                            BottomTab(
+                                label = stringResource(tab.label),
+                                icon = tab.icon,
+                                selected = destination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true,
+                                onClick = { navController.navigateToTab(tab.route) }
+                            )
+                        }
+                    )
                 }
             }
-        }
-    ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.padding(bottom = padding.calculateBottomPadding()).consumeWindowInsets(padding)
-        ) {
-            composable<Onboarding> {
-                OnboardingScreen(
-                    onFinished = {
-                        navController.navigate(Today) {
-                            popUpTo<Onboarding> { inclusive = true }
-                        }
-                    },
-                    onOpenBatteryGuide = { navController.navigate(BatteryGuide) }
-                )
+        ) { padding ->
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                modifier = Modifier.padding(bottom = padding.calculateBottomPadding()).consumeWindowInsets(padding)
+            ) {
+                composable<Onboarding> {
+                    OnboardingScreen(
+                        onFinished = {
+                            navController.navigate(Today) {
+                                popUpTo<Onboarding> { inclusive = true }
+                            }
+                        },
+                        onOpenBatteryGuide = { navController.navigate(BatteryGuide) }
+                    )
+                }
+                composable<Today> {
+                    TodayScreen(onAddMedication = { navController.navigate(MedicationEdit()) })
+                }
+                composable<Medications> {
+                    MedicationsScreen(
+                        onAdd = { navController.navigate(MedicationEdit()) },
+                        onOpen = { id -> navController.navigate(MedicationEdit(id)) }
+                    )
+                }
+                composable<MedicationEdit> {
+                    MedicationEditScreen(
+                        onSaved = {
+                            navController.popBackStack()
+                            showSaved()
+                        },
+                        onArchived = { navController.popBackStack() },
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+                composable<History> { HistoryScreen() }
+                composable<Settings> {
+                    SettingsScreen(
+                        onBatteryGuide = { navController.navigate(BatteryGuide) },
+                        onExport = { navController.navigate(Export) },
+                        onProfiles = { navController.navigate(Profiles) },
+                        onPro = { navController.navigate(Pro) }
+                    )
+                }
+                composable<Profiles> {
+                    ProfilesScreen(
+                        onBack = { navController.popBackStack() },
+                        onOpenPro = { navController.navigate(Pro) }
+                    )
+                }
+                composable<BatteryGuide> { BatteryGuideScreen(onBack = { navController.popBackStack() }) }
+                composable<Export> {
+                    ExportScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
+                }
+                composable<Pro> { ProScreen(onBack = { navController.popBackStack() }) }
             }
-            composable<Today> {
-                TodayScreen(onAddMedication = { navController.navigate(MedicationEdit()) })
-            }
-            composable<Medications> {
-                MedicationsScreen(
-                    onAdd = { navController.navigate(MedicationEdit()) },
-                    onOpen = { id -> navController.navigate(MedicationEdit(id)) }
-                )
-            }
-            composable<MedicationEdit> {
-                MedicationEditScreen(
-                    onSaved = {
-                        navController.popBackStack()
-                        showSaved()
-                    },
-                    onArchived = { navController.popBackStack() },
-                    onBack = { navController.popBackStack() }
-                )
-            }
-            composable<History> { HistoryScreen() }
-            composable<Settings> {
-                SettingsScreen(
-                    onBatteryGuide = { navController.navigate(BatteryGuide) },
-                    onExport = { navController.navigate(Export) },
-                    onProfiles = { navController.navigate(Profiles) },
-                    onPro = { navController.navigate(Pro) }
-                )
-            }
-            composable<Profiles> {
-                ProfilesScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
-            }
-            composable<BatteryGuide> { BatteryGuideScreen(onBack = { navController.popBackStack() }) }
-            composable<Export> {
-                ExportScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
-            }
-            composable<Pro> { ProScreen(onBack = { navController.popBackStack() }) }
         }
     }
 }

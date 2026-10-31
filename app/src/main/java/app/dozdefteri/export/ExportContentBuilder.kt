@@ -3,11 +3,13 @@ package app.dozdefteri.export
 import android.content.Context
 import android.text.format.DateFormat
 import app.dozdefteri.R
+import app.dozdefteri.core.format.DoseText
 import app.dozdefteri.core.format.Formats
-import app.dozdefteri.core.format.ScheduleFormatter
 import app.dozdefteri.data.db.dao.DoseEventDetails
 import app.dozdefteri.data.repository.MedicationWithSchedule
-import app.dozdefteri.domain.AdherenceCalculator
+import app.dozdefteri.domain.DayStatus
+import app.dozdefteri.domain.DayStatusCalculator
+import app.dozdefteri.domain.HistoryStats
 import app.dozdefteri.domain.model.DoseStatus
 import app.dozdefteri.domain.model.ScheduleType
 import app.dozdefteri.ui.components.statusLabelRes
@@ -17,12 +19,12 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 /** Resolves the localized texts of CSV and PDF exports. */
 class ExportContentBuilder @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val adherenceCalculator: AdherenceCalculator
+    @ApplicationContext private val context: Context
 ) {
     fun csvLabels(): CsvLabels = CsvLabels(
         headers = listOf(
@@ -38,85 +40,74 @@ class ExportContentBuilder @Inject constructor(
         statuses = DoseStatus.entries.associateWith { context.getString(statusLabelRes(it)) }
     )
 
+    /** "1–31 Ekim 2026" */
+    fun rangeLabel(start: LocalDate, end: LocalDate): String {
+        val full = DateTimeFormatter.ofPattern("d MMMM yyyy")
+        return if (start.year == end.year && start.month == end.month) {
+            "${start.dayOfMonth}–${end.format(full)}"
+        } else {
+            "${start.format(DateTimeFormatter.ofPattern("d MMMM"))} – ${end.format(full)}"
+        }
+    }
+
     @Suppress("LongParameterList")
     fun pdfReport(
         profileName: String,
         start: LocalDate,
         end: LocalDate,
-        generatedAt: Instant,
+        today: LocalDate,
         zone: ZoneId,
         medications: List<MedicationWithSchedule>,
-        doses: List<DoseEventDetails>,
-        detailed: Boolean
+        doses: List<DoseEventDetails>
     ): PdfReport {
-        val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
         val is24Hour = DateFormat.is24HourFormat(context)
         val scheduled = doses.filter { it.scheduleType != ScheduleType.AS_NEEDED }
+        val counts = HistoryStats.count(scheduled.map { it.event.status })
+        val byMedication = doses.groupBy { it.event.medicationId }
+        val lines = medications.map { item ->
+            val med = item.medication
+            val name = DoseText.title(med.name, DoseText.strength(med.strengthAmount, med.strengthUnit))
+            val events = byMedication[med.id].orEmpty()
+            if (item.schedule?.type == ScheduleType.AS_NEEDED) {
+                val times = events.count { it.event.status == DoseStatus.TAKEN }
+                context.getString(R.string.pdf_line_prn, name, times)
+            } else {
+                val medCounts = HistoryStats.count(events.map { it.event.status })
+                val times = item.schedule?.times.orEmpty().joinToString(", ") { Formats.time(it, is24Hour) }
+                context.getString(R.string.pdf_line, name, times, medCounts.taken, medCounts.planned)
+            }
+        }
+        val statusesByDay = scheduled.groupBy {
+            Instant.ofEpochMilli(it.event.originalScheduledAt).atZone(zone).toLocalDate()
+        }
+        val dayCount = ChronoUnit.DAYS.between(start, end).toInt() + 1
+        val days = (0 until dayCount).map { offset ->
+            val date = start.plusDays(offset.toLong())
+            if (date.isAfter(today)) {
+                DayStatus.NONE
+            } else {
+                DayStatusCalculator.calculate(statusesByDay[date].orEmpty().map { it.event.status })
+            }
+        }
+        val percent = counts.percent?.let { context.getString(R.string.percent_value, it) }
+            ?: context.getString(R.string.no_value)
         return PdfReport(
             title = context.getString(R.string.pdf_title),
             subtitleLines = listOf(
-                context.getString(R.string.pdf_profile, profileName),
-                context.getString(R.string.pdf_range, start.format(dateFormat), end.format(dateFormat)),
-                context.getString(R.string.pdf_generated, generatedAt.atZone(zone).toLocalDate().format(dateFormat))
-            ),
-            medicationsTitle = context.getString(R.string.pdf_medications),
-            medicationHeaders = listOf(
-                context.getString(R.string.csv_medication),
-                context.getString(R.string.csv_dose),
-                context.getString(R.string.pdf_schedule)
-            ),
-            medicationRows = medications.map {
-                listOf(
-                    it.medication.name,
-                    Formats.dose(it.medication.doseAmount, it.medication.doseUnit),
-                    ScheduleFormatter.summary(context, it.schedule)
+                "$profileName · ${rangeLabel(start, end)}",
+                context.getString(
+                    R.string.pdf_generated,
+                    today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
                 )
-            },
-            dosesTitle = context.getString(R.string.pdf_doses),
-            doseHeaders = listOf(
-                context.getString(R.string.csv_date),
-                context.getString(R.string.pdf_time),
-                context.getString(R.string.csv_medication),
-                context.getString(R.string.csv_status)
             ),
-            doseRows = doses.sortedBy { it.event.originalScheduledAt }.map { dose ->
-                val planned = Instant.ofEpochMilli(dose.event.originalScheduledAt).atZone(zone)
-                listOf(
-                    planned.toLocalDate().format(dateFormat),
-                    Formats.time(planned.toLocalTime(), is24Hour),
-                    dose.medicationName,
-                    context.getString(statusLabelRes(dose.event.status))
-                )
-            },
-            adherence = if (detailed) {
-                AdherenceSection(
-                    title = context.getString(R.string.pdf_adherence),
-                    overallLine = context.getString(
-                        R.string.pdf_overall_adherence,
-                        percent(adherenceCalculator.calculate(scheduled.map { it.event }))
-                    ),
-                    headers = listOf(
-                        context.getString(R.string.csv_medication),
-                        context.getString(R.string.pdf_adherence)
-                    ),
-                    rows = scheduled.groupBy { it.event.medicationId }.values
-                        .sortedBy { it.first().medicationName.lowercase() }
-                        .map { list ->
-                            listOf(
-                                list.first().medicationName,
-                                percent(adherenceCalculator.calculate(list.map { it.event }))
-                            )
-                        }
-                )
-            } else {
-                null
-            },
+            adherenceLine = context.getString(R.string.pdf_adherence_line, percent, counts.taken, counts.planned),
+            medicationLines = lines,
+            days = days,
+            stripLegend = context.getString(R.string.pdf_strip_legend),
             emptyText = context.getString(R.string.pdf_empty),
+            footnote = context.getString(R.string.pdf_footnote),
             disclaimer = context.getString(R.string.disclaimer),
             pageFormat = context.getString(R.string.pdf_page)
         )
     }
-
-    private fun percent(value: Int?): String =
-        value?.let { context.getString(R.string.percent_value, it) } ?: context.getString(R.string.no_value)
 }

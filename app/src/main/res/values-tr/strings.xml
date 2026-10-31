@@ -187,7 +187,7 @@
     <string name="backup_create">Yedekle</string>
     <string name="backup_restore">Yedekten geri yükle</string>
     <string name="backup_restore_confirm_title">Yedek geri yüklensin mi?</string>
-    <string name="backup_restore_confirm_text">Mevcut tüm veriler silinip yedekteki verilerle değiştirilecek.</string>
+    <string name="backup_restore_confirm_text">Mevcut tüm veriler silinecek ve yedekteki verilerle değiştirilecek. Bu işlem geri alınamaz.</string>
     <string name="backup_restored">Yedek geri yüklendi</string>
     <string name="backup_error_invalid">Bu dosya bir DozDefteri yedeği değil.</string>
     <string name="backup_error_version">Bu yedek DozDefteri\'nin daha yeni bir sürümüyle alınmış. Uygulamayı güncelleyip tekrar dene.</string>
@@ -199,7 +199,7 @@
     <string name="csv_status">durum</string>
     <string name="csv_action_time">işlem_zamanı</string>
     <string name="csv_profile">profil</string>
-    <string name="pdf_title">İlaç kullanım raporu</string>
+    <string name="pdf_title">DozDefteri · İlaç uyum özeti</string>
     <string name="pdf_profile">Profil: %1$s</string>
     <string name="pdf_range">Tarih aralığı: %1$s – %2$s</string>
     <string name="pdf_generated">Oluşturulma: %1$s</string>
@@ -215,7 +215,7 @@
     <!-- Ayarlar -->
     <string name="settings_appearance">Görünüm</string>
     <string name="settings_theme">Tema</string>
-    <string name="theme_system">Sistem varsayılanı</string>
+    <string name="theme_system">Sistem ayarını izle</string>
     <string name="theme_light">Açık</string>
     <string name="theme_dark">Koyu</string>
     <string name="settings_accent">Vurgu rengi</string>
@@ -233,7 +233,7 @@
     <string name="settings_not_allowed">İzin yok, düzeltmek için dokun</string>
     <string name="settings_data">Veri</string>
     <string name="settings_pro_status">Durum</string>
-    <string name="settings_pro_active">Pro etkin</string>
+    <string name="settings_pro_active">Etkin · teşekkürler</string>
     <string name="settings_pro_inactive">Ücretsiz sürüm</string>
     <string name="settings_about">Hakkında</string>
     <string name="settings_version">Sürüm</string>
@@ -451,4 +451,83 @@
     </plurals>
     <string name="notif_remaining_days">Kalan: %1$s · ~%2$d gün</string>
     <string name="notif_remaining">Kalan: %1$s</string>
+
+    <!-- Rapor v2 -->
+    <string name="reports_title">Rapor ve yedek</string>
+    <string name="reports_doctor_section">Doktor raporu</string>
+    <string name="range_last_month">Son 1 ay</string>
+    <string name="range_last_3_months">Son 3 ay</string>
+    <string name="format_pdf">PDF</string>
+    <string name="format_pdf_desc">Doktor için tek sayfa</string>
+    <string name="format_csv">CSV</string>
+    <string name="format_csv_desc">Tablo programları için</string>
+    <string name="create_pdf_share">PDF oluştur ve paylaş</string>
+    <string name="create_csv_share">CSV oluştur ve paylaş</string>
+    <string name="pdf_preview_a11y">PDF raporunun önizlemesi</string>
+    <string name="pdf_line">%1$s · %2$s · %3$d/%4$d</string>
+    <string name="pdf_line_prn">%1$s · gerektiğinde · %2$d kez</string>
+    <string name="pdf_adherence_line">Uyum: %1$s (%2$d/%3$d)</string>
+    <string name="pdf_strip_legend">Her çubuk bir gün: koyu yeşil tamamı alındı, sarı kısmi, kahverengi işaretlenmedi, gri doz yok.</string>
+    <string name="pdf_footnote">Atlanan/işaretlenmeyen dozlar kullanıcı kaydına dayanır.</string>
+    <string name="backup_last">Son yedek: %1$s</string>
+    <string name="backup_never">Henüz yedek yok</string>
+    <string name="backup_create_now">Şimdi yedek oluştur</string>
+    <string name="backup_restore_confirm">Yedekle değiştir</string>
+    <string name="backup_monthly_reminder">Ayda bir yedek hatırlat</string>
+    <string name="backup_next_reminder">Sonraki: %1$s</string>
+    <string name="backup_saved">Yedek kaydedildi</string>
+    <string name="downloads_folder">İndirilenler</string>
+
+    <!-- Ayarlar v2 -->
+    <string name="health_title">Hatırlatma sağlığı</string>
+    <plurals name="health_issues">
+        <item quantity="one">%d sorun</item>
+        <item quantity="other">%d sorun</item>
+    </plurals>
+    <string name="health_notifications">Bildirimler</string>
+    <string name="health_notifications_on">Açık</string>
+    <string name="health_notifications_off">Kapalı · hatırlatmalar görünemez</string>
+    <string name="health_exact">Tam vaktinde çalma</string>
+    <string name="health_exact_on">Açık</string>
+    <string name="health_exact_off">Kapalı · birkaç dakika gecikebilir</string>
+    <string name="health_battery">Pil kısıtlaması</string>
+    <string name="health_battery_ok">Kısıtlanmamış</string>
+    <string name="health_battery_restricted">Kısıtlı · hatırlatmalar gecikebilir</string>
+    <string name="settings_language">Dil</string>
+    <string name="language_system">Sistem dili</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_english">English</string>
+    <string name="settings_large_text">Büyük yazı</string>
+    <string name="settings_large_text_desc">Metinler ve butonlar büyür</string>
+    <string name="settings_missed_after_v2">\"İşaretlenmedi\" sayılma süresi</string>
+    <string name="settings_missed_after_value">Doz saatinden %1$d dk sonra</string>
+    <string name="settings_data_profiles">Veriler ve profiller</string>
+    <string name="settings_reports_desc">PDF, CSV, yedek dosyası</string>
+    <string name="settings_profiles_desc">Birden fazla kişinin ilaçları</string>
+    <string name="settings_pro_price">Tek seferlik · %1$s</string>
+    <string name="settings_pro_one_time">Tek seferlik satın alma</string>
+    <string name="settings_privacy">Gizlilik</string>
+    <string name="settings_privacy_desc">Verilerin yalnızca bu telefonda. Hesap yok.</string>
+    <string name="disclaimer_short">DozDefteri tıbbi tavsiye vermez, doktor talimatının yerini tutmaz.</string>
+
+    <!-- Pro v2 -->
+    <string name="pro_headline_v2">Bir kez öde, hep senin.</string>
+    <string name="pro_subtitle">Abonelik yok, reklam yok. Ücretsiz sürüm de kalıcı olarak ücretsiz kalır.</string>
+    <string name="pro_free_forever">Ücretsizde sonsuza kadar</string>
+    <string name="pro_free_list">Sınırsız ilaç · tüm hatırlatmalar · geçmiş ve uyum · PDF/CSV rapor · yedekleme</string>
+    <string name="pro_row_unlimited">Sınırsız ilaç ve hatırlatma</string>
+    <string name="pro_row_actions">Bildirimden Aldım / Ertele / Atla</string>
+    <string name="pro_row_history">Geçmiş, rapor, yedek</string>
+    <string name="pro_row_profiles">Birden fazla profil</string>
+    <string name="pro_row_widget">Ana ekran widget\'ı</string>
+    <string name="pro_row_colors">Profil renkleri</string>
+    <string name="pro_col_feature">Özellik</string>
+    <string name="pro_col_free">Ücretsiz</string>
+    <string name="pro_col_pro">Pro</string>
+    <string name="pro_cell_yes">var</string>
+    <string name="pro_cell_no">yok</string>
+    <string name="pro_row_a11y">%1$s: ücretsiz %2$s, Pro %3$s</string>
+    <string name="pro_buy_with_price">%1$s · Tek seferlik satın al</string>
+    <string name="pro_price_unavailable_short">Fiyat yüklenemedi</string>
+    <string name="pro_footnote">Ödeme Google Play üzerinden. Hesap gerekmez.</string>
 </resources>

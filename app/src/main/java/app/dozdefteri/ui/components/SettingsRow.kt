@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.dozdefteri.ui.theme.Doz
 import app.dozdefteri.ui.theme.DozDefteriTheme
@@ -45,6 +46,7 @@ fun SettingsRow(
     iconTint: Color = Doz.colors.textSecondary,
     trailing: RowTrailing = RowTrailing.Chevron,
     showChevronAfterBadge: Boolean = true,
+    horizontalPadding: Dp = Space.s16,
     onClick: (() -> Unit)? = null
 ) {
     val c = Doz.colors
@@ -61,7 +63,7 @@ fun SettingsRow(
             .fillMaxWidth()
             .heightIn(min = 56.dp)
             .then(clickModifier)
-            .padding(horizontal = Space.s16, vertical = Space.s12)
+            .padding(horizontal = horizontalPadding, vertical = Space.s12)
     ) {
         if (icon != null) Icon(icon, contentDescription = null, tint = iconTint)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.s4)) {

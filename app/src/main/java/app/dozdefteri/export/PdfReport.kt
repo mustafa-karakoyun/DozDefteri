@@ -1,27 +1,25 @@
 package app.dozdefteri.export
 
-/** Fully localized content of a PDF report; [PdfExporter] only lays it out. */
+import app.dozdefteri.domain.DayStatus
+
+/** Fully localized content of the one-page doctor report; [PdfExporter] only lays it out. */
 data class PdfReport(
+    /** "DozDefteri · İlaç uyum özeti" */
     val title: String,
-    /** Lines under the title: profile, date range, generation date. */
+    /** "Ayşe · 1–31 Ekim 2026" and the generation date. */
     val subtitleLines: List<String>,
-    val medicationsTitle: String,
-    val medicationHeaders: List<String>,
-    val medicationRows: List<List<String>>,
-    val dosesTitle: String,
-    val doseHeaders: List<String>,
-    val doseRows: List<List<String>>,
-    /** Detailed (Pro) template only; null for the simple template. */
-    val adherence: AdherenceSection?,
+    /** "Uyum: %92 (136/148)" */
+    val adherenceLine: String,
+    /** "Levotiroksin 50 mcg · 07:30 · 31/31", "Parasetamol 500 mg · gerektiğinde · 4 kez" */
+    val medicationLines: List<String>,
+    /** One entry per day of the range, drawn as a colored strip. */
+    val days: List<DayStatus>,
+    /** Legend under the strip. */
+    val stripLegend: String,
     val emptyText: String,
+    /** "Atlanan/işaretlenmeyen dozlar kullanıcı kaydına dayanır." */
+    val footnote: String,
     val disclaimer: String,
     /** Format with two %d placeholders: current page, total pages. */
     val pageFormat: String
-)
-
-data class AdherenceSection(
-    val title: String,
-    val overallLine: String,
-    val headers: List<String>,
-    val rows: List<List<String>>
 )

@@ -189,10 +189,10 @@ fun AppNavHost(
                 composable<History> { HistoryScreen() }
                 composable<Settings> {
                     SettingsScreen(
-                        onBatteryGuide = { navController.navigate(BatteryGuide) },
-                        onExport = { navController.navigate(Export) },
+                        onReports = { navController.navigate(Export) },
                         onProfiles = { navController.navigate(Profiles) },
-                        onPro = { navController.navigate(Pro) }
+                        onPro = { navController.navigate(Pro) },
+                        onBatteryGuide = { navController.navigate(BatteryGuide) }
                     )
                 }
                 composable<Profiles> {
@@ -203,7 +203,7 @@ fun AppNavHost(
                 }
                 composable<BatteryGuide> { BatteryGuideScreen(onBack = { navController.popBackStack() }) }
                 composable<Export> {
-                    ExportScreen(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Pro) })
+                    ExportScreen(onBack = { navController.popBackStack() })
                 }
                 composable<Pro> { ProScreen(onBack = { navController.popBackStack() }) }
             }

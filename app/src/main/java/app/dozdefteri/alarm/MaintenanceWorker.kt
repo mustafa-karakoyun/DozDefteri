@@ -38,7 +38,9 @@ class MaintenanceWorker @AssistedInject constructor(
 
     private suspend fun maybeRemindBackup() {
         val now = clock.millis()
-        val last = settingsRepository.current().lastBackupReminderAt
+        val settings = settingsRepository.current()
+        if (!settings.backupReminderEnabled) return
+        val last = settings.lastBackupReminderAt
         if (last == 0L) {
             // First run after install: start the 30-day period instead of reminding immediately.
             settingsRepository.setLastBackupReminderAt(now)

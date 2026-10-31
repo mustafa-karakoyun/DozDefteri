@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@file:OptIn(ExperimentalLayoutApi::class)
 
 package app.dozdefteri.ui.export
 
@@ -8,43 +8,36 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Backup
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Restore
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,102 +47,109 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.dozdefteri.R
 import app.dozdefteri.data.db.entity.ProfileEntity
+import app.dozdefteri.domain.DayStatus
+import app.dozdefteri.export.PdfReport
 import app.dozdefteri.ui.components.ConfirmDialog
-import app.dozdefteri.ui.components.DateSelectDialog
+import app.dozdefteri.ui.components.DateRangeSelectDialog
+import app.dozdefteri.ui.components.DozDropdownField
+import app.dozdefteri.ui.components.DozTopBar
+import app.dozdefteri.ui.components.OutlinedPillButton
+import app.dozdefteri.ui.components.PrimaryButton
+import app.dozdefteri.ui.components.RowTrailing
+import app.dozdefteri.ui.components.SelectChip
+import app.dozdefteri.ui.components.SettingsRow
+import app.dozdefteri.ui.components.TonalButton
+import app.dozdefteri.ui.theme.Doz
 import app.dozdefteri.ui.theme.DozDefteriTheme
+import app.dozdefteri.ui.theme.DozPreviews
+import app.dozdefteri.ui.theme.Amber
+import app.dozdefteri.ui.theme.Clay
+import app.dozdefteri.ui.theme.DozShapes
+import app.dozdefteri.ui.theme.Sand
+import app.dozdefteri.ui.theme.Teal
+import app.dozdefteri.ui.theme.Space
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import java.util.Locale
 
 data class ExportActions(
     val onSelectProfile: (Long?) -> Unit = {},
     val onSelectRange: (RangeOption) -> Unit = {},
-    val onCustomStart: (LocalDate) -> Unit = {},
-    val onCustomEnd: (LocalDate) -> Unit = {},
-    val onCsv: () -> Unit = {},
-    val onPdf: () -> Unit = {},
+    val onCustomRange: (LocalDate, LocalDate) -> Unit = { _, _ -> },
+    val onSelectFormat: (ReportFormat) -> Unit = {},
+    val onCreate: () -> Unit = {},
     val onBackup: () -> Unit = {},
     val onRestore: () -> Unit = {},
     val onConfirmRestore: () -> Unit = {},
     val onDismissRestore: () -> Unit = {},
-    val onOpenPro: () -> Unit = {},
+    val onBackupReminder: (Boolean) -> Unit = {},
     val onBack: () -> Unit = {}
 )
 
 @Composable
-fun ExportScreen(onBack: () -> Unit, onOpenPro: () -> Unit, viewModel: ExportViewModel = hiltViewModel()) {
+fun ExportScreen(onBack: () -> Unit, viewModel: ExportViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val allProfilesLabel = stringResource(R.string.all_profiles)
+    LaunchedEffect(allProfilesLabel) { viewModel.setAllProfilesLabel(allProfilesLabel) }
 
-    val csvLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_CSV)) {
-        it?.let(viewModel::exportCsv)
-    }
-    val pdfLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_PDF)) {
-        it?.let { uri -> viewModel.exportPdf(uri, allProfilesLabel) }
-    }
-    val backupLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ExportViewModel.MIME_JSON)) {
-            it?.let(viewModel::backup)
+    var legacyBackupName by rememberSaveable { mutableStateOf("") }
+    val legacyBackupLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(BACKUP_PICK_MIME)) { uri ->
+            uri?.let { viewModel.backupTo(it, legacyBackupName) }
         }
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
         it?.let(viewModel::readBackup)
     }
-
-    val savedText = stringResource(R.string.file_saved)
-    val shareText = stringResource(R.string.share)
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
-                is ExportEvent.Saved -> {
-                    val result = snackbarHostState.showSnackbar(
-                        message = savedText,
-                        actionLabel = shareText,
-                        duration = SnackbarDuration.Long
-                    )
-                    if (result == SnackbarResult.ActionPerformed) share(context, event.uri, event.mimeType)
-                }
+                is ExportEvent.Share -> share(context, event.uri, event.mimeType)
                 is ExportEvent.Message -> snackbarHostState.showSnackbar(context.getString(event.text))
+                is ExportEvent.PickBackupLocation -> {
+                    legacyBackupName = event.fileName
+                    legacyBackupLauncher.launch(event.fileName)
+                }
             }
         }
     }
-
     ExportContent(
         state = state,
         snackbarHostState = snackbarHostState,
         actions = ExportActions(
             onSelectProfile = viewModel::selectProfile,
             onSelectRange = viewModel::selectRange,
-            onCustomStart = viewModel::setCustomStart,
-            onCustomEnd = viewModel::setCustomEnd,
-            onCsv = { csvLauncher.launch(viewModel.csvFileName()) },
-            onPdf = { pdfLauncher.launch(viewModel.pdfFileName()) },
-            onBackup = { backupLauncher.launch(viewModel.backupFileName()) },
-            onRestore = { restoreLauncher.launch(BACKUP_MIME_TYPES) },
+            onCustomRange = viewModel::setCustomRange,
+            onSelectFormat = viewModel::selectFormat,
+            onCreate = viewModel::createAndShare,
+            onBackup = viewModel::backupNow,
+            onRestore = { restoreLauncher.launch(arrayOf("*/*")) },
             onConfirmRestore = viewModel::confirmRestore,
             onDismissRestore = viewModel::dismissRestore,
-            onOpenPro = onOpenPro,
+            onBackupReminder = viewModel::setBackupReminder,
             onBack = onBack
         )
     )
 }
 
-private val BACKUP_MIME_TYPES = arrayOf("application/json", "text/plain", "application/octet-stream")
+private const val BACKUP_PICK_MIME = "application/octet-stream"
 
 private fun share(context: Context, uri: Uri, mimeType: String) {
     val send = Intent(Intent.ACTION_SEND)
@@ -159,62 +159,39 @@ private fun share(context: Context, uri: Uri, mimeType: String) {
     try {
         context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     } catch (_: ActivityNotFoundException) {
-        // No app can receive the file; the file itself is already saved.
+        // No app can receive the file.
     }
 }
 
 @Composable
 fun ExportContent(state: ExportUiState, snackbarHostState: SnackbarHostState, actions: ExportActions) {
     Scaffold(
+        containerColor = Doz.colors.bgApp,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.export_title)) },
-                navigationIcon = {
-                    IconButton(onClick = actions.onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-                    }
-                }
-            )
-        }
+        topBar = { DozTopBar(stringResource(R.string.reports_title), onNavigate = actions.onBack) }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = Space.s16)
+                .navigationBarsPadding(),
+            verticalArrangement = Arrangement.spacedBy(Space.s12)
         ) {
-            if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-            if (state.profiles.size > 1) ProfileChooser(state, actions)
-            RangeChooser(state, actions)
-            ActionButton(Icons.Filled.Description, stringResource(R.string.export_csv), !state.busy, actions.onCsv)
-            ActionButton(Icons.Filled.PictureAsPdf, stringResource(R.string.export_pdf), !state.busy, actions.onPdf)
-            Text(
-                stringResource(if (state.isPro) R.string.export_pdf_detailed_hint else R.string.export_pdf_simple_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            HorizontalDivider()
+            if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth(), color = Doz.colors.primary)
+            SectionTitle(stringResource(R.string.reports_doctor_section))
+            ReportCard(state, actions)
             SectionTitle(stringResource(R.string.backup_section))
-            Text(stringResource(R.string.backup_hint), style = MaterialTheme.typography.bodyMedium)
-            ActionButton(Icons.Filled.Backup, stringResource(R.string.backup_create), !state.busy, actions.onBackup)
-            ActionButton(
-                Icons.Filled.Restore,
-                stringResource(R.string.backup_restore),
-                !state.busy,
-                actions.onRestore,
-                outlined = true
-            )
+            BackupCard(state, actions)
+            Box(Modifier.height(Space.s16))
         }
     }
-
     if (state.pendingRestore != null) {
         ConfirmDialog(
             title = stringResource(R.string.backup_restore_confirm_title),
             text = stringResource(R.string.backup_restore_confirm_text),
-            confirmLabel = stringResource(R.string.backup_restore),
+            confirmLabel = stringResource(R.string.backup_restore_confirm),
             onConfirm = actions.onConfirmRestore,
             onDismiss = actions.onDismissRestore
         )
@@ -223,142 +200,313 @@ fun ExportContent(state: ExportUiState, snackbarHostState: SnackbarHostState, ac
 
 @Composable
 private fun SectionTitle(text: String) {
-    Text(text, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-}
-
-@Composable
-private fun ProfileChooser(state: ExportUiState, actions: ExportActions) {
-    SectionTitle(stringResource(R.string.export_profile))
-    Column(Modifier.selectableGroup()) {
-        state.profiles.forEach { profile ->
-            ChoiceRow(
-                label = profile.name,
-                selected = !state.allProfilesSelected && state.selectedProfile?.id == profile.id,
-                onClick = { actions.onSelectProfile(profile.id) }
-            )
-        }
-        ChoiceRow(
-            label = stringResource(R.string.all_profiles),
-            selected = state.allProfilesSelected,
-            locked = !state.isPro,
-            onClick = { if (state.isPro) actions.onSelectProfile(null) else actions.onOpenPro() }
-        )
-    }
-}
-
-@Composable
-private fun ChoiceRow(label: String, selected: Boolean, onClick: () -> Unit, locked: Boolean = false) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Text(
+        text,
+        style = Doz.type.titleMedium,
+        color = Doz.colors.textSecondary,
         modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 48.dp)
-            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+            .padding(top = Space.s12)
+            .semantics { heading() }
+    )
+}
+
+@Composable
+private fun CardSurface(content: @Composable () -> Unit) {
+    Surface(
+        shape = DozShapes.card,
+        color = Doz.colors.surfaceDefault,
+        border = BorderStroke(1.dp, Doz.colors.borderDefault),
+        modifier = Modifier.fillMaxWidth()
     ) {
-        RadioButton(selected = selected, onClick = null, enabled = !locked)
-        Text(label, modifier = Modifier.padding(start = 12.dp).weight(1f))
-        if (locked) {
-            Icon(Icons.Filled.Lock, contentDescription = stringResource(R.string.pro_required))
-        }
+        Column(Modifier.padding(Space.s16), verticalArrangement = Arrangement.spacedBy(Space.s16)) { content() }
     }
 }
 
 @Composable
-private fun RangeChooser(state: ExportUiState, actions: ExportActions) {
-    var pickStart by rememberSaveable { mutableStateOf(false) }
-    var pickEnd by rememberSaveable { mutableStateOf(false) }
-    val formatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM) }
-    SectionTitle(stringResource(R.string.export_range))
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        RangeOption.entries.forEach { option ->
-            FilterChip(
-                selected = state.range == option,
-                onClick = { actions.onSelectRange(option) },
-                label = { Text(stringResource(rangeLabel(option))) }
+private fun ReportCard(state: ExportUiState, actions: ExportActions) {
+    var pickRange by rememberSaveable { mutableStateOf(false) }
+    CardSurface {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(Space.s8),
+            verticalArrangement = Arrangement.spacedBy(Space.s8)
+        ) {
+            listOf(
+                RangeOption.LAST_MONTH to R.string.range_last_month,
+                RangeOption.LAST_3_MONTHS to R.string.range_last_3_months,
+                RangeOption.CUSTOM to R.string.range_custom
+            ).forEach { (option, label) ->
+                SelectChip(
+                    text = stringResource(label),
+                    selected = state.range == option,
+                    onClick = { if (option == RangeOption.CUSTOM) pickRange = true else actions.onSelectRange(option) },
+                    showCheck = true
+                )
+            }
+        }
+        ProfileRangeField(state, actions.onSelectProfile)
+        Row(horizontalArrangement = Arrangement.spacedBy(Space.s8)) {
+            FormatCard(
+                title = stringResource(R.string.format_pdf),
+                description = stringResource(R.string.format_pdf_desc),
+                selected = state.format == ReportFormat.PDF,
+                onClick = { actions.onSelectFormat(ReportFormat.PDF) },
+                modifier = Modifier.weight(1f)
+            )
+            FormatCard(
+                title = stringResource(R.string.format_csv),
+                description = stringResource(R.string.format_csv_desc),
+                selected = state.format == ReportFormat.CSV,
+                onClick = { actions.onSelectFormat(ReportFormat.CSV) },
+                modifier = Modifier.weight(1f)
+            )
+        }
+        if (state.format == ReportFormat.PDF) state.preview?.let { PdfThumbnail(it) }
+        PrimaryButton(
+            stringResource(
+                if (state.format == ReportFormat.PDF) R.string.create_pdf_share else R.string.create_csv_share
+            ),
+            onClick = actions.onCreate,
+            enabled = !state.busy,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+    if (pickRange) {
+        DateRangeSelectDialog(
+            initialStart = state.start,
+            initialEnd = state.end,
+            onConfirm = { start, end ->
+                pickRange = false
+                actions.onCustomRange(start, end)
+            },
+            onDismiss = { pickRange = false }
+        )
+    }
+}
+
+private sealed interface ProfileChoice {
+    data class One(val profile: ProfileEntity) : ProfileChoice
+    data object All : ProfileChoice
+}
+
+@Composable
+private fun ProfileRangeField(state: ExportUiState, onSelect: (Long?) -> Unit) {
+    val allLabel = stringResource(R.string.all_profiles)
+    val choices: List<ProfileChoice> = state.profiles.map { ProfileChoice.One(it) } +
+        if (state.profiles.size > 1) listOf(ProfileChoice.All) else emptyList()
+    val selected: ProfileChoice = if (state.allProfilesSelected) {
+        ProfileChoice.All
+    } else {
+        choices.firstOrNull { it is ProfileChoice.One && it.profile.id == state.selectedProfile?.id }
+            ?: ProfileChoice.All
+    }
+    DozDropdownField(
+        selected = selected,
+        options = choices,
+        label = { choice ->
+            val name = when (choice) {
+                is ProfileChoice.One -> choice.profile.name
+                ProfileChoice.All -> allLabel
+            }
+            "$name · ${state.rangeLabel}"
+        },
+        onSelect = { choice ->
+            onSelect(
+                when (choice) {
+                    is ProfileChoice.One -> choice.profile.id
+                    ProfileChoice.All -> null
+                }
+            )
+        }
+    )
+}
+
+@Composable
+private fun FormatCard(
+    title: String,
+    description: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier
+) {
+    val c = Doz.colors
+    Surface(
+        shape = DozShapes.field,
+        color = if (selected) c.primaryContainer else c.surfaceDefault,
+        border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) c.primary else c.borderStrong),
+        modifier = modifier
+            .heightIn(min = 64.dp)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
+    ) {
+        Column(Modifier.padding(Space.s12)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Space.s4)
+            ) {
+                if (selected) Icon(Icons.Rounded.Check, contentDescription = null, tint = c.onPrimaryContainer)
+                Text(
+                    title,
+                    style = Doz.type.titleMedium,
+                    color = if (selected) c.onPrimaryContainer else c.textPrimary
+                )
+            }
+            Text(
+                description,
+                style = Doz.type.caption,
+                color = if (selected) c.onPrimaryContainer else c.textSecondary
             )
         }
     }
-    if (state.range == RangeOption.CUSTOM) {
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = { pickStart = true }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) {
-                Text(state.start.format(formatter))
+}
+
+/** Miniature of the doctor report so the user sees what will be shared. */
+@Composable
+private fun PdfThumbnail(report: PdfReport) {
+    val c = Doz.colors
+    val description = stringResource(R.string.pdf_preview_a11y)
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .background(c.surfaceContainerHigh, DozShapes.card)
+            .padding(vertical = Space.s16)
+            .clearAndSetSemantics { contentDescription = description },
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth(0.72f)
+                .aspectRatio(PAPER_RATIO)
+                .background(Sand.c0)
+                .padding(Space.s12),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            Text(report.title, style = paperStyle(7, bold = true))
+            report.subtitleLines.take(1).forEach { Text(it, style = paperStyle(5)) }
+            Text(report.adherenceLine, style = paperStyle(6, bold = true))
+            report.medicationLines.take(MAX_PREVIEW_LINES).forEach {
+                Text(it, style = paperStyle(5), maxLines = 1)
             }
-            OutlinedButton(onClick = { pickEnd = true }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) {
-                Text(state.end.format(formatter))
+            if (report.days.isNotEmpty()) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(14.dp),
+                    horizontalArrangement = Arrangement.spacedBy(1.dp)
+                ) {
+                    report.days.takeLast(MAX_PREVIEW_DAYS).forEach { status ->
+                        val color = when (status) {
+                            DayStatus.ALL_TAKEN -> Teal.c600
+                            DayStatus.PARTIAL -> Amber.c700
+                            DayStatus.MISSED -> Clay.c700
+                            DayStatus.NONE -> Sand.c200
+                        }
+                        Box(Modifier.weight(1f).fillMaxHeight().background(color))
+                    }
+                }
             }
+            Text(report.footnote, style = paperStyle(4))
         }
-    } else {
-        Text(
-            stringResource(R.string.export_range_value, state.start.format(formatter), state.end.format(formatter)),
-            style = MaterialTheme.typography.bodyMedium
-        )
-    }
-    if (pickStart) {
-        DateSelectDialog(
-            initial = state.start,
-            onConfirm = {
-                pickStart = false
-                actions.onCustomStart(it)
-            },
-            onDismiss = { pickStart = false }
-        )
-    }
-    if (pickEnd) {
-        DateSelectDialog(
-            initial = state.end,
-            onConfirm = {
-                pickEnd = false
-                actions.onCustomEnd(it)
-            },
-            onDismiss = { pickEnd = false }
-        )
     }
 }
 
-private fun rangeLabel(option: RangeOption): Int = when (option) {
-    RangeOption.LAST_7 -> R.string.range_7
-    RangeOption.LAST_30 -> R.string.range_30
-    RangeOption.LAST_90 -> R.string.range_90
-    RangeOption.CUSTOM -> R.string.range_custom
-}
+/** Text on the white paper preview stays dark in both themes, like the real PDF. */
+private fun paperStyle(size: Int, bold: Boolean = false) = TextStyle(
+    fontSize = size.sp,
+    lineHeight = (size + 2).sp,
+    color = Sand.c900,
+    fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal
+)
+
+private const val PAPER_RATIO = 595f / 842f
+private const val MAX_PREVIEW_LINES = 8
+private const val MAX_PREVIEW_DAYS = 31
 
 @Composable
-private fun ActionButton(
-    icon: ImageVector,
-    label: String,
-    enabled: Boolean,
-    onClick: () -> Unit,
-    outlined: Boolean = false
-) {
-    val content: @Composable () -> Unit = {
-        Icon(icon, contentDescription = null)
-        Text(label, modifier = Modifier.padding(start = 8.dp))
-    }
-    if (outlined) {
-        OutlinedButton(onClick = onClick, enabled = enabled, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-            content()
+private fun BackupCard(state: ExportUiState, actions: ExportActions) {
+    val c = Doz.colors
+    val dateTime = DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm", Locale.getDefault())
+    CardSurface {
+        Text(
+            state.lastBackupAt?.let {
+                stringResource(R.string.backup_last, it.atZone(ZoneId.systemDefault()).format(dateTime))
+            } ?: stringResource(R.string.backup_never),
+            style = Doz.type.bodyLarge,
+            color = c.textPrimary
+        )
+        state.lastBackupLocation?.let { location ->
+            Row(
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(Space.s12),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(c.surfaceContainer, DozShapes.small)
+                    .padding(Space.s12)
+            ) {
+                Icon(Icons.Rounded.Description, contentDescription = null, tint = c.textSecondary)
+                Text(prettyPath(location), style = Doz.type.bodyMedium, color = c.textPrimary)
+            }
         }
-    } else {
-        Button(onClick = onClick, enabled = enabled, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-            content()
-        }
+        TonalButton(
+            stringResource(R.string.backup_create_now),
+            onClick = actions.onBackup,
+            enabled = !state.busy,
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedPillButton(
+            stringResource(R.string.backup_restore),
+            onClick = actions.onRestore,
+            enabled = !state.busy,
+            modifier = Modifier.fillMaxWidth()
+        )
+        HorizontalDivider(color = c.borderDefault)
+        SettingsRow(
+            title = stringResource(R.string.backup_monthly_reminder),
+            subtitle = state.nextReminder?.takeIf { state.backupReminderEnabled }?.let {
+                stringResource(
+                    R.string.backup_next_reminder,
+                    it.format(DateTimeFormatter.ofPattern("d MMMM", Locale.getDefault()))
+                )
+            },
+            trailing = RowTrailing.Toggle(state.backupReminderEnabled, actions.onBackupReminder),
+            horizontalPadding = 0.dp
+        )
     }
 }
 
-@Preview(showBackground = true)
-@Preview(showBackground = true, fontScale = 2f)
+/** "Download/DozDefteri/yedek-….ddb" → "İndirilenler / DozDefteri / yedek-….ddb". */
+@Composable
+private fun prettyPath(location: String): String {
+    val downloads = stringResource(R.string.downloads_folder)
+    return location.split('/').joinToString(" / ") { if (it == "Download") downloads else it }
+}
+
+@DozPreviews
 @Composable
 private fun ExportPreview() {
     DozDefteriTheme {
         ExportContent(
             state = ExportUiState(
-                profiles = listOf(
-                    ProfileEntity(id = 1, name = "Me", colorIndex = 0, createdAt = 0),
-                    ProfileEntity(id = 2, name = "Mom", colorIndex = 1, createdAt = 0)
-                ),
-                selectedProfile = ProfileEntity(id = 1, name = "Me", colorIndex = 0, createdAt = 0),
+                profiles = listOf(ProfileEntity(id = 1, name = "Ayşe", colorIndex = 0, createdAt = 0)),
+                selectedProfile = ProfileEntity(id = 1, name = "Ayşe", colorIndex = 0, createdAt = 0),
                 start = LocalDate.of(2026, 10, 1),
-                end = LocalDate.of(2026, 10, 30)
+                end = LocalDate.of(2026, 10, 31),
+                rangeLabel = "1–31 Ekim 2026",
+                lastBackupLocation = "Download/DozDefteri/yedek-2026-10-03.ddb",
+                nextReminder = LocalDate.of(2026, 11, 3),
+                preview = PdfReport(
+                    title = "DozDefteri · İlaç uyum özeti",
+                    subtitleLines = listOf("Ayşe · 1–31 Ekim 2026"),
+                    adherenceLine = "Uyum: %92 (136/148)",
+                    medicationLines = listOf(
+                        "Levotiroksin 50 mcg · 07:30 · 31/31",
+                        "Metformin 500 mg · 08:00, 20:00 · 58/62"
+                    ),
+                    days = List(31) { if (it % 7 == 3) DayStatus.MISSED else DayStatus.ALL_TAKEN },
+                    stripLegend = "",
+                    emptyText = "",
+                    footnote = "Atlanan/işaretlenmeyen dozlar kullanıcı kaydına dayanır.",
+                    disclaimer = "",
+                    pageFormat = "%1\$d/%2\$d"
+                )
             ),
             snackbarHostState = remember { SnackbarHostState() },
             actions = ExportActions()

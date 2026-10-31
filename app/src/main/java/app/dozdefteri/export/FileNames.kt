@@ -24,5 +24,6 @@ object FileNames {
     fun pdf(profileName: String, start: LocalDate, end: LocalDate): String =
         "dozdefteri_${asciiSlug(profileName)}_${start}_$end.pdf"
 
-    fun backup(date: LocalDate): String = "dozdefteri_yedek_$date.json"
+    /** "yedek-2026-10-03.ddb" — the content is the JSON backup; the extension marks it as a DozDefteri file. */
+    fun backup(date: LocalDate): String = "yedek-$date.ddb"
 }

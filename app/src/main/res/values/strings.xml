@@ -196,7 +196,7 @@
     <string name="backup_create">Back up</string>
     <string name="backup_restore">Restore from backup</string>
     <string name="backup_restore_confirm_title">Restore this backup?</string>
-    <string name="backup_restore_confirm_text">All current data will be deleted and replaced with the data in the backup.</string>
+    <string name="backup_restore_confirm_text">All current data will be deleted and replaced with the data in the backup. This cannot be undone.</string>
     <string name="backup_restored">Backup restored</string>
     <string name="backup_error_invalid">This file is not a DozDefteri backup.</string>
     <string name="backup_error_version">This backup was made with a newer version of DozDefteri. Update the app and try again.</string>
@@ -208,7 +208,7 @@
     <string name="csv_status">status</string>
     <string name="csv_action_time">action_time</string>
     <string name="csv_profile">profile</string>
-    <string name="pdf_title">Medication report</string>
+    <string name="pdf_title">DozDefteri · Medication adherence summary</string>
     <string name="pdf_profile">Profile: %1$s</string>
     <string name="pdf_range">Date range: %1$s – %2$s</string>
     <string name="pdf_generated">Created: %1$s</string>
@@ -225,7 +225,7 @@
     <string name="privacy_policy_url" translatable="false"></string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme">Theme</string>
-    <string name="theme_system">System default</string>
+    <string name="theme_system">Follow system setting</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="settings_accent">Accent color</string>
@@ -243,7 +243,7 @@
     <string name="settings_not_allowed">Not allowed, tap to fix</string>
     <string name="settings_data">Data</string>
     <string name="settings_pro_status">Status</string>
-    <string name="settings_pro_active">Pro is active</string>
+    <string name="settings_pro_active">Active · thank you</string>
     <string name="settings_pro_inactive">Free version</string>
     <string name="settings_about">About</string>
     <string name="settings_version">Version</string>
@@ -461,4 +461,83 @@
     </plurals>
     <string name="notif_remaining_days">Left: %1$s · ~%2$d days</string>
     <string name="notif_remaining">Left: %1$s</string>
+
+    <!-- Reports v2 -->
+    <string name="reports_title">Reports and backup</string>
+    <string name="reports_doctor_section">Doctor report</string>
+    <string name="range_last_month">Last month</string>
+    <string name="range_last_3_months">Last 3 months</string>
+    <string name="format_pdf">PDF</string>
+    <string name="format_pdf_desc">One page for the doctor</string>
+    <string name="format_csv">CSV</string>
+    <string name="format_csv_desc">For spreadsheet apps</string>
+    <string name="create_pdf_share">Create and share PDF</string>
+    <string name="create_csv_share">Create and share CSV</string>
+    <string name="pdf_preview_a11y">Preview of the PDF report</string>
+    <string name="pdf_line">%1$s · %2$s · %3$d/%4$d</string>
+    <string name="pdf_line_prn">%1$s · as needed · %2$d times</string>
+    <string name="pdf_adherence_line">Adherence: %1$s (%2$d/%3$d)</string>
+    <string name="pdf_strip_legend">Each bar is one day: dark green all taken, amber partial, brown not marked, grey no doses.</string>
+    <string name="pdf_footnote">Skipped and unmarked doses are based on the user\'s own records.</string>
+    <string name="backup_last">Last backup: %1$s</string>
+    <string name="backup_never">No backup yet</string>
+    <string name="backup_create_now">Create backup now</string>
+    <string name="backup_restore_confirm">Replace with backup</string>
+    <string name="backup_monthly_reminder">Remind me to back up monthly</string>
+    <string name="backup_next_reminder">Next: %1$s</string>
+    <string name="backup_saved">Backup saved</string>
+    <string name="downloads_folder">Downloads</string>
+
+    <!-- Settings v2 -->
+    <string name="health_title">Reminder health</string>
+    <plurals name="health_issues">
+        <item quantity="one">%d issue</item>
+        <item quantity="other">%d issues</item>
+    </plurals>
+    <string name="health_notifications">Notifications</string>
+    <string name="health_notifications_on">On</string>
+    <string name="health_notifications_off">Off · reminders cannot appear</string>
+    <string name="health_exact">On-time alarms</string>
+    <string name="health_exact_on">On</string>
+    <string name="health_exact_off">Off · may be a few minutes late</string>
+    <string name="health_battery">Battery restriction</string>
+    <string name="health_battery_ok">Unrestricted</string>
+    <string name="health_battery_restricted">Restricted · reminders may be delayed</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system">System language</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_english">English</string>
+    <string name="settings_large_text">Large text</string>
+    <string name="settings_large_text_desc">Text and buttons get bigger</string>
+    <string name="settings_missed_after_v2">Count as \"not marked\" after</string>
+    <string name="settings_missed_after_value">%1$d min after the dose time</string>
+    <string name="settings_data_profiles">Data and profiles</string>
+    <string name="settings_reports_desc">PDF, CSV, backup file</string>
+    <string name="settings_profiles_desc">Medications of more than one person</string>
+    <string name="settings_pro_price">One-time · %1$s</string>
+    <string name="settings_pro_one_time">One-time purchase</string>
+    <string name="settings_privacy">Privacy</string>
+    <string name="settings_privacy_desc">Your data stays on this phone only. No account.</string>
+    <string name="disclaimer_short">DozDefteri does not give medical advice and does not replace your doctor\'s instructions.</string>
+
+    <!-- Pro v2 -->
+    <string name="pro_headline_v2">Pay once, keep it forever.</string>
+    <string name="pro_subtitle">No subscription, no ads. The free version stays free for good.</string>
+    <string name="pro_free_forever">Free forever</string>
+    <string name="pro_free_list">Unlimited medications · all reminders · history and adherence · PDF/CSV reports · backup</string>
+    <string name="pro_row_unlimited">Unlimited medications and reminders</string>
+    <string name="pro_row_actions">Taken / Snooze / Skip from the notification</string>
+    <string name="pro_row_history">History, reports, backup</string>
+    <string name="pro_row_profiles">More than one profile</string>
+    <string name="pro_row_widget">Home screen widget</string>
+    <string name="pro_row_colors">Profile colors</string>
+    <string name="pro_col_feature">Feature</string>
+    <string name="pro_col_free">Free</string>
+    <string name="pro_col_pro">Pro</string>
+    <string name="pro_cell_yes">included</string>
+    <string name="pro_cell_no">not included</string>
+    <string name="pro_row_a11y">%1$s: free %2$s, Pro %3$s</string>
+    <string name="pro_buy_with_price">%1$s · One-time purchase</string>
+    <string name="pro_price_unavailable_short">Price could not be loaded</string>
+    <string name="pro_footnote">Payment through Google Play. No account needed.</string>
 </resources>

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,8 +24,12 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 /** Permission state that is re-read every time the screen resumes (e.g. after returning from system settings). */
 data class PermissionSnapshot(
     val notificationsAllowed: Boolean,
-    val exactAlarmsAllowed: Boolean
-)
+    val exactAlarmsAllowed: Boolean,
+    /** The app is exempt from battery optimization ("Kısıtlanmamış"). */
+    val batteryUnrestricted: Boolean = true
+) {
+    val issueCount: Int get() = listOf(notificationsAllowed, exactAlarmsAllowed, batteryUnrestricted).count { !it }
+}
 
 fun readPermissions(context: Context): PermissionSnapshot {
     val notificationPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
@@ -33,7 +38,13 @@ fun readPermissions(context: Context): PermissionSnapshot {
     val notifications = notificationPermission && NotificationManagerCompat.from(context).areNotificationsEnabled()
     val exact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
         context.getSystemService(AlarmManager::class.java)?.canScheduleExactAlarms() == true
-    return PermissionSnapshot(notificationsAllowed = notifications, exactAlarmsAllowed = exact)
+    val battery = context.getSystemService(PowerManager::class.java)?.isIgnoringBatteryOptimizations(context.packageName)
+        ?: true
+    return PermissionSnapshot(
+        notificationsAllowed = notifications,
+        exactAlarmsAllowed = exact,
+        batteryUnrestricted = battery
+    )
 }
 
 @Composable
@@ -68,6 +79,15 @@ object SystemSettings {
 
     fun openBatteryOptimizationSettings(context: Context) {
         launch(context, Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+    }
+
+    /** Android 13+ per-app language screen; earlier versions fall back to the app details page. */
+    fun openAppLanguageSettings(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            launch(context, Intent(Settings.ACTION_APP_LOCALE_SETTINGS, Uri.parse("package:${context.packageName}")))
+        } else {
+            openAppDetails(context)
+        }
     }
 
     fun openAppDetails(context: Context) {

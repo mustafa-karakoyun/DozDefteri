@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
             val state by mainViewModel.uiState.collectAsStateWithLifecycle()
             // Nothing is drawn until settings are read once, so the start destination never flips.
             state?.let { current ->
-                DozDefteriTheme(themeMode = current.themeMode, accentIndex = current.accentIndex) {
+                DozDefteriTheme(themeMode = current.themeMode, largeText = current.largeText) {
                     AppNavHost(
                         onboardingDone = current.onboardingDone,
                         pendingDestination = pendingDestination,

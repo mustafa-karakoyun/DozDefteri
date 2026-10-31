@@ -65,14 +65,12 @@ import app.dozdefteri.domain.model.ThemeMode
 import app.dozdefteri.ui.components.PermissionSnapshot
 import app.dozdefteri.ui.components.SystemSettings
 import app.dozdefteri.ui.components.rememberPermissionSnapshot
-import app.dozdefteri.ui.theme.AccentSeeds
 import app.dozdefteri.ui.theme.DozDefteriTheme
 import app.dozdefteri.ui.theme.StatusMissed
 import app.dozdefteri.ui.theme.StatusTaken
 
 data class SettingsActions(
     val onThemeMode: (ThemeMode) -> Unit = {},
-    val onAccent: (Int) -> Unit = {},
     val onSnooze: (Int) -> Unit = {},
     val onMissedAfter: (Int) -> Unit = {},
     val onFixExactAlarms: () -> Unit = {},
@@ -104,7 +102,6 @@ fun SettingsScreen(
         permissions = permissions,
         actions = SettingsActions(
             onThemeMode = viewModel::setThemeMode,
-            onAccent = { if (!viewModel.setAccent(it)) onPro() },
             onSnooze = viewModel::setSnoozeMinutes,
             onMissedAfter = viewModel::setMissedAfterMinutes,
             onFixExactAlarms = { SystemSettings.openExactAlarmSettings(context) },
@@ -140,7 +137,6 @@ fun SettingsContent(state: SettingsUiState, permissions: PermissionSnapshot, act
                 value = stringResource(themeLabel(settings.themeMode)),
                 onClick = { dialog = DIALOG_THEME }
             )
-            AccentRow(selected = state.effectiveAccent, isPro = state.isPro, onSelect = actions.onAccent)
             HorizontalDivider()
 
             SectionHeader(stringResource(R.string.settings_reminders))
@@ -316,69 +312,6 @@ private fun SettingRow(
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
         }
     }
-}
-
-@Composable
-private fun AccentRow(selected: Int, isPro: Boolean, onSelect: (Int) -> Unit) {
-    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Text(stringResource(R.string.settings_accent), style = MaterialTheme.typography.bodyLarge)
-        if (!isPro) {
-            Text(
-                stringResource(R.string.settings_accent_pro_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Row(Modifier.selectableGroup().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            AccentSeeds.forEachIndexed { index, color ->
-                val locked = index != 0 && !isPro
-                val description = stringResource(accentName(index)) +
-                    if (locked) ", " + stringResource(R.string.pro_required) else ""
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .selectable(
-                            selected = selected == index,
-                            onClick = { onSelect(index) },
-                            role = Role.RadioButton
-                        )
-                        .semantics { contentDescription = description }
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(36.dp)
-                            .background(color, CircleShape)
-                            .then(
-                                if (selected == index) {
-                                    Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    ) {
-                        when {
-                            selected == index -> Icon(Icons.Filled.Check, contentDescription = null, tint = Color.White)
-                            locked -> Icon(
-                                Icons.Filled.Lock,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-private fun accentName(index: Int): Int = when (index) {
-    1 -> R.string.accent_indigo
-    2 -> R.string.accent_orange
-    3 -> R.string.accent_green
-    else -> R.string.accent_teal
 }
 
 @Composable

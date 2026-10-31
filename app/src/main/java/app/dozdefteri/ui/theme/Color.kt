@@ -3,137 +3,148 @@ package app.dozdefteri.ui.theme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-val StatusTaken = Color(0xFF15803D)
-val StatusMissed = Color(0xFFB91C1C)
-val StatusPartial = Color(0xFFC2410C)
+/** A background/foreground pair used by chips and tinted boxes. */
+@Immutable
+data class ColorPair(val bg: Color, val fg: Color)
 
-/** Profile color palette, indexed by `ProfileEntity.colorIndex` (0..7). */
-val ProfileColors = listOf(
-    Color(0xFF0E7C86),
-    Color(0xFF5B5BD6),
-    Color(0xFFC2410C),
-    Color(0xFF15803D),
-    Color(0xFFB91C1C),
-    Color(0xFFA16207),
-    Color(0xFF7E22CE),
-    Color(0xFF475569)
-)
-
-fun profileColor(index: Int): Color = ProfileColors[index.mod(ProfileColors.size)]
-
-/** Seed colors of the selectable accents; index 0 is free, 1..3 are Pro. */
-val AccentSeeds = listOf(
-    Color(0xFF0E7C86),
-    Color(0xFF5B5BD6),
-    Color(0xFFC2410C),
-    Color(0xFF15803D)
-)
-
-const val ACCENT_COUNT = 4
-
-private data class AccentTones(
+/** Semantic color tokens from the Figma "Color" collection (`light/…` and `dark/…`). */
+@Immutable
+data class DozColors(
+    val bgApp: Color,
+    val surfaceDefault: Color,
+    val surfaceContainer: Color,
+    val surfaceContainerHigh: Color,
+    val surfaceInverse: Color,
+    val textPrimary: Color,
+    val textSecondary: Color,
+    val textOnPrimary: Color,
+    val textInverse: Color,
     val primary: Color,
-    val onPrimary: Color,
     val primaryContainer: Color,
     val onPrimaryContainer: Color,
-    val secondary: Color,
-    val secondaryContainer: Color,
-    val onSecondaryContainer: Color,
-    val tertiary: Color,
-    val tertiaryContainer: Color,
-    val onTertiaryContainer: Color
+    val borderDefault: Color,
+    val borderStrong: Color,
+    val taken: ColorPair,
+    val skipped: ColorPair,
+    val snoozed: ColorPair,
+    /** Missed doses use earthy clay, deliberately not the alarming red of [danger]. */
+    val missed: ColorPair,
+    val pendingFg: Color,
+    val warning: ColorPair,
+    val danger: ColorPair,
+    val pro: ColorPair,
+    val isDark: Boolean
 )
 
-// Hand-tuned tonal values following the Material Theme Builder approach (tone 40/100/90/10 light, 80/20/30/90 dark).
-private val lightTones = listOf(
-    AccentTones(
-        Color(0xFF0E7C86), Color(0xFFFFFFFF), Color(0xFFA2EEF5), Color(0xFF002023),
-        Color(0xFF4A6365), Color(0xFFCCE8EA), Color(0xFF051F21),
-        Color(0xFF4D5F7C), Color(0xFFD5E3FF), Color(0xFF071C36)
-    ),
-    AccentTones(
-        Color(0xFF5B5BD6), Color(0xFFFFFFFF), Color(0xFFE1DFFF), Color(0xFF13105E),
-        Color(0xFF5D5C72), Color(0xFFE2E0F9), Color(0xFF1A1A2C),
-        Color(0xFF79536A), Color(0xFFFFD8EC), Color(0xFF2E1125)
-    ),
-    AccentTones(
-        Color(0xFFC2410C), Color(0xFFFFFFFF), Color(0xFFFFDBCF), Color(0xFF390C00),
-        Color(0xFF77574C), Color(0xFFFFDBCF), Color(0xFF2C160D),
-        Color(0xFF6A5F2F), Color(0xFFF3E3A7), Color(0xFF221B00)
-    ),
-    AccentTones(
-        Color(0xFF15803D), Color(0xFFFFFFFF), Color(0xFFA6F4B5), Color(0xFF00210B),
-        Color(0xFF506352), Color(0xFFD2E8D2), Color(0xFF0E1F12),
-        Color(0xFF3A646F), Color(0xFFBEEAF6), Color(0xFF001F26)
+val LightDozColors = DozColors(
+    bgApp = Sand.c25,
+    surfaceDefault = Sand.c0,
+    surfaceContainer = Sand.c50,
+    surfaceContainerHigh = Sand.c100,
+    surfaceInverse = Sand.c900,
+    textPrimary = Sand.c900,
+    textSecondary = Sand.c600,
+    textOnPrimary = Sand.c0,
+    textInverse = Sand.c50,
+    primary = Teal.c600,
+    primaryContainer = Teal.c50,
+    onPrimaryContainer = Teal.c800,
+    borderDefault = Sand.c200,
+    borderStrong = Sand.c400,
+    taken = ColorPair(Teal.c50, Teal.c700),
+    skipped = ColorPair(Slate.c100, Slate.c700),
+    snoozed = ColorPair(Amber.c100, Amber.c700),
+    missed = ColorPair(Clay.c100, Clay.c700),
+    pendingFg = Sand.c600,
+    warning = ColorPair(Amber.c100, Amber.c700),
+    danger = ColorPair(Red.c100, Red.c700),
+    pro = ColorPair(Violet.c100, Violet.c700),
+    isDark = false
+)
+
+val DarkDozColors = DozColors(
+    bgApp = Sand.c950,
+    surfaceDefault = Sand.c900,
+    surfaceContainer = Sand.c850,
+    surfaceContainerHigh = Sand.c800,
+    surfaceInverse = Sand.c50,
+    textPrimary = Sand.c50,
+    textSecondary = Sand.c300,
+    textOnPrimary = Teal.c900,
+    textInverse = Sand.c900,
+    primary = Teal.c200,
+    primaryContainer = Teal.c800,
+    onPrimaryContainer = Teal.c100,
+    borderDefault = Sand.c700,
+    borderStrong = Sand.c500,
+    taken = ColorPair(Teal.c800, Teal.c100),
+    skipped = ColorPair(Slate.c900, Slate.c200),
+    snoozed = ColorPair(Amber.c900, Amber.c200),
+    missed = ColorPair(Clay.c900, Clay.c200),
+    pendingFg = Sand.c300,
+    warning = ColorPair(Amber.c900, Amber.c200),
+    danger = ColorPair(Red.c900, Red.c300),
+    pro = ColorPair(Violet.c900, Violet.c200),
+    isDark = true
+)
+
+val LocalDozColors = staticCompositionLocalOf { LightDozColors }
+
+/** Profile colors (mode independent). Index 0 (blue) is free; the others are the Pro "profile colors". */
+@Immutable
+data class ProfileColor(val color: Color, val on: Color)
+
+val ProfilePalette = listOf(
+    ProfileColor(Color(0xFF1F5FA8), Color.White),
+    ProfileColor(Color(0xFFE69F00), Color(0xFF1C1A17)),
+    ProfileColor(Color(0xFF00805C), Color.White),
+    ProfileColor(Color(0xFFB4508E), Color.White),
+    ProfileColor(Color(0xFF56B4E9), Color(0xFF1C1A17)),
+    ProfileColor(Color(0xFFC24E00), Color.White),
+    ProfileColor(Color(0xFF6A4C93), Color.White),
+    ProfileColor(Color(0xFFE8D44D), Color(0xFF1C1A17))
+)
+
+fun profileColorOf(index: Int): ProfileColor = ProfilePalette[index.mod(ProfilePalette.size)]
+
+/** Material scheme derived from the tokens so stock Material components match the design. */
+fun DozColors.toColorScheme(): ColorScheme {
+    val base = if (isDark) darkColorScheme() else lightColorScheme()
+    return base.copy(
+        primary = primary,
+        onPrimary = textOnPrimary,
+        primaryContainer = primaryContainer,
+        onPrimaryContainer = onPrimaryContainer,
+        secondary = primary,
+        onSecondary = textOnPrimary,
+        secondaryContainer = primaryContainer,
+        onSecondaryContainer = onPrimaryContainer,
+        background = bgApp,
+        onBackground = textPrimary,
+        surface = bgApp,
+        onSurface = textPrimary,
+        surfaceVariant = surfaceContainerHigh,
+        onSurfaceVariant = textSecondary,
+        surfaceContainerLowest = surfaceDefault,
+        surfaceContainerLow = surfaceDefault,
+        surfaceContainer = surfaceContainer,
+        surfaceContainerHigh = surfaceContainerHigh,
+        surfaceContainerHighest = surfaceContainerHigh,
+        surfaceBright = surfaceDefault,
+        surfaceDim = surfaceContainer,
+        inverseSurface = surfaceInverse,
+        inverseOnSurface = textInverse,
+        inversePrimary = if (isDark) Teal.c600 else Teal.c200,
+        outline = borderStrong,
+        outlineVariant = borderDefault,
+        error = danger.fg,
+        onError = if (isDark) Red.c900 else Sand.c0,
+        errorContainer = danger.bg,
+        onErrorContainer = danger.fg,
+        scrim = Color.Black
     )
-)
-
-private val darkTones = listOf(
-    AccentTones(
-        Color(0xFF85D2DA), Color(0xFF00363B), Color(0xFF004F55), Color(0xFFA2EEF5),
-        Color(0xFFB1CBCE), Color(0xFF324B4D), Color(0xFFCCE8EA),
-        Color(0xFFB5C7E9), Color(0xFF354763), Color(0xFFD5E3FF)
-    ),
-    AccentTones(
-        Color(0xFFC2C1FF), Color(0xFF26248F), Color(0xFF4342BD), Color(0xFFE1DFFF),
-        Color(0xFFC6C4DD), Color(0xFF454559), Color(0xFFE2E0F9),
-        Color(0xFFE9B9D4), Color(0xFF5F3C52), Color(0xFFFFD8EC)
-    ),
-    AccentTones(
-        Color(0xFFFFB59C), Color(0xFF5C1900), Color(0xFF842B00), Color(0xFFFFDBCF),
-        Color(0xFFE7BDB0), Color(0xFF5D4036), Color(0xFFFFDBCF),
-        Color(0xFFD6C78D), Color(0xFF51471A), Color(0xFFF3E3A7)
-    ),
-    AccentTones(
-        Color(0xFF8AD79A), Color(0xFF003918), Color(0xFF005226), Color(0xFFA6F4B5),
-        Color(0xFFB6CCB7), Color(0xFF384B3B), Color(0xFFD2E8D2),
-        Color(0xFFA2CEDA), Color(0xFF204C56), Color(0xFFBEEAF6)
-    )
-)
-
-fun accentColorScheme(accentIndex: Int, dark: Boolean): ColorScheme {
-    val index = accentIndex.coerceIn(0, ACCENT_COUNT - 1)
-    return if (dark) {
-        val t = darkTones[index]
-        darkColorScheme(
-            primary = t.primary,
-            onPrimary = t.onPrimary,
-            primaryContainer = t.primaryContainer,
-            onPrimaryContainer = t.onPrimaryContainer,
-            secondary = t.secondary,
-            secondaryContainer = t.secondaryContainer,
-            onSecondaryContainer = t.onSecondaryContainer,
-            tertiary = t.tertiary,
-            tertiaryContainer = t.tertiaryContainer,
-            onTertiaryContainer = t.onTertiaryContainer,
-            background = Color(0xFF0F1415),
-            surface = Color(0xFF0F1415),
-            onBackground = Color(0xFFDEE3E4),
-            onSurface = Color(0xFFDEE3E4),
-            surfaceVariant = Color(0xFF3F484A),
-            onSurfaceVariant = Color(0xFFBFC8CA)
-        )
-    } else {
-        val t = lightTones[index]
-        lightColorScheme(
-            primary = t.primary,
-            onPrimary = t.onPrimary,
-            primaryContainer = t.primaryContainer,
-            onPrimaryContainer = t.onPrimaryContainer,
-            secondary = t.secondary,
-            secondaryContainer = t.secondaryContainer,
-            onSecondaryContainer = t.onSecondaryContainer,
-            tertiary = t.tertiary,
-            tertiaryContainer = t.tertiaryContainer,
-            onTertiaryContainer = t.onTertiaryContainer,
-            background = Color(0xFFFAFDFD),
-            surface = Color(0xFFFAFDFD),
-            onBackground = Color(0xFF191C1D),
-            onSurface = Color(0xFF191C1D),
-            surfaceVariant = Color(0xFFDBE4E6),
-            onSurfaceVariant = Color(0xFF3F484A)
-        )
-    }
 }

@@ -18,10 +18,7 @@ import javax.inject.Inject
 data class SettingsUiState(
     val settings: AppSettings = AppSettings(),
     val isPro: Boolean = false
-) {
-    /** The accent actually applied: Pro accents fall back to the free one without Pro. */
-    val effectiveAccent: Int get() = if (isPro) settings.accentIndex else 0
-}
+)
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -38,11 +35,8 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { settingsRepository.setThemeMode(mode) }
     }
 
-    /** Returns false when the accent needs Pro, so the caller can open the Pro screen. */
-    fun setAccent(index: Int): Boolean {
-        if (index != 0 && !uiState.value.isPro) return false
-        viewModelScope.launch { settingsRepository.setAccentIndex(index) }
-        return true
+    fun setLargeText(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setLargeText(enabled) }
     }
 
     fun setSnoozeMinutes(minutes: Int) {

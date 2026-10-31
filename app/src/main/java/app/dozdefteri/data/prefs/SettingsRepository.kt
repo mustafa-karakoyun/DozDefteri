@@ -22,9 +22,15 @@ data class AppSettings(
     val snoozeMinutes: Int = SettingsRepository.DEFAULT_SNOOZE_MINUTES,
     val missedAfterMinutes: Int = SettingsRepository.DEFAULT_MISSED_AFTER_MINUTES,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
-    val accentIndex: Int = 0,
+    /** In-app extra text scale and taller buttons (plan UI section 5). */
+    val largeText: Boolean = false,
     val proCached: Boolean = false,
-    val lastBackupReminderAt: Long = 0L
+    val lastBackupReminderAt: Long = 0L,
+    val backupReminderEnabled: Boolean = true,
+    /** Epoch millis of the last successful backup; 0 = never. */
+    val lastBackupAt: Long = 0L,
+    /** Human-readable location of the last backup file, e.g. "Download/DozDefteri/yedek-2026-10-03.ddb". */
+    val lastBackupLocation: String? = null
 )
 
 @Singleton
@@ -41,9 +47,12 @@ class SettingsRepository @Inject constructor(
                 .takeIf { it in MISSED_AFTER_OPTIONS } ?: DEFAULT_MISSED_AFTER_MINUTES,
             themeMode = prefs[THEME_MODE]?.let { value -> ThemeMode.entries.firstOrNull { it.name == value } }
                 ?: ThemeMode.SYSTEM,
-            accentIndex = prefs[ACCENT_INDEX] ?: 0,
+            largeText = prefs[LARGE_TEXT] ?: false,
             proCached = prefs[PRO_CACHED] ?: false,
-            lastBackupReminderAt = prefs[LAST_BACKUP_REMINDER_AT] ?: 0L
+            lastBackupReminderAt = prefs[LAST_BACKUP_REMINDER_AT] ?: 0L,
+            backupReminderEnabled = prefs[BACKUP_REMINDER_ENABLED] ?: true,
+            lastBackupAt = prefs[LAST_BACKUP_AT] ?: 0L,
+            lastBackupLocation = prefs[LAST_BACKUP_LOCATION]
         )
     }.distinctUntilChanged()
 
@@ -71,8 +80,21 @@ class SettingsRepository @Inject constructor(
         dataStore.edit { it[THEME_MODE] = mode.name }
     }
 
-    suspend fun setAccentIndex(index: Int) {
-        dataStore.edit { it[ACCENT_INDEX] = index }
+    suspend fun setLargeText(enabled: Boolean) {
+        dataStore.edit { it[LARGE_TEXT] = enabled }
+    }
+
+    suspend fun setBackupReminderEnabled(enabled: Boolean) {
+        dataStore.edit { it[BACKUP_REMINDER_ENABLED] = enabled }
+    }
+
+    /** Records a finished backup; also restarts the 30-day reminder period. */
+    suspend fun setLastBackup(epochMillis: Long, location: String) {
+        dataStore.edit {
+            it[LAST_BACKUP_AT] = epochMillis
+            it[LAST_BACKUP_LOCATION] = location
+            it[LAST_BACKUP_REMINDER_AT] = epochMillis
+        }
     }
 
     suspend fun setProCached(pro: Boolean) {
@@ -85,16 +107,19 @@ class SettingsRepository @Inject constructor(
 
     companion object {
         const val DEFAULT_SNOOZE_MINUTES = 10
-        const val DEFAULT_MISSED_AFTER_MINUTES = 180
+        const val DEFAULT_MISSED_AFTER_MINUTES = 60
         val SNOOZE_OPTIONS = listOf(5, 10, 15, 30, 60)
-        val MISSED_AFTER_OPTIONS = listOf(60, 120, 180, 360)
+        val MISSED_AFTER_OPTIONS = listOf(30, 60, 120, 180, 360)
 
         private val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         private val ACTIVE_PROFILE_ID = longPreferencesKey("active_profile_id")
         private val SNOOZE_MINUTES = intPreferencesKey("snooze_minutes")
         private val MISSED_AFTER_MINUTES = intPreferencesKey("missed_after_minutes")
         private val THEME_MODE = stringPreferencesKey("theme_mode")
-        private val ACCENT_INDEX = intPreferencesKey("accent_index")
+        private val LARGE_TEXT = booleanPreferencesKey("large_text")
+        private val BACKUP_REMINDER_ENABLED = booleanPreferencesKey("backup_reminder_enabled")
+        private val LAST_BACKUP_AT = longPreferencesKey("last_backup_at")
+        private val LAST_BACKUP_LOCATION = stringPreferencesKey("last_backup_location")
         private val PRO_CACHED = booleanPreferencesKey("pro_cached")
         private val LAST_BACKUP_REMINDER_AT = longPreferencesKey("last_backup_reminder_at")
     }

@@ -79,8 +79,8 @@
     </plurals>
     <string name="medication_add_title">Add medication</string>
     <string name="medication_edit_title">Edit medication</string>
-    <string name="archive_confirm_title">Archive this medication?</string>
-    <string name="archive_confirm_text">Reminders stop and upcoming doses are removed. Its history is kept, and you can restore it from the Archive tab.</string>
+    <string name="archive_confirm_title">Move this medication to the archive?</string>
+    <string name="archive_confirm_text">Reminders stop and upcoming doses are removed. Its history and reports stay intact, and you can bring it back from the My medications > Archive tab.</string>
     <string name="field_name">Name</string>
     <string name="field_dose_amount">Dose amount</string>
     <string name="field_dose_unit">Unit</string>
@@ -109,10 +109,10 @@
     <string name="unit_puff">puff</string>
     <string name="form_tablet">Tablet</string>
     <string name="form_capsule">Capsule</string>
-    <string name="form_liquid">Liquid</string>
+    <string name="form_liquid">Syrup</string>
     <string name="form_drops">Drops</string>
     <string name="form_injection">Injection</string>
-    <string name="form_inhaler">Inhaler</string>
+    <string name="form_inhaler">Spray</string>
     <string name="form_cream">Cream</string>
     <string name="form_other">Other</string>
     <string name="schedule_type_daily">Every day</string>
@@ -347,4 +347,72 @@
     <string name="switcher_no_doses">No doses today</string>
     <string name="switcher_manage">Manage profiles</string>
     <string name="switcher_switched">Showing %1$s\'s medications</string>
+
+    <!-- Medication editor v2 -->
+    <string name="unit_injection">dose</string>
+    <string name="unit_application">application</string>
+    <string name="archive_move">Move to archive</string>
+    <string name="discard_title">Discard your changes?</string>
+    <string name="discard_text">The changes you made on this screen will not be saved.</string>
+    <string name="discard_confirm">Discard</string>
+    <string name="field_med_name">Medication name</string>
+    <string name="field_strength">Strength</string>
+    <string name="field_strength_unit">Unit</string>
+    <string name="field_per_dose">Each time</string>
+    <string name="field_how_often">How often?</string>
+    <string name="schedule_daily_title">Every day</string>
+    <string name="schedule_daily_desc">Once or several times a day</string>
+    <string name="schedule_weekdays_title">Specific days of the week</string>
+    <string name="schedule_weekdays_desc">E.g. Mon, Wed, Fri</string>
+    <string name="schedule_every_n_title">Every few days</string>
+    <string name="schedule_every_n_desc">E.g. every 3 days</string>
+    <string name="schedule_as_needed_title">As needed</string>
+    <string name="schedule_as_needed_desc">No reminders, mark it whenever you take it</string>
+    <string name="field_interval_days">Every how many days?</string>
+    <string name="field_which_times">At what times?</string>
+    <string name="add_other_time">Another time</string>
+    <string name="summary_daily">Every day at %1$s</string>
+    <string name="summary_weekdays">On %1$s at %2$s</string>
+    <string name="summary_every_n">Every %1$d days at %2$s</string>
+    <string name="summary_as_needed">As needed, no reminders</string>
+    <string name="summary_duration">for %1$d days</string>
+    <string name="summary_indefinite">with no end date</string>
+    <string name="list_and">and</string>
+    <string name="section_duration">Duration</string>
+    <string name="duration_starts_today">Starts today</string>
+    <string name="duration_starts_on">Starts %1$s</string>
+    <string name="duration_indefinite">no end date</string>
+    <string name="duration_days">%1$s days</string>
+    <string name="duration_indefinite_switch">No end date</string>
+    <string name="field_duration_days">For how many days?</string>
+    <string name="section_stock">Stock and low-stock alert</string>
+    <string name="stock_not_entered">Not entered · optional</string>
+    <string name="stock_summary">%1$s · alert %2$s days before running out</string>
+    <string name="field_stock_now">Current amount (%1$s)</string>
+    <string name="field_low_stock_days">Alert how many days before running out?</string>
+    <string name="section_note">Note</string>
+    <string name="note_placeholder">E.g. after a meal, with plenty of water</string>
+    <string name="error_duration">Enter a number of days between 1 and %1$d</string>
+    <string name="error_low_stock_days">Enter between 0 and %1$d days</string>
+
+    <!-- Today v2 -->
+    <string name="snackbar_taken">%1$s taken</string>
+    <string name="banner_exact_alarm">Reminders may be a few minutes late.</string>
+    <string name="banner_notifications_off">Notifications are off, so reminders cannot appear.</string>
+    <string name="empty_today_title">No medications yet</string>
+    <string name="empty_today_body">Add your first medication and we will remind you with a notification when it is time.</string>
+    <string name="stock_with_days">%1$s · ~%2$d days left</string>
+    <string name="next_dose">Next: %1$s, %2$s</string>
+    <string name="next_dose_snoozed">Next: %1$s, %2$s (snoozed)</string>
+    <string name="prn_last_today">last: today %1$s</string>
+    <string name="prn_last_yesterday">last: yesterday %1$s</string>
+    <string name="prn_last_date">last: %1$s %2$s</string>
+    <string name="taken_at">at %1$s</string>
+    <string name="part_morning">Morning</string>
+    <string name="part_noon">Midday</string>
+    <string name="part_evening">Evening</string>
+    <string name="taken_time_title">When did you take %1$s?</string>
+    <string name="taken_time_save">Save as taken</string>
+    <string name="add_stock_title">Add stock · %1$s</string>
+    <string name="add_stock_amount">How many %1$s did you add?</string>
 </resources>

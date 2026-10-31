@@ -25,7 +25,7 @@ data class MedicationEntity(
     val name: String,
     /** Greater than 0, e.g. 1.0 or 0.5. */
     val doseAmount: Double,
-    /** Free text, 1..20 characters, e.g. "tablet", "mg", "ml". */
+    /** Unit counted per dose and in stock, 1..20 characters, e.g. "tablet", "damla", "ml". */
     val doseUnit: String,
     val form: MedicationForm,
     /** At most 200 characters. */
@@ -37,5 +37,11 @@ data class MedicationEntity(
     val lowStockNotified: Boolean = false,
     val isArchived: Boolean = false,
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    /** Strength per unit, e.g. 500 for "500 mg"; null when not entered. Added in schema version 2. */
+    val strengthAmount: Double? = null,
+    /** Unit of [strengthAmount], e.g. "mg", "mcg", "IU". */
+    val strengthUnit: String? = null,
+    /** Warn when the stock lasts fewer than this many days; drives [lowStockThreshold]. */
+    val lowStockDays: Int? = null
 )

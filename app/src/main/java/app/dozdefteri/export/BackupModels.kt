@@ -29,7 +29,13 @@ data class BackupFile(
 )
 
 @Serializable
-data class BackupProfile(val id: Long, val name: String, val colorIndex: Int, val createdAt: Long)
+data class BackupProfile(
+    val id: Long,
+    val name: String,
+    val colorIndex: Int,
+    val createdAt: Long,
+    val note: String? = null
+)
 
 @Serializable
 data class BackupMedication(
@@ -45,7 +51,10 @@ data class BackupMedication(
     val lowStockNotified: Boolean = false,
     val isArchived: Boolean = false,
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val strengthAmount: Double? = null,
+    val strengthUnit: String? = null,
+    val lowStockDays: Int? = null
 )
 
 @Serializable
@@ -101,7 +110,10 @@ class InvalidBackupException(val reason: Reason, cause: Throwable? = null) : Exc
 /** Converts between [BackupData] and the JSON backup file. Pure Kotlin. */
 object BackupCodec {
     const val FORMAT = "dozdefteri-backup"
-    const val SCHEMA_VERSION = 1
+    const val SCHEMA_VERSION = 2
+
+    /** Backups written by older app versions; their missing fields take default values. */
+    private val SUPPORTED_VERSIONS = 1..SCHEMA_VERSION
 
     private val json = Json {
         prettyPrint = true
@@ -126,7 +138,7 @@ object BackupCodec {
             throw InvalidBackupException(reason, e)
         }
         if (file.format != FORMAT) throw InvalidBackupException(InvalidBackupException.Reason.WRONG_FORMAT)
-        if (file.schemaVersion != SCHEMA_VERSION) {
+        if (file.schemaVersion !in SUPPORTED_VERSIONS) {
             throw InvalidBackupException(InvalidBackupException.Reason.UNSUPPORTED_VERSION)
         }
         return try {
@@ -155,7 +167,7 @@ object BackupCodec {
         schemaVersion = SCHEMA_VERSION,
         appVersionCode = appVersionCode,
         exportedAt = exportedAt,
-        profiles = data.profiles.map { BackupProfile(it.id, it.name, it.colorIndex, it.createdAt) },
+        profiles = data.profiles.map { BackupProfile(it.id, it.name, it.colorIndex, it.createdAt, it.note) },
         medications = data.medications.map {
             BackupMedication(
                 id = it.id,
@@ -170,7 +182,10 @@ object BackupCodec {
                 lowStockNotified = it.lowStockNotified,
                 isArchived = it.isArchived,
                 createdAt = it.createdAt,
-                updatedAt = it.updatedAt
+                updatedAt = it.updatedAt,
+                strengthAmount = it.strengthAmount,
+                strengthUnit = it.strengthUnit,
+                lowStockDays = it.lowStockDays
             )
         },
         schedules = data.schedules.map {
@@ -205,7 +220,7 @@ object BackupCodec {
     )
 
     private fun fromFile(file: BackupFile) = BackupData(
-        profiles = file.profiles.map { ProfileEntity(it.id, it.name, it.colorIndex, it.createdAt) },
+        profiles = file.profiles.map { ProfileEntity(it.id, it.name, it.colorIndex, it.createdAt, it.note) },
         medications = file.medications.map {
             MedicationEntity(
                 id = it.id,
@@ -220,7 +235,10 @@ object BackupCodec {
                 lowStockNotified = it.lowStockNotified,
                 isArchived = it.isArchived,
                 createdAt = it.createdAt,
-                updatedAt = it.updatedAt
+                updatedAt = it.updatedAt,
+                strengthAmount = it.strengthAmount,
+                strengthUnit = it.strengthUnit,
+                lowStockDays = it.lowStockDays
             )
         },
         schedules = file.schedules.map {

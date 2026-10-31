@@ -182,6 +182,34 @@ class DoseRepository @Inject constructor(
     }
 
     /**
+     * Records a dose as taken at [takenAt] (from the "Güncelle" / "Saati düzelt" sheet). Works for any status;
+     * stock is only deducted when the dose was not already TAKEN. Returns false for an unknown event.
+     */
+    suspend fun markTakenAt(eventId: Long, takenAt: Instant, now: Instant): Boolean {
+        val outcome = db.withTransaction {
+            val event = doseDao.getById(eventId) ?: return@withTransaction NOT_APPLIED
+            val wasTaken = event.status == DoseStatus.TAKEN
+            doseDao.update(event.copy(status = DoseStatus.TAKEN, actionAt = takenAt.toEpochMilli()))
+            val lowStock = if (wasTaken) null else deductStock(event.medicationId, event.quantity, now)
+            TakeOutcome(applied = true, lowStock = lowStock)
+        }
+        outcome.lowStock?.let(lowStockNotifier::notifyLowStock)
+        return outcome.applied
+    }
+
+    /** Marks a dose as skipped / not taken; a TAKEN dose returns its quantity to the stock. */
+    suspend fun markSkipped(eventId: Long, now: Instant): Boolean = db.withTransaction {
+        val event = doseDao.getById(eventId) ?: return@withTransaction false
+        if (event.status == DoseStatus.SKIPPED) return@withTransaction false
+        if (event.status == DoseStatus.TAKEN) refundStock(event.medicationId, event.quantity, now)
+        doseDao.update(event.copy(status = DoseStatus.SKIPPED, actionAt = now.toEpochMilli()))
+        true
+    }
+
+    suspend fun lastTakenAt(medicationId: Long): Instant? =
+        doseDao.lastTakenAt(medicationId)?.let(Instant::ofEpochMilli)
+
+    /**
      * Archives the medication and deletes its future PENDING/SNOOZED events.
      * Returns the ids of its currently shown (notified, still open) doses so their notifications can be cancelled.
      */

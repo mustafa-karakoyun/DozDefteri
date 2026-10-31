@@ -4,11 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import app.dozdefteri.R
@@ -32,32 +32,28 @@ class MedicationEditContentTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Test
-    fun saveIsDisabledUntilFormIsValid() {
+    fun saveWithEmptyName_showsTheNameError() {
         composeRule.setContent {
-            var form by remember { mutableStateOf(MedicationFormState(startDate = LocalDate.of(2026, 11, 1))) }
-            val state = MedicationEditUiState(
-                isLoading = false,
-                form = form,
-                errors = MedicationFormValidator.validate(form),
-                touched = setOf("name", "doseUnit")
-            )
-            DozDefteriTheme {
-                MedicationEditContent(
-                    state = state,
-                    actions = MedicationEditActions(
-                        onNameChange = { form = form.copy(name = it) },
-                        onDoseUnitChange = { form = form.copy(doseUnit = it) }
+            var state by remember {
+                val form = MedicationFormState(startDate = LocalDate.of(2026, 11, 1))
+                mutableStateOf(
+                    MedicationEditUiState(
+                        isLoading = false,
+                        today = LocalDate.of(2026, 11, 1),
+                        form = form,
+                        errors = MedicationFormValidator.validate(form)
                     )
                 )
             }
+            DozDefteriTheme {
+                MedicationEditContent(
+                    state = state,
+                    actions = MedicationEditActions(onSave = { state = state.copy(showAllErrors = true) })
+                )
+            }
         }
-        val save = context.getString(R.string.save)
-        composeRule.onNodeWithText(save).assertIsNotEnabled()
+        composeRule.onNodeWithText(context.getString(R.string.error_name_required)).assertDoesNotExist()
+        composeRule.onAllNodesWithText(context.getString(R.string.save)).onFirst().performClick()
         composeRule.onNodeWithText(context.getString(R.string.error_name_required)).assertExists()
-
-        composeRule.onNodeWithText(context.getString(R.string.field_name)).performTextInput("Vitamin D")
-        composeRule.onNodeWithText(context.getString(R.string.field_dose_unit)).performTextInput("tablet")
-
-        composeRule.onNodeWithText(save).assertIsEnabled()
     }
 }

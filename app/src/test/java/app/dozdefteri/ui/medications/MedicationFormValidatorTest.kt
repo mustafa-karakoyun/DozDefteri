@@ -9,98 +9,74 @@ import java.time.LocalTime
 
 class MedicationFormValidatorTest {
 
-    private val valid = MedicationFormState(
-        name = "Vitamin D",
-        doseAmount = "1",
-        doseUnit = "tablet",
-        startDate = LocalDate.of(2026, 11, 1)
-    )
+    private val valid = MedicationFormState(name = "Metformin", strengthAmount = "500", startDate = LocalDate.of(2026, 11, 1))
+
+    private fun errors(state: MedicationFormState) = MedicationFormValidator.validate(state)
 
     @Test
-    fun validForm_hasNoErrors() {
-        assertThat(MedicationFormValidator.validate(valid).isValid).isTrue()
+    fun smartDefaults_withAName_areValid() {
+        assertThat(errors(MedicationFormState(name = "D vitamini", startDate = LocalDate.of(2026, 11, 1))).isValid).isTrue()
+        assertThat(valid.endDate).isEqualTo(LocalDate.of(2026, 11, 30))
     }
 
     @Test
-    fun name_isTrimmed_andLimitedTo60() {
-        assertThat(MedicationFormValidator.validate(valid.copy(name = "   ")).name).isEqualTo(FieldError.NAME_REQUIRED)
-        assertThat(MedicationFormValidator.validate(valid.copy(name = "a".repeat(61))).name)
-            .isEqualTo(FieldError.NAME_TOO_LONG)
-        assertThat(MedicationFormValidator.validate(valid.copy(name = " " + "a".repeat(60) + " ")).name).isNull()
+    fun name_requiredAndLimited() {
+        assertThat(errors(valid.copy(name = "  ")).name).isEqualTo(FieldError.NAME_REQUIRED)
+        assertThat(errors(valid.copy(name = "a".repeat(61))).name).isEqualTo(FieldError.NAME_TOO_LONG)
+        assertThat(errors(valid.copy(name = "  ")).firstInvalid).isEqualTo(FormField.NAME)
     }
 
     @Test
-    fun amount_mustBePositive_withAtMostTwoDecimals() {
-        listOf("0", "-1", "1.234", "abc", "").forEach {
-            assertThat(MedicationFormValidator.validate(valid.copy(doseAmount = it)).doseAmount)
-                .isEqualTo(FieldError.AMOUNT_INVALID)
-        }
-        listOf("0.5", "0,5", "2", "1.25").forEach {
-            assertThat(MedicationFormValidator.validate(valid.copy(doseAmount = it)).doseAmount).isNull()
-        }
-        assertThat(MedicationFormValidator.parseDecimal("0,5")).isEqualTo(0.5)
+    fun strength_isOptional_butPositiveWhenGiven() {
+        assertThat(errors(valid.copy(strengthAmount = "")).strength).isNull()
+        assertThat(errors(valid.copy(strengthAmount = "0")).strength).isEqualTo(FieldError.STRENGTH_INVALID)
+        assertThat(errors(valid.copy(strengthAmount = "abc")).strength).isEqualTo(FieldError.STRENGTH_INVALID)
+        assertThat(errors(valid.copy(strengthAmount = "0,5")).strength).isNull()
     }
 
     @Test
-    fun unit_isRequired_andLimitedTo20() {
-        assertThat(MedicationFormValidator.validate(valid.copy(doseUnit = "")).doseUnit)
-            .isEqualTo(FieldError.UNIT_REQUIRED)
-        assertThat(MedicationFormValidator.validate(valid.copy(doseUnit = "x".repeat(21))).doseUnit)
-            .isEqualTo(FieldError.UNIT_TOO_LONG)
+    fun perDose_mustBePositive() {
+        assertThat(errors(valid.copy(perDose = "0")).perDose).isEqualTo(FieldError.PER_DOSE_INVALID)
+        assertThat(errors(valid.copy(perDose = "0.5")).perDose).isNull()
     }
 
     @Test
-    fun times_requiredExceptAsNeeded_andAtMost12() {
-        assertThat(MedicationFormValidator.validate(valid.copy(times = emptyList())).times)
-            .isEqualTo(FieldError.TIMES_REQUIRED)
-        val asNeeded = valid.copy(times = emptyList(), scheduleType = ScheduleType.AS_NEEDED)
-        assertThat(MedicationFormValidator.validate(asNeeded).isValid).isTrue()
+    fun times_requiredExceptAsNeeded() {
+        assertThat(errors(valid.copy(times = emptyList())).times).isEqualTo(FieldError.TIMES_REQUIRED)
+        assertThat(errors(valid.copy(times = emptyList(), scheduleType = ScheduleType.AS_NEEDED)).isValid).isTrue()
         val thirteen = (0..12).map { LocalTime.of(it, 0) }
-        assertThat(MedicationFormValidator.validate(valid.copy(times = thirteen)).times)
-            .isEqualTo(FieldError.TIMES_TOO_MANY)
+        assertThat(errors(valid.copy(times = thirteen)).times).isEqualTo(FieldError.TIMES_TOO_MANY)
     }
 
     @Test
-    fun weekdays_needAtLeastOneDay() {
-        val weekdays = valid.copy(scheduleType = ScheduleType.WEEKDAYS)
-        assertThat(MedicationFormValidator.validate(weekdays).days).isEqualTo(FieldError.DAYS_REQUIRED)
-        assertThat(MedicationFormValidator.validate(weekdays.copy(days = setOf(DayOfWeek.MONDAY))).days).isNull()
-    }
-
-    @Test
-    fun interval_between2And30() {
+    fun weekdays_andInterval() {
+        assertThat(errors(valid.copy(scheduleType = ScheduleType.WEEKDAYS)).days).isEqualTo(FieldError.DAYS_REQUIRED)
+        assertThat(errors(valid.copy(scheduleType = ScheduleType.WEEKDAYS, days = setOf(DayOfWeek.MONDAY))).isValid)
+            .isTrue()
         val everyN = valid.copy(scheduleType = ScheduleType.EVERY_N_DAYS)
-        assertThat(MedicationFormValidator.validate(everyN.copy(intervalDays = 1)).interval)
-            .isEqualTo(FieldError.INTERVAL_RANGE)
-        assertThat(MedicationFormValidator.validate(everyN.copy(intervalDays = 31)).interval)
-            .isEqualTo(FieldError.INTERVAL_RANGE)
-        assertThat(MedicationFormValidator.validate(everyN.copy(intervalDays = 30)).interval).isNull()
+        assertThat(errors(everyN.copy(intervalDays = "1")).interval).isEqualTo(FieldError.INTERVAL_RANGE)
+        assertThat(errors(everyN.copy(intervalDays = "31")).interval).isEqualTo(FieldError.INTERVAL_RANGE)
+        assertThat(errors(everyN.copy(intervalDays = "3")).isValid).isTrue()
     }
 
     @Test
-    fun endDate_cannotBeBeforeStart() {
-        assertThat(MedicationFormValidator.validate(valid.copy(endDate = LocalDate.of(2026, 10, 31))).endDate)
-            .isEqualTo(FieldError.END_BEFORE_START)
-        assertThat(MedicationFormValidator.validate(valid.copy(endDate = LocalDate.of(2026, 11, 1))).endDate).isNull()
+    fun duration_orIndefinite() {
+        assertThat(errors(valid.copy(durationDays = "0")).duration).isEqualTo(FieldError.DURATION_INVALID)
+        assertThat(errors(valid.copy(durationDays = "", indefinite = true)).isValid).isTrue()
+        assertThat(valid.copy(indefinite = true).endDate).isNull()
     }
 
     @Test
-    fun stock_validatedOnlyWhenEnabled() {
-        assertThat(MedicationFormValidator.validate(valid.copy(stockQuantity = "x")).isValid).isTrue()
-        val enabled = valid.copy(stockEnabled = true)
-        assertThat(MedicationFormValidator.validate(enabled.copy(stockQuantity = "")).stockQuantity)
-            .isEqualTo(FieldError.STOCK_INVALID)
-        assertThat(MedicationFormValidator.validate(enabled.copy(stockQuantity = "0")).stockQuantity).isNull()
-        val negativeThreshold = enabled.copy(stockQuantity = "5", lowStockThreshold = "-1")
-        assertThat(MedicationFormValidator.validate(negativeThreshold).lowStockThreshold)
-            .isEqualTo(FieldError.THRESHOLD_INVALID)
-        val noThreshold = enabled.copy(stockQuantity = "5", lowStockThreshold = "")
-        assertThat(MedicationFormValidator.validate(noThreshold).isValid).isTrue()
+    fun stock_optional_lowStockDaysValidatedOnlyWithStock() {
+        assertThat(errors(valid.copy(stockQuantity = "", lowStockDays = "x")).isValid).isTrue()
+        assertThat(errors(valid.copy(stockQuantity = "-1")).stock).isEqualTo(FieldError.STOCK_INVALID)
+        assertThat(errors(valid.copy(stockQuantity = "38", lowStockDays = "400")).lowStockDays)
+            .isEqualTo(FieldError.LOW_STOCK_DAYS_INVALID)
+        assertThat(errors(valid.copy(stockQuantity = "38", lowStockDays = "")).isValid).isTrue()
     }
 
     @Test
-    fun note_atMost200() {
-        assertThat(MedicationFormValidator.validate(valid.copy(note = "n".repeat(201))).note)
-            .isEqualTo(FieldError.NOTE_TOO_LONG)
+    fun note_limited() {
+        assertThat(errors(valid.copy(note = "n".repeat(201))).note).isEqualTo(FieldError.NOTE_TOO_LONG)
     }
 }

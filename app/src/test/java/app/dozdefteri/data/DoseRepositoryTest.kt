@@ -219,4 +219,35 @@ class DoseRepositoryTest {
         repository.ensureWindow(now)
         assertThat(db.doseEventDao().getAll()).isEmpty()
     }
+
+    @Test
+    fun markTakenAt_onMissedDose_setsTimeAndDeductsStockOnce() = runTest {
+        val (medicationId, _) = insertMedication(stock = 10.0)
+        repository.ensureWindow(now)
+        val eventId = firstEventId()
+        val takenAt = now.plus(Duration.ofMinutes(65))
+        repository.markMissed(now.plus(Duration.ofHours(5)), 60)
+
+        assertThat(repository.markTakenAt(eventId, takenAt, now.plus(Duration.ofHours(5)))).isTrue()
+        assertThat(repository.markTakenAt(eventId, takenAt.plusSeconds(60), now.plus(Duration.ofHours(5)))).isTrue()
+
+        val event = db.doseEventDao().getById(eventId)
+        assertThat(event?.status).isEqualTo(DoseStatus.TAKEN)
+        assertThat(event?.actionAt).isEqualTo(takenAt.plusSeconds(60).toEpochMilli())
+        assertThat(db.medicationDao().getById(medicationId)?.stockQuantity).isEqualTo(9.0)
+        assertThat(repository.lastTakenAt(medicationId)).isEqualTo(takenAt.plusSeconds(60))
+    }
+
+    @Test
+    fun markSkipped_onTakenDose_refundsStock() = runTest {
+        val (medicationId, _) = insertMedication(stock = 10.0)
+        repository.ensureWindow(now)
+        val eventId = firstEventId()
+        repository.take(eventId, now)
+
+        assertThat(repository.markSkipped(eventId, now)).isTrue()
+
+        assertThat(db.doseEventDao().getById(eventId)?.status).isEqualTo(DoseStatus.SKIPPED)
+        assertThat(db.medicationDao().getById(medicationId)?.stockQuantity).isEqualTo(10.0)
+    }
 }

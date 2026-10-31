@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import app.dozdefteri.data.db.entity.DoseEventEntity
+import app.dozdefteri.domain.model.MedicationForm
 import app.dozdefteri.domain.model.ScheduleType
 import kotlinx.coroutines.flow.Flow
 
@@ -17,12 +18,17 @@ data class DoseEventDetails(
     val doseAmount: Double,
     val doseUnit: String,
     val scheduleType: ScheduleType,
-    val profileName: String
+    val profileName: String,
+    val form: MedicationForm = MedicationForm.TABLET,
+    val strengthAmount: Double? = null,
+    val strengthUnit: String? = null,
+    val medicationNote: String? = null
 )
 
 private const val DETAILS_SELECT =
     "SELECT e.*, m.name AS medicationName, m.doseAmount AS doseAmount, m.doseUnit AS doseUnit, " +
-        "s.type AS scheduleType, p.name AS profileName FROM dose_events e " +
+        "s.type AS scheduleType, p.name AS profileName, m.form AS form, m.strengthAmount AS strengthAmount, " +
+        "m.strengthUnit AS strengthUnit, m.note AS medicationNote FROM dose_events e " +
         "INNER JOIN medications m ON m.id = e.medicationId " +
         "INNER JOIN schedules s ON s.id = e.scheduleId " +
         "INNER JOIN profiles p ON p.id = e.profileId "
@@ -108,6 +114,9 @@ interface DoseEventDao {
             "AND e.originalScheduledAt >= :from AND e.originalScheduledAt < :to ORDER BY e.originalScheduledAt, e.id"
     )
     suspend fun getDetailsRange(profileId: Long?, from: Long, to: Long): List<DoseEventDetails>
+
+    @Query("SELECT MAX(actionAt) FROM dose_events WHERE medicationId = :medicationId AND status = 'TAKEN'")
+    suspend fun lastTakenAt(medicationId: Long): Long?
 
     @Query("$DETAILS_SELECT WHERE e.profileId = :profileId AND e.status IN $OPEN ORDER BY e.scheduledAt LIMIT 1")
     suspend fun getNextOpenForProfile(profileId: Long): DoseEventDetails?

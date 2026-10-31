@@ -18,7 +18,7 @@ import java.time.LocalTime
 class BackupCodecTest {
 
     private val data = BackupData(
-        profiles = listOf(ProfileEntity(id = 3, name = "Ayşe", colorIndex = 2, createdAt = 10)),
+        profiles = listOf(ProfileEntity(id = 3, name = "Ayşe", colorIndex = 2, createdAt = 10, note = "Annem")),
         medications = listOf(
             MedicationEntity(
                 id = 7,
@@ -33,7 +33,10 @@ class BackupCodecTest {
                 lowStockNotified = true,
                 isArchived = false,
                 createdAt = 11,
-                updatedAt = 12
+                updatedAt = 12,
+                strengthAmount = 100.0,
+                strengthUnit = "mg",
+                lowStockDays = 7
             )
         ),
         schedules = listOf(
@@ -77,7 +80,7 @@ class BackupCodecTest {
     fun roundTrip_preservesEverything() {
         val json = BackupCodec.encode(data, appVersionCode = 1, exportedAt = "2026-11-20T10:15:00Z")
         assertThat(json).contains("\"format\": \"dozdefteri-backup\"")
-        assertThat(json).contains("\"schemaVersion\": 1")
+        assertThat(json).contains("\"schemaVersion\": 2")
         assertThat(BackupCodec.decode(json)).isEqualTo(data)
     }
 
@@ -90,9 +93,24 @@ class BackupCodecTest {
 
     @Test
     fun newerSchema_isRejected() {
-        val json = BackupCodec.encode(data, 1, "x").replace("\"schemaVersion\": 1", "\"schemaVersion\": 2")
+        val json = BackupCodec.encode(data, 1, "x").replace("\"schemaVersion\": 2", "\"schemaVersion\": 3")
         val error = assertThrows(InvalidBackupException::class.java) { BackupCodec.decode(json) }
         assertThat(error.reason).isEqualTo(InvalidBackupException.Reason.UNSUPPORTED_VERSION)
+    }
+
+    @Test
+    fun version1Backup_isAccepted_withDefaultsForNewFields() {
+        val v1 = data.copy(
+            profiles = data.profiles.map { it.copy(note = null) },
+            medications = data.medications.map {
+                it.copy(strengthAmount = null, strengthUnit = null, lowStockDays = null)
+            }
+        )
+        val json = BackupCodec.encode(v1, 1, "x")
+            .replace("\"schemaVersion\": 2", "\"schemaVersion\": 1")
+            .replace(Regex(",\\s*\"(note|strengthAmount|strengthUnit|lowStockDays)\": null"), "")
+        assertThat(json).doesNotContain("strengthUnit")
+        assertThat(BackupCodec.decode(json)).isEqualTo(v1)
     }
 
     @Test

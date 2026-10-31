@@ -6,66 +6,90 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
-/** Raw, editable values of the add/edit medication form. Numbers stay as text until validated. */
+/** Raw, editable values of the add/edit medication screen. Numbers stay as text until validated. */
 data class MedicationFormState(
     val name: String = "",
-    val doseAmount: String = "1",
-    val doseUnit: String = "",
+    /** Strength per unit ("Miktar"), optional, e.g. "500". */
+    val strengthAmount: String = "",
+    val strengthUnit: String = MedicationFormValidator.STRENGTH_UNITS.first(),
     val form: MedicationForm = MedicationForm.TABLET,
+    /** Amount taken each time, in form units (1 tablet, 2 damla). */
+    val perDose: String = "1",
     val scheduleType: ScheduleType = ScheduleType.DAILY,
     val times: List<LocalTime> = listOf(LocalTime.of(8, 0)),
     val days: Set<DayOfWeek> = emptySet(),
-    val intervalDays: Int = MedicationFormValidator.MIN_INTERVAL,
+    val intervalDays: String = "3",
     val startDate: LocalDate,
-    val endDate: LocalDate? = null,
-    val stockEnabled: Boolean = false,
+    val durationDays: String = MedicationFormValidator.DEFAULT_DURATION.toString(),
+    val indefinite: Boolean = false,
+    /** Current stock; blank means stock is not tracked. */
     val stockQuantity: String = "",
-    val lowStockThreshold: String = "",
+    val lowStockDays: String = MedicationFormValidator.DEFAULT_LOW_STOCK_DAYS.toString(),
     val note: String = ""
-)
+) {
+    val endDate: LocalDate?
+        get() = if (indefinite) null else durationDays.trim().toIntOrNull()?.let { startDate.plusDays(it - 1L) }
+}
 
 enum class FieldError {
     NAME_REQUIRED,
     NAME_TOO_LONG,
-    AMOUNT_INVALID,
-    UNIT_REQUIRED,
-    UNIT_TOO_LONG,
+    STRENGTH_INVALID,
+    PER_DOSE_INVALID,
     TIMES_REQUIRED,
     TIMES_TOO_MANY,
     DAYS_REQUIRED,
     INTERVAL_RANGE,
-    END_BEFORE_START,
+    DURATION_INVALID,
     STOCK_INVALID,
-    THRESHOLD_INVALID,
+    LOW_STOCK_DAYS_INVALID,
     NOTE_TOO_LONG
 }
 
+/** Form fields in screen order, used to scroll to the first error. */
+enum class FormField { NAME, STRENGTH, PER_DOSE, SCHEDULE, TIMES, DURATION, STOCK, NOTE }
+
 data class MedicationFormErrors(
     val name: FieldError? = null,
-    val doseAmount: FieldError? = null,
-    val doseUnit: FieldError? = null,
+    val strength: FieldError? = null,
+    val perDose: FieldError? = null,
     val times: FieldError? = null,
     val days: FieldError? = null,
     val interval: FieldError? = null,
-    val endDate: FieldError? = null,
-    val stockQuantity: FieldError? = null,
-    val lowStockThreshold: FieldError? = null,
+    val duration: FieldError? = null,
+    val stock: FieldError? = null,
+    val lowStockDays: FieldError? = null,
     val note: FieldError? = null
 ) {
-    val isValid: Boolean
-        get() = listOf(
-            name, doseAmount, doseUnit, times, days, interval, endDate, stockQuantity, lowStockThreshold, note
-        ).all { it == null }
+    val isValid: Boolean get() = firstInvalid == null
+
+    val firstInvalid: FormField?
+        get() = when {
+            name != null -> FormField.NAME
+            strength != null -> FormField.STRENGTH
+            perDose != null -> FormField.PER_DOSE
+            days != null || interval != null -> FormField.SCHEDULE
+            times != null -> FormField.TIMES
+            duration != null -> FormField.DURATION
+            stock != null || lowStockDays != null -> FormField.STOCK
+            note != null -> FormField.NOTE
+            else -> null
+        }
 }
 
-/** Validation rules of plan section 6.4. Pure Kotlin. */
+/** Validation rules of the medication screen. Pure Kotlin. */
 object MedicationFormValidator {
     const val NAME_MAX = 60
-    const val UNIT_MAX = 20
     const val NOTE_MAX = 200
     const val TIMES_MAX = 12
     const val MIN_INTERVAL = 2
     const val MAX_INTERVAL = 30
+    const val MAX_DURATION = 3650
+    const val MAX_LOW_STOCK_DAYS = 365
+    const val DEFAULT_DURATION = 30
+    const val DEFAULT_LOW_STOCK_DAYS = 7
+    val STRENGTH_UNITS = listOf("mg", "mcg", "g", "ml", "IU", "%")
+    val SUGGESTED_TIMES: List<LocalTime> = listOf(LocalTime.of(8, 0), LocalTime.of(13, 0), LocalTime.of(20, 0))
 
     private val decimalPattern = Regex("""^\d+([.,]\d{1,2})?$""")
 
@@ -78,21 +102,23 @@ object MedicationFormValidator {
 
     fun validate(state: MedicationFormState): MedicationFormErrors {
         val name = state.name.trim()
-        val unit = state.doseUnit.trim()
-        val amount = parseDecimal(state.doseAmount)
         val needsTimes = state.scheduleType != ScheduleType.AS_NEEDED
+        val interval = state.intervalDays.trim().toIntOrNull()
+        val duration = state.durationDays.trim().toIntOrNull()
+        val tracksStock = state.stockQuantity.isNotBlank()
+        val lowDays = state.lowStockDays.trim()
         return MedicationFormErrors(
             name = when {
                 name.isEmpty() -> FieldError.NAME_REQUIRED
                 name.length > NAME_MAX -> FieldError.NAME_TOO_LONG
                 else -> null
             },
-            doseAmount = if (amount == null || amount <= 0.0) FieldError.AMOUNT_INVALID else null,
-            doseUnit = when {
-                unit.isEmpty() -> FieldError.UNIT_REQUIRED
-                unit.length > UNIT_MAX -> FieldError.UNIT_TOO_LONG
-                else -> null
+            strength = if (state.strengthAmount.isNotBlank() && (parseDecimal(state.strengthAmount) ?: 0.0) <= 0.0) {
+                FieldError.STRENGTH_INVALID
+            } else {
+                null
             },
+            perDose = if ((parseDecimal(state.perDose) ?: 0.0) <= 0.0) FieldError.PER_DOSE_INVALID else null,
             times = when {
                 !needsTimes -> null
                 state.times.isEmpty() -> FieldError.TIMES_REQUIRED
@@ -105,26 +131,22 @@ object MedicationFormValidator {
                 null
             },
             interval = if (state.scheduleType == ScheduleType.EVERY_N_DAYS &&
-                state.intervalDays !in MIN_INTERVAL..MAX_INTERVAL
+                (interval == null || interval !in MIN_INTERVAL..MAX_INTERVAL)
             ) {
                 FieldError.INTERVAL_RANGE
             } else {
                 null
             },
-            endDate = if (state.endDate != null && state.endDate.isBefore(state.startDate)) {
-                FieldError.END_BEFORE_START
+            duration = if (!state.indefinite && (duration == null || duration !in 1..MAX_DURATION)) {
+                FieldError.DURATION_INVALID
             } else {
                 null
             },
-            stockQuantity = if (state.stockEnabled && parseDecimal(state.stockQuantity) == null) {
-                FieldError.STOCK_INVALID
-            } else {
-                null
-            },
-            lowStockThreshold = if (state.stockEnabled && state.lowStockThreshold.isNotBlank() &&
-                parseDecimal(state.lowStockThreshold) == null
+            stock = if (tracksStock && parseDecimal(state.stockQuantity) == null) FieldError.STOCK_INVALID else null,
+            lowStockDays = if (tracksStock && lowDays.isNotEmpty() &&
+                (lowDays.toIntOrNull() ?: -1) !in 0..MAX_LOW_STOCK_DAYS
             ) {
-                FieldError.THRESHOLD_INVALID
+                FieldError.LOW_STOCK_DAYS_INVALID
             } else {
                 null
             },

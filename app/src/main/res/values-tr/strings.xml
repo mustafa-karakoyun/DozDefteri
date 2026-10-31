@@ -73,8 +73,8 @@
     </plurals>
     <string name="medication_add_title">İlaç ekle</string>
     <string name="medication_edit_title">İlacı düzenle</string>
-    <string name="archive_confirm_title">Bu ilaç arşivlensin mi?</string>
-    <string name="archive_confirm_text">Hatırlatmalar durur ve gelecek dozlar kaldırılır. Geçmişi saklanır; Arşiv sekmesinden geri yükleyebilirsin.</string>
+    <string name="archive_confirm_title">İlaç arşive taşınsın mı?</string>
+    <string name="archive_confirm_text">Hatırlatmalar durur ve gelecek dozlar kaldırılır. Geçmişi ve raporları bozulmaz; İlaçlarım > Arşiv sekmesinden tek dokunuşla geri alabilirsin.</string>
     <string name="field_name">Ad</string>
     <string name="field_dose_amount">Doz miktarı</string>
     <string name="field_dose_unit">Birim</string>
@@ -82,7 +82,7 @@
     <string name="field_days">Günler</string>
     <string name="field_interval">Aralık</string>
     <string name="field_times">Saatler</string>
-    <string name="field_start_date">Başlangıç</string>
+    <string name="field_start_date">Başlangıç tarihi</string>
     <string name="field_end_date">Bitiş</string>
     <string name="no_end_date">Bitiş yok</string>
     <string name="clear_end_date">Bitiş tarihini temizle</string>
@@ -103,10 +103,10 @@
     <string name="unit_puff">puf</string>
     <string name="form_tablet">Tablet</string>
     <string name="form_capsule">Kapsül</string>
-    <string name="form_liquid">Şurup / sıvı</string>
+    <string name="form_liquid">Şurup</string>
     <string name="form_drops">Damla</string>
     <string name="form_injection">İğne</string>
-    <string name="form_inhaler">İnhaler</string>
+    <string name="form_inhaler">Sprey</string>
     <string name="form_cream">Krem</string>
     <string name="form_other">Diğer</string>
     <string name="schedule_type_daily">Her gün</string>
@@ -337,4 +337,72 @@
     <string name="switcher_no_doses">Bugün doz yok</string>
     <string name="switcher_manage">Profilleri yönet</string>
     <string name="switcher_switched">%1$s ilaçları gösteriliyor</string>
+
+    <!-- İlaç düzenleyici v2 -->
+    <string name="unit_injection">doz</string>
+    <string name="unit_application">uygulama</string>
+    <string name="archive_move">Arşive taşı</string>
+    <string name="discard_title">Değişiklikler kaydedilmesin mi?</string>
+    <string name="discard_text">Bu ekranda yaptığın değişiklikler kaydedilmeyecek.</string>
+    <string name="discard_confirm">Kaydetme</string>
+    <string name="field_med_name">İlaç adı</string>
+    <string name="field_strength">Miktar</string>
+    <string name="field_strength_unit">Birim</string>
+    <string name="field_per_dose">Her seferinde</string>
+    <string name="field_how_often">Ne sıklıkla?</string>
+    <string name="schedule_daily_title">Her gün</string>
+    <string name="schedule_daily_desc">Günde bir veya birkaç kez</string>
+    <string name="schedule_weekdays_title">Haftanın belirli günleri</string>
+    <string name="schedule_weekdays_desc">Ör. Pzt, Çar, Cum</string>
+    <string name="schedule_every_n_title">Birkaç günde bir</string>
+    <string name="schedule_every_n_desc">Ör. 3 günde bir</string>
+    <string name="schedule_as_needed_title">Gerektiğinde</string>
+    <string name="schedule_as_needed_desc">Hatırlatma yok, istediğinde işaretlersin</string>
+    <string name="field_interval_days">Kaç günde bir?</string>
+    <string name="field_which_times">Hangi saatlerde?</string>
+    <string name="add_other_time">Başka saat</string>
+    <string name="summary_daily">Her gün %1$s</string>
+    <string name="summary_weekdays">%1$s günleri %2$s</string>
+    <string name="summary_every_n">%1$d günde bir %2$s</string>
+    <string name="summary_as_needed">Gerektiğinde, hatırlatma yok</string>
+    <string name="summary_duration">%1$d gün boyunca</string>
+    <string name="summary_indefinite">süresiz</string>
+    <string name="list_and">ve</string>
+    <string name="section_duration">Süre</string>
+    <string name="duration_starts_today">Bugün başlar</string>
+    <string name="duration_starts_on">Başlangıç: %1$s</string>
+    <string name="duration_indefinite">süresiz</string>
+    <string name="duration_days">%1$s gün</string>
+    <string name="duration_indefinite_switch">Süresiz (bitiş yok)</string>
+    <string name="field_duration_days">Kaç gün sürecek?</string>
+    <string name="section_stock">Stok ve azalınca uyar</string>
+    <string name="stock_not_entered">Girilmedi · isteğe bağlı</string>
+    <string name="stock_summary">%1$s · %2$s gün kala uyar</string>
+    <string name="field_stock_now">Mevcut miktar (%1$s)</string>
+    <string name="field_low_stock_days">Kaç gün kala uyarılsın?</string>
+    <string name="section_note">Not</string>
+    <string name="note_placeholder">Ör. tok karnına, bol suyla</string>
+    <string name="error_duration">1 ile %1$d arasında bir gün sayısı gir</string>
+    <string name="error_low_stock_days">0 ile %1$d gün arasında gir</string>
+
+    <!-- Bugün v2 -->
+    <string name="snackbar_taken">%1$s alındı</string>
+    <string name="banner_exact_alarm">Hatırlatmalar birkaç dakika gecikebilir.</string>
+    <string name="banner_notifications_off">Bildirimler kapalı; hatırlatmalar görünemez.</string>
+    <string name="empty_today_title">Henüz ilaç yok</string>
+    <string name="empty_today_body">İlk ilacını ekle; saati gelince bildirimle hatırlatalım.</string>
+    <string name="stock_with_days">%1$s · ~%2$d gün yeter</string>
+    <string name="next_dose">Sıradaki: %1$s, %2$s</string>
+    <string name="next_dose_snoozed">Sıradaki: %1$s, %2$s (ertelendi)</string>
+    <string name="prn_last_today">son: bugün %1$s</string>
+    <string name="prn_last_yesterday">son: dün %1$s</string>
+    <string name="prn_last_date">son: %1$s %2$s</string>
+    <string name="taken_at">%1$s</string>
+    <string name="part_morning">Sabah</string>
+    <string name="part_noon">Öğle</string>
+    <string name="part_evening">Akşam</string>
+    <string name="taken_time_title">%1$s ne zaman alındı?</string>
+    <string name="taken_time_save">Alındı olarak kaydet</string>
+    <string name="add_stock_title">Stok ekle · %1$s</string>
+    <string name="add_stock_amount">Kaç %1$s eklendi?</string>
 </resources>

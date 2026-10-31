@@ -2,6 +2,7 @@ package app.dozdefteri.core.di
 
 import android.content.Context
 import androidx.room.Room
+import app.dozdefteri.data.db.ALL_MIGRATIONS
 import app.dozdefteri.data.db.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -16,5 +17,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.NAME).build()
+        Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.NAME)
+            .addMigrations(*ALL_MIGRATIONS)
+            .build()
 }

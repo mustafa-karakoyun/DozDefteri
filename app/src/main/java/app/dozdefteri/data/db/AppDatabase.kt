@@ -22,7 +22,7 @@ import app.dozdefteri.data.db.entity.StockLogEntity
         DoseEventEntity::class,
         StockLogEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(Converters::class)

@@ -83,6 +83,7 @@ fun AppNavHost(
     val activeProfile by shellViewModel.activeProfile.collectAsStateWithLifecycle()
     val summaries by shellViewModel.summaries.collectAsStateWithLifecycle()
     var switcherOpen by rememberSaveable { mutableStateOf(false) }
+    var stockRequest by rememberSaveable { mutableStateOf<Long?>(null) }
     val headerProfile = activeProfile?.let { profile ->
         HeaderProfile(profile.name, profile.colorIndex) {
             shellViewModel.loadSummaries()
@@ -92,10 +93,16 @@ fun AppNavHost(
 
     LaunchedEffect(pendingDestination, onboardingDone) {
         if (pendingDestination == null || !onboardingDone) return@LaunchedEffect
-        when (pendingDestination) {
-            MainActivity.DESTINATION_TODAY -> navController.navigateToTab(Today)
-            MainActivity.DESTINATION_EXPORT -> navController.navigate(Export)
-            MainActivity.DESTINATION_PRO -> navController.navigate(Pro)
+        when {
+            pendingDestination == MainActivity.DESTINATION_TODAY -> navController.navigateToTab(Today)
+            pendingDestination == MainActivity.DESTINATION_EXPORT -> navController.navigate(Export)
+            pendingDestination == MainActivity.DESTINATION_PRO -> navController.navigate(Pro)
+            pendingDestination.startsWith(MainActivity.DESTINATION_STOCK_PREFIX) -> {
+                stockRequest = pendingDestination
+                    .removePrefix(MainActivity.DESTINATION_STOCK_PREFIX)
+                    .toLongOrNull()
+                navController.navigateToTab(Medications)
+            }
         }
         onDestinationHandled()
     }
@@ -164,7 +171,9 @@ fun AppNavHost(
                 composable<Medications> {
                     MedicationsScreen(
                         onAdd = { navController.navigate(MedicationEdit()) },
-                        onOpen = { id -> navController.navigate(MedicationEdit(id)) }
+                        onOpen = { id -> navController.navigate(MedicationEdit(id)) },
+                        openStockFor = stockRequest,
+                        onStockRequestHandled = { stockRequest = null }
                     )
                 }
                 composable<MedicationEdit> {

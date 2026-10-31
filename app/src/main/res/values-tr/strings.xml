@@ -429,4 +429,26 @@
     <string name="legend_none">Doz yok</string>
     <string name="edit_dose">%1$s dozunu düzenle</string>
     <string name="not_marked">İşaretlenmedi</string>
+
+    <!-- Bildirimler v2 -->
+    <string name="notif_dose_text">Saat %1$s · %2$s</string>
+    <string name="notif_action_snooze">Ertele (%1$d dk)</string>
+    <plurals name="notif_group_title">
+        <item quantity="one">%1$s · %2$d ilaç</item>
+        <item quantity="other">%1$s · %2$d ilaç</item>
+    </plurals>
+    <string name="notif_group_hint">Tek tek işaretlemek için uygulamayı aç.</string>
+    <string name="notif_action_take_all">Hepsini aldım</string>
+    <string name="notif_action_open">Aç</string>
+    <string name="notif_taken_title">✓ %1$s alındı · %2$s</string>
+    <string name="notif_snoozed_title">⏱ %1$s %2$s ertelendi</string>
+    <string name="notif_snoozed_text">Tekrar hatırlatacağız.</string>
+    <string name="notif_stock_text_days">%1$s kaldı, yaklaşık %2$d gün yeter.</string>
+    <string name="notif_stock_text">%1$s kaldı.</string>
+    <plurals name="notif_medication_count">
+        <item quantity="one">%d ilaç</item>
+        <item quantity="other">%d ilaç</item>
+    </plurals>
+    <string name="notif_remaining_days">Kalan: %1$s · ~%2$d gün</string>
+    <string name="notif_remaining">Kalan: %1$s</string>
 </resources>

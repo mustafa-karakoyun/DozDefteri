@@ -64,5 +64,8 @@ class MainActivity : ComponentActivity() {
         const val DESTINATION_TODAY = "today"
         const val DESTINATION_EXPORT = "export"
         const val DESTINATION_PRO = "pro"
+
+        /** "stock:<medicationId>" opens the add-stock sheet of that medication. */
+        const val DESTINATION_STOCK_PREFIX = "stock:"
     }
 }

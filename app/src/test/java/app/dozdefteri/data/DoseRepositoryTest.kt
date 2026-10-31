@@ -37,7 +37,7 @@ class DoseRepositoryTest {
     @Before
     fun setUp() {
         db = inMemoryDatabase()
-        repository = DoseRepository(db, DoseGenerator(), clock, LowStockNotifier { lowStockAlerts += it })
+        repository = DoseRepository(db, DoseGenerator(), clock, LowStockNotifier { medication, _ -> lowStockAlerts += medication })
     }
 
     @After

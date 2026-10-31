@@ -25,6 +25,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -74,11 +75,15 @@ data class MedicationsActions(
 fun MedicationsScreen(
     onAdd: () -> Unit,
     onOpen: (Long) -> Unit,
+    openStockFor: Long? = null,
+    onStockRequestHandled: () -> Unit = {},
     viewModel: MedicationsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     MedicationsContent(
         state = state,
+        openStockFor = openStockFor,
+        onStockRequestHandled = onStockRequestHandled,
         header = LocalHeaderProfile.current,
         actions = MedicationsActions(
             onAdd = onAdd,
@@ -91,9 +96,22 @@ fun MedicationsScreen(
 }
 
 @Composable
-fun MedicationsContent(state: MedicationsUiState, header: HeaderProfile?, actions: MedicationsActions) {
+fun MedicationsContent(
+    state: MedicationsUiState,
+    header: HeaderProfile?,
+    actions: MedicationsActions,
+    openStockFor: Long? = null,
+    onStockRequestHandled: () -> Unit = {}
+) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var stockSheetFor by remember { mutableStateOf<MedicationEntity?>(null) }
+    // "Stok ekle" from the low-stock notification opens the sheet once the list has loaded.
+    LaunchedEffect(openStockFor, state.isLoading) {
+        val id = openStockFor ?: return@LaunchedEffect
+        if (state.isLoading) return@LaunchedEffect
+        stockSheetFor = state.active.firstOrNull { it.medication.id == id }?.medication
+        onStockRequestHandled()
+    }
     val c = Doz.colors
     Scaffold(
         containerColor = c.bgApp,

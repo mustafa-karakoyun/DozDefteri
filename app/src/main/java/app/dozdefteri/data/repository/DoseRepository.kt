@@ -7,6 +7,7 @@ import app.dozdefteri.data.db.entity.DoseEventEntity
 import app.dozdefteri.data.db.entity.MedicationEntity
 import app.dozdefteri.data.db.entity.StockLogEntity
 import app.dozdefteri.domain.DoseGenerator
+import app.dozdefteri.domain.StockEstimator
 import app.dozdefteri.domain.model.DoseStatus
 import app.dozdefteri.domain.model.OPEN_DOSE_STATUSES
 import app.dozdefteri.domain.model.ScheduleType
@@ -108,7 +109,7 @@ class DoseRepository @Inject constructor(
             doseDao.update(event.copy(status = DoseStatus.TAKEN, actionAt = now.toEpochMilli()))
             TakeOutcome(applied = true, lowStock = deductStock(event.medicationId, event.quantity, now))
         }
-        lowStock.lowStock?.let(lowStockNotifier::notifyLowStock)
+        lowStock.lowStock?.let { notifyLowStock(it) }
         return lowStock.applied
     }
 
@@ -137,7 +138,7 @@ class DoseRepository @Inject constructor(
             if (inserted.firstOrNull() == -1L) return@withTransaction NOT_APPLIED
             TakeOutcome(applied = true, lowStock = deductStock(medication.id, medication.doseAmount, now))
         }
-        outcome.lowStock?.let(lowStockNotifier::notifyLowStock)
+        outcome.lowStock?.let { notifyLowStock(it) }
         return outcome.applied
     }
 
@@ -193,7 +194,7 @@ class DoseRepository @Inject constructor(
             val lowStock = if (wasTaken) null else deductStock(event.medicationId, event.quantity, now)
             TakeOutcome(applied = true, lowStock = lowStock)
         }
-        outcome.lowStock?.let(lowStockNotifier::notifyLowStock)
+        outcome.lowStock?.let { notifyLowStock(it) }
         return outcome.applied
     }
 
@@ -218,6 +219,15 @@ class DoseRepository @Inject constructor(
         medicationDao.update(medication.copy(isArchived = true, updatedAt = now.toEpochMilli()))
         doseDao.deleteFutureOpenForMedication(medicationId, now.toEpochMilli())
         doseDao.getNotifiedOpenIdsForMedication(medicationId)
+    }
+
+    private suspend fun notifyLowStock(medication: MedicationEntity) {
+        val days = StockEstimator.remainingDays(
+            medication.stockQuantity,
+            scheduleDao.getByMedication(medication.id),
+            medication.doseAmount
+        )
+        lowStockNotifier.notifyLowStock(medication, days)
     }
 
     /** Returns the medication when it crossed its low-stock threshold and the alert has not been shown yet. */

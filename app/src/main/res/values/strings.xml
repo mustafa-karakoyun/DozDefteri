@@ -439,4 +439,26 @@
     <string name="legend_none">No doses</string>
     <string name="edit_dose">Edit %1$s dose</string>
     <string name="not_marked">Not marked</string>
+
+    <!-- Notifications v2 -->
+    <string name="notif_dose_text">At %1$s · %2$s</string>
+    <string name="notif_action_snooze">Snooze (%1$d min)</string>
+    <plurals name="notif_group_title">
+        <item quantity="one">%1$s · %2$d medication</item>
+        <item quantity="other">%1$s · %2$d medications</item>
+    </plurals>
+    <string name="notif_group_hint">Open the app to mark them one by one.</string>
+    <string name="notif_action_take_all">Took all</string>
+    <string name="notif_action_open">Open</string>
+    <string name="notif_taken_title">✓ %1$s taken · %2$s</string>
+    <string name="notif_snoozed_title">⏱ %1$s snoozed until %2$s</string>
+    <string name="notif_snoozed_text">We will remind you again.</string>
+    <string name="notif_stock_text_days">%1$s left, enough for about %2$d days.</string>
+    <string name="notif_stock_text">%1$s left.</string>
+    <plurals name="notif_medication_count">
+        <item quantity="one">%d medication</item>
+        <item quantity="other">%d medications</item>
+    </plurals>
+    <string name="notif_remaining_days">Left: %1$s · ~%2$d days</string>
+    <string name="notif_remaining">Left: %1$s</string>
 </resources>

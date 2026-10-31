@@ -36,7 +36,7 @@ class AlarmSchedulerTest {
     @Before
     fun setUp() {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        repository = DoseRepository(db, DoseGenerator(), clock, LowStockNotifier { })
+        repository = DoseRepository(db, DoseGenerator(), clock, LowStockNotifier { _, _ -> })
         scheduler = AlarmScheduler(context, repository, clock)
     }
 

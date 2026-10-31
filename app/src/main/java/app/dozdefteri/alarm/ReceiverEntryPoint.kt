@@ -3,6 +3,7 @@ package app.dozdefteri.alarm
 import android.content.Context
 import app.dozdefteri.data.prefs.SettingsRepository
 import app.dozdefteri.data.repository.DoseRepository
+import app.dozdefteri.data.repository.MedicationRepository
 import app.dozdefteri.data.repository.ProfileRepository
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -17,6 +18,7 @@ interface ReceiverEntryPoint {
     fun doseSync(): DoseSync
     fun doseRepository(): DoseRepository
     fun profileRepository(): ProfileRepository
+    fun medicationRepository(): MedicationRepository
     fun settingsRepository(): SettingsRepository
     fun notifier(): DoseNotifier
     fun clock(): Clock

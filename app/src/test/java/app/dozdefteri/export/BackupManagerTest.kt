@@ -54,7 +54,7 @@ class BackupManagerTest {
         val profileId = source.profileDao().insert(testProfile("Ayşe"))
         val medicationId = source.medicationDao().insert(testMedication(profileId, name = "Demir, 100", stock = 10.0))
         source.scheduleDao().insert(testSchedule(medicationId))
-        val repository = DoseRepository(source, DoseGenerator(), clock, LowStockNotifier { })
+        val repository = DoseRepository(source, DoseGenerator(), clock, LowStockNotifier { _, _ -> })
         repository.ensureWindow(clock.instant())
         repository.take(source.doseEventDao().getAll().first().id, clock.instant())
 

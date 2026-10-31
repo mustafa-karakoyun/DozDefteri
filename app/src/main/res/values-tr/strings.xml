@@ -304,4 +304,26 @@
     <string name="widget_no_more_doses">Bugün başka doz yok</string>
     <string name="widget_next_at">%1$s · %2$s</string>
     <string name="widget_summary">%1$d/%2$d alındı</string>
+
+    <!-- UI v2 bileşenleri -->
+    <string name="status_low_stock">Stok azalıyor</string>
+    <string name="dose_card_a11y">%1$s, %2$s, saat %3$s, %4$s</string>
+    <string name="dose_missed_hint">Bu dozu işaretlemedin. Aldıysan güncelleyebilirsin.</string>
+    <string name="dose_update">Güncelle</string>
+    <string name="dose_menu">%1$s için diğer işlemler</string>
+    <string name="dose_mark_not_taken">Alınmadı olarak işaretle</string>
+    <string name="dose_fix_time">Saati düzelt</string>
+    <string name="dose_mark_taken">Aldım olarak işaretle</string>
+    <string name="dose_mark_skipped">Atlandı olarak işaretle</string>
+    <plurals name="day_progress">
+        <item quantity="one">%1$d dozdan %2$s alındı</item>
+        <item quantity="other">%1$d dozdan %2$s alındı</item>
+    </plurals>
+    <string name="dismiss">Kapat</string>
+    <string name="close">Kapat</string>
+    <string name="profile_chip_a11y">Profil: %1$s. Profil değiştir</string>
+    <string name="pro_badge">Pro</string>
+    <string name="take_now_short">Şimdi al</string>
+    <string name="low_stock_title">%1$s azalıyor</string>
+    <string name="add_stock">Stok ekle</string>
 </resources>

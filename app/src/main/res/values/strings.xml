@@ -314,4 +314,26 @@
     <string name="widget_no_more_doses">No more doses today</string>
     <string name="widget_next_at">%1$s · %2$s</string>
     <string name="widget_summary">%1$d/%2$d taken</string>
+
+    <!-- UI v2 components -->
+    <string name="status_low_stock">Running low</string>
+    <string name="dose_card_a11y">%1$s, %2$s, at %3$s, %4$s</string>
+    <string name="dose_missed_hint">You did not mark this dose. If you took it, you can update it.</string>
+    <string name="dose_update">Update</string>
+    <string name="dose_menu">More actions for %1$s</string>
+    <string name="dose_mark_not_taken">Mark as not taken</string>
+    <string name="dose_fix_time">Fix the time</string>
+    <string name="dose_mark_taken">Mark as taken</string>
+    <string name="dose_mark_skipped">Mark as skipped</string>
+    <plurals name="day_progress">
+        <item quantity="one">%2$s of %1$d dose taken</item>
+        <item quantity="other">%2$s of %1$d doses taken</item>
+    </plurals>
+    <string name="dismiss">Dismiss</string>
+    <string name="close">Close</string>
+    <string name="profile_chip_a11y">Profile: %1$s. Switch profile</string>
+    <string name="pro_badge">Pro</string>
+    <string name="take_now_short">Take now</string>
+    <string name="low_stock_title">%1$s is running low</string>
+    <string name="add_stock">Add stock</string>
 </resources>

@@ -161,8 +161,9 @@ fun AppNavHost(
                             navController.navigate(Today) {
                                 popUpTo<Onboarding> { inclusive = true }
                             }
-                        },
-                        onOpenBatteryGuide = { navController.navigate(BatteryGuide) }
+                            // "İlk ilacını ekle": open the editor on top of Today.
+                            navController.navigate(MedicationEdit())
+                        }
                     )
                 }
                 composable<Today> {

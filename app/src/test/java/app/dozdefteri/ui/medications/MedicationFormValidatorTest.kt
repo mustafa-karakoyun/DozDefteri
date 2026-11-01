@@ -9,13 +9,15 @@ import java.time.LocalTime
 
 class MedicationFormValidatorTest {
 
-    private val valid = MedicationFormState(name = "Metformin", strengthAmount = "500", startDate = LocalDate.of(2026, 11, 1))
+    private val valid =
+        MedicationFormState(name = "Metformin", strengthAmount = "500", startDate = LocalDate.of(2026, 11, 1))
 
     private fun errors(state: MedicationFormState) = MedicationFormValidator.validate(state)
 
     @Test
     fun smartDefaults_withAName_areValid() {
-        assertThat(errors(MedicationFormState(name = "D vitamini", startDate = LocalDate.of(2026, 11, 1))).isValid).isTrue()
+        val defaults = MedicationFormState(name = "D vitamini", startDate = LocalDate.of(2026, 11, 1))
+        assertThat(errors(defaults).isValid).isTrue()
         assertThat(valid.endDate).isEqualTo(LocalDate.of(2026, 11, 30))
     }
 

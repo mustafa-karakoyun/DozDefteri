@@ -8,6 +8,7 @@ import app.dozdefteri.data.db.entity.StockLogEntity
 import app.dozdefteri.domain.StockEstimator
 import app.dozdefteri.domain.model.StockChangeReason
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,6 +28,10 @@ class MedicationRepository @Inject constructor(
         medicationDao.observeByProfile(profileId, archived)
 
     fun observeSchedules(): Flow<List<ScheduleEntity>> = scheduleDao.observeAll()
+
+    /** Active medication count per profile id. */
+    fun observeActiveCounts(): Flow<Map<Long, Int>> =
+        medicationDao.observeActiveCounts().map { counts -> counts.associate { it.profileId to it.count } }
 
     suspend fun get(medicationId: Long): MedicationWithSchedule? {
         val medication = medicationDao.getById(medicationId) ?: return null

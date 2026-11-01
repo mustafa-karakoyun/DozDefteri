@@ -38,8 +38,8 @@ fun readPermissions(context: Context): PermissionSnapshot {
     val notifications = notificationPermission && NotificationManagerCompat.from(context).areNotificationsEnabled()
     val exact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
         context.getSystemService(AlarmManager::class.java)?.canScheduleExactAlarms() == true
-    val battery = context.getSystemService(PowerManager::class.java)?.isIgnoringBatteryOptimizations(context.packageName)
-        ?: true
+    val battery = context.getSystemService(PowerManager::class.java)
+        ?.isIgnoringBatteryOptimizations(context.packageName) ?: true
     return PermissionSnapshot(
         notificationsAllowed = notifications,
         exactAlarmsAllowed = exact,

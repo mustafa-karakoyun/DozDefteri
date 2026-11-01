@@ -50,10 +50,18 @@ class ProfileRepository @Inject constructor(
         }
     }
 
-    suspend fun add(name: String, colorIndex: Int, now: Instant): Long =
-        profileDao.insert(ProfileEntity(name = name.trim(), colorIndex = colorIndex, createdAt = now.toEpochMilli()))
+    suspend fun add(name: String, colorIndex: Int, now: Instant, note: String? = null): Long =
+        profileDao.insert(
+            ProfileEntity(
+                name = name.trim(),
+                colorIndex = colorIndex,
+                createdAt = now.toEpochMilli(),
+                note = note?.trim()?.ifEmpty { null }
+            )
+        )
 
-    suspend fun update(profile: ProfileEntity) = profileDao.update(profile.copy(name = profile.name.trim()))
+    suspend fun update(profile: ProfileEntity) =
+        profileDao.update(profile.copy(name = profile.name.trim(), note = profile.note?.trim()?.ifEmpty { null }))
 
     suspend fun setActive(profileId: Long) = settingsRepository.setActiveProfileId(profileId)
 

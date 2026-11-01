@@ -58,7 +58,15 @@ class MedicationSummaryTest {
     @Test
     fun everyNDays_andAsNeeded() {
         assertThat(
-            MedicationSummary.build(ScheduleType.EVERY_N_DAYS, listOf(LocalTime.of(13, 0)), emptyList(), 3, "1 kapsül", 10, tr)
+            MedicationSummary.build(
+                ScheduleType.EVERY_N_DAYS,
+                listOf(LocalTime.of(13, 0)),
+                emptyList(),
+                3,
+                "1 kapsül",
+                10,
+                tr
+            )
         ).isEqualTo("3 günde bir 13:00'te, 1 kapsül, 10 gün boyunca.")
         assertThat(
             MedicationSummary.build(ScheduleType.AS_NEEDED, emptyList(), emptyList(), null, "1 tablet", null, tr)

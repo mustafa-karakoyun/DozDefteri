@@ -16,12 +16,6 @@
     <string name="action_taken">Taken</string>
     <string name="action_snooze">Snooze</string>
     <string name="action_skip">Skip</string>
-    <plurals name="dose_summary_title">
-        <item quantity="one">%d dose waiting</item>
-        <item quantity="other">%d doses waiting</item>
-    </plurals>
-    <string name="low_stock_notification_title">%1$s is running low</string>
-    <string name="low_stock_notification_text">%1$s left. Time to refill.</string>
     <string name="backup_reminder_title">Back up your data</string>
     <string name="backup_reminder_text">Your data lives only on this phone. Save a backup file to keep it safe.</string>
 
@@ -35,75 +29,25 @@
     <string name="save">Save</string>
     <string name="saved">Saved</string>
     <string name="back">Back</string>
-    <string name="more_options">More options</string>
-    <string name="archive">Archive</string>
-    <string name="restore">Restore</string>
-    <string name="open_settings">Open settings</string>
     <string name="decrease">Decrease</string>
     <string name="increase">Increase</string>
-    <string name="character_count">%1$d/%2$d</string>
     <string name="disclaimer">DozDefteri does not provide medical advice and does not replace your doctor\'s instructions. Consult your doctor or pharmacist about your medication.</string>
     <string name="battery_guide_title">Battery settings guide</string>
-    <string name="export_title">Export and backup</string>
     <string name="pro_title">DozDefteri Pro</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_value_title">Never miss a dose</string>
-    <string name="onboarding_value_body">Simple reminders for your medication and supplements.</string>
-    <string name="onboarding_point_no_subscription">No subscription</string>
-    <string name="onboarding_point_no_account">No account</string>
-    <string name="onboarding_point_on_device">Your data stays on your phone</string>
-    <string name="onboarding_continue">Continue</string>
-    <string name="onboarding_notifications_title">Allow notifications</string>
-    <string name="onboarding_notifications_body">Reminders arrive as notifications. You can mark a dose as taken, snooze or skip it right from the notification.</string>
-    <string name="onboarding_notifications_denied">Notifications are off, so reminders cannot be shown. You can turn them on in settings.</string>
-    <string name="onboarding_allow">Allow</string>
-    <string name="onboarding_skip_for_now">Skip for now</string>
-    <string name="onboarding_permission_granted">Allowed</string>
-    <string name="onboarding_exact_title">On-time reminders</string>
-    <string name="onboarding_exact_body">To remind you at the exact minute, DozDefteri needs the \"Alarms &amp; reminders\" permission. Without it, reminders may be late.</string>
-    <string name="onboarding_start">Get started</string>
-    <string name="battery_guide_link">Battery settings guide</string>
+    <string name="onboarding_start">Start</string>
 
     <!-- Medications -->
-    <string name="tab_active">Active</string>
-    <string name="tab_archive">Archive</string>
     <string name="add_medication">Add medication</string>
-    <string name="empty_medications">No medications yet</string>
-    <string name="empty_archive">No archived medications</string>
-    <string name="stock_left">%1$s left</string>
-    <string name="stock_low_left">Low stock: %1$s left</string>
-    <plurals name="days_left">
-        <item quantity="one">about %d day</item>
-        <item quantity="other">about %d days</item>
-    </plurals>
     <string name="medication_add_title">Add medication</string>
     <string name="medication_edit_title">Edit medication</string>
     <string name="archive_confirm_title">Move this medication to the archive?</string>
     <string name="archive_confirm_text">Reminders stop and upcoming doses are removed. Its history and reports stay intact, and you can bring it back from the My medications > Archive tab.</string>
-    <string name="field_name">Name</string>
-    <string name="field_dose_amount">Dose amount</string>
-    <string name="field_dose_unit">Unit</string>
     <string name="field_form">Form</string>
-    <string name="field_days">Days</string>
-    <string name="field_interval">Interval</string>
-    <string name="field_times">Times</string>
     <string name="field_start_date">Start date</string>
-    <string name="field_end_date">End date</string>
-    <string name="no_end_date">No end date</string>
-    <string name="clear_end_date">Clear end date</string>
-    <string name="field_stock_tracking">Track stock</string>
-    <string name="field_stock_tracking_hint">Counts down with every dose taken</string>
-    <string name="field_stock_quantity">Current amount</string>
-    <string name="field_low_stock_threshold">Alert below</string>
-    <string name="field_low_stock_threshold_hint">Optional</string>
-    <string name="field_note">Note</string>
-    <string name="section_schedule">Schedule</string>
-    <string name="add_time">Add time</string>
-    <string name="remove_time">Remove %1$s</string>
     <string name="unit_tablet">tablet</string>
     <string name="unit_capsule">capsule</string>
-    <string name="unit_mg">mg</string>
     <string name="unit_ml">ml</string>
     <string name="unit_drop">drop</string>
     <string name="unit_puff">puff</string>
@@ -115,14 +59,6 @@
     <string name="form_inhaler">Spray</string>
     <string name="form_cream">Cream</string>
     <string name="form_other">Other</string>
-    <string name="schedule_type_daily">Every day</string>
-    <string name="schedule_type_weekdays">Specific days of the week</string>
-    <string name="schedule_type_every_n_days">Every few days</string>
-    <string name="schedule_type_as_needed">As needed (no reminders)</string>
-    <plurals name="every_n_days">
-        <item quantity="one">Every %d day</item>
-        <item quantity="other">Every %d days</item>
-    </plurals>
     <string name="schedule_summary_daily">Every day %1$s</string>
     <string name="schedule_summary_weekdays">%1$s · %2$s</string>
     <plurals name="schedule_summary_every_n_days">
@@ -133,12 +69,10 @@
     <string name="error_name_required">Enter a name</string>
     <string name="error_too_long">At most %1$d characters</string>
     <string name="error_amount_invalid">Enter an amount greater than 0 with at most 2 decimals</string>
-    <string name="error_unit_required">Enter a unit</string>
     <string name="error_times_required">Add at least one time</string>
     <string name="error_times_too_many">At most %1$d times</string>
     <string name="error_days_required">Pick at least one day</string>
     <string name="error_interval_range">Choose between %1$d and %2$d days</string>
-    <string name="error_end_before_start">End date cannot be before the start date</string>
     <string name="error_number_invalid">Enter 0 or more, with at most 2 decimals</string>
 
     <!-- Today -->
@@ -147,28 +81,18 @@
     <string name="status_skipped">Skipped</string>
     <string name="status_snoozed">Snoozed</string>
     <string name="status_pending">Pending</string>
-    <string name="warning_exact_alarms">Reminders may be late</string>
     <string name="fix">Fix</string>
-    <string name="warning_notifications_off">Notifications are off</string>
     <string name="turn_on">Turn on</string>
     <string name="no_doses_today">No doses today</string>
     <string name="section_as_needed">As needed</string>
-    <string name="switch_profile">Switch profile</string>
-    <string name="overdue">Late</string>
-    <string name="long_press_to_snooze">Long press to snooze</string>
     <string name="undo">Undo</string>
     <string name="take_now">Taken now</string>
-    <string name="low_stock_card_title">Running low</string>
 
     <!-- History -->
-    <string name="monthly_adherence">Adherence this month: %1$s</string>
     <string name="no_value">—</string>
     <string name="percent_value">%1$d%%</string>
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
-    <string name="day_all_taken">All taken</string>
-    <string name="day_partial">Partly taken</string>
-    <string name="day_missed">Missed dose</string>
     <string name="day_no_doses">No doses</string>
 
     <!-- Settings -->
@@ -177,23 +101,9 @@
     <!-- Export and backup -->
     <string name="all_profiles">All profiles</string>
     <string name="pro_required">Requires Pro</string>
-    <string name="export_profile">Profile</string>
-    <string name="export_range">Date range</string>
-    <string name="export_range_value">%1$s – %2$s</string>
-    <string name="range_7">Last 7 days</string>
-    <string name="range_30">Last 30 days</string>
-    <string name="range_90">Last 90 days</string>
     <string name="range_custom">Custom</string>
-    <string name="export_csv">Save as CSV</string>
-    <string name="export_pdf">Create PDF report</string>
-    <string name="export_pdf_simple_hint">The PDF report lists your medications and doses. Pro adds adherence per medication.</string>
-    <string name="export_pdf_detailed_hint">The PDF report includes adherence per medication and overall.</string>
     <string name="export_failed">Could not save the file. Please try again.</string>
-    <string name="file_saved">File saved</string>
-    <string name="share">Share</string>
     <string name="backup_section">Backup</string>
-    <string name="backup_hint">Your data is stored only on this phone. Save a backup file somewhere safe (for example cloud storage) to move or recover it.</string>
-    <string name="backup_create">Back up</string>
     <string name="backup_restore">Restore from backup</string>
     <string name="backup_restore_confirm_title">Restore this backup?</string>
     <string name="backup_restore_confirm_text">All current data will be deleted and replaced with the data in the backup. This cannot be undone.</string>
@@ -209,15 +119,7 @@
     <string name="csv_action_time">action_time</string>
     <string name="csv_profile">profile</string>
     <string name="pdf_title">DozDefteri · Medication adherence summary</string>
-    <string name="pdf_profile">Profile: %1$s</string>
-    <string name="pdf_range">Date range: %1$s – %2$s</string>
     <string name="pdf_generated">Created: %1$s</string>
-    <string name="pdf_medications">Medications</string>
-    <string name="pdf_schedule">Schedule</string>
-    <string name="pdf_doses">Doses</string>
-    <string name="pdf_time">Time</string>
-    <string name="pdf_adherence">Adherence</string>
-    <string name="pdf_overall_adherence">Overall adherence: %1$s</string>
     <string name="pdf_empty">No records</string>
     <string name="pdf_page">%1$d/%2$d</string>
 
@@ -228,78 +130,39 @@
     <string name="theme_system">Follow system setting</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
-    <string name="settings_accent">Accent color</string>
-    <string name="settings_accent_pro_hint">More colors with Pro</string>
-    <string name="accent_teal">Teal</string>
-    <string name="accent_indigo">Indigo</string>
-    <string name="accent_orange">Orange</string>
-    <string name="accent_green">Green</string>
     <string name="settings_reminders">Reminders</string>
     <string name="settings_snooze">Snooze duration</string>
-    <string name="settings_missed_after">Mark as missed after</string>
-    <string name="settings_exact_alarms">On-time reminders</string>
-    <string name="settings_notifications">Notification settings</string>
-    <string name="settings_allowed">Allowed</string>
-    <string name="settings_not_allowed">Not allowed, tap to fix</string>
-    <string name="settings_data">Data</string>
-    <string name="settings_pro_status">Status</string>
     <string name="settings_pro_active">Active · thank you</string>
-    <string name="settings_pro_inactive">Free version</string>
     <string name="settings_about">About</string>
     <string name="settings_version">Version</string>
-    <string name="settings_privacy_policy">Privacy policy</string>
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
-    <plurals name="hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
-    </plurals>
 
     <!-- Profiles -->
     <string name="profiles_title">Profiles</string>
-    <string name="profile_add">Add profile</string>
     <string name="profile_edit">Edit profile</string>
     <string name="profile_edit_named">Edit %1$s</string>
-    <string name="profile_delete_named">Delete %1$s</string>
     <string name="profile_active">Active</string>
     <string name="profile_name">Name</string>
     <string name="profile_color">Color</string>
     <string name="profile_color_option">Color %1$d</string>
     <string name="profile_delete_title">Delete %1$s?</string>
     <string name="profile_delete_text">All medications, history and stock records of this profile will be deleted permanently.</string>
-    <string name="profiles_pro_hint">The free version includes one profile. Add family members with Pro.</string>
     <string name="delete">Delete</string>
 
     <!-- Battery guide -->
     <string name="battery_intro">Some phones stop apps in the background to save battery, which can delay or block reminders. Allowing DozDefteri to run without battery restrictions keeps reminders on time.</string>
-    <string name="battery_open_settings">Open battery optimization settings</string>
-    <string name="battery_brand_generic">General steps</string>
-    <string name="battery_brand_xiaomi">Xiaomi, Redmi, POCO</string>
-    <string name="battery_brand_samsung">Samsung</string>
-    <string name="battery_brand_huawei">Huawei, Honor</string>
-    <string name="battery_brand_oppo">OPPO, realme, OnePlus</string>
-    <string name="battery_brand_vivo">vivo</string>
     <string name="battery_steps_generic">1. Open Settings > Apps > DozDefteri > Battery.\n2. Choose \"Unrestricted\" or \"Don\'t optimize\".\n3. Make sure notifications are allowed for DozDefteri.</string>
     <string name="battery_steps_xiaomi">1. Settings > Apps > Manage apps > DozDefteri.\n2. Turn on \"Autostart\".\n3. Battery saver > \"No restrictions\".\n4. In recent apps, long press DozDefteri and tap the lock icon.</string>
     <string name="battery_steps_samsung">1. Settings > Battery > Background usage limits.\n2. Make sure DozDefteri is not in \"Sleeping apps\" or \"Deep sleeping apps\".\n3. Settings > Apps > DozDefteri > Battery > \"Unrestricted\".</string>
     <string name="battery_steps_huawei">1. Settings > Battery > App launch.\n2. Find DozDefteri, turn off \"Manage automatically\".\n3. Turn on \"Auto-launch\", \"Secondary launch\" and \"Run in background\".</string>
     <string name="battery_steps_oppo">1. Settings > Battery > More settings > Optimize battery use: choose \"Don\'t optimize\" for DozDefteri.\n2. Settings > Apps > DozDefteri > Battery usage: allow background activity and auto launch.</string>
-    <string name="battery_steps_vivo">1. Settings > Battery > Background power consumption management.\n2. Allow high background power use for DozDefteri.\n3. Settings > Apps > Autostart: turn on DozDefteri.</string>
 
     <!-- Pro -->
-    <string name="pro_headline">Support DozDefteri with a one-time purchase</string>
-    <string name="pro_feature_profiles">Unlimited profiles for family members</string>
-    <string name="pro_feature_widget">Home screen widget with your next dose</string>
-    <string name="pro_feature_pdf">Detailed PDF report with adherence per medication</string>
-    <string name="pro_feature_colors">Extra accent colors</string>
-    <string name="pro_feature_all_profiles">Export all profiles together</string>
-    <string name="pro_price">One-time price: %1$s</string>
-    <string name="pro_price_unavailable">Price could not be loaded. Check that Google Play is available and try again later.</string>
     <string name="pro_buy">Buy</string>
     <string name="pro_restore">Restore purchase</string>
-    <string name="pro_always_free">Reminders and the number of medications are always free.</string>
     <string name="pro_active_thanks">Pro is active. Thank you!</string>
     <string name="pro_message_purchased">Pro unlocked. Thank you!</string>
     <string name="pro_message_pending">Payment pending. Pro unlocks once the payment completes.</string>
@@ -310,10 +173,8 @@
     <!-- Widget -->
     <string name="widget_name">Next dose</string>
     <string name="widget_description">Shows your next dose and today\'s progress</string>
-    <string name="widget_locked">The widget is available with DozDefteri Pro. Tap to learn more.</string>
+    <string name="widget_locked">The widget is available with Pro</string>
     <string name="widget_no_more_doses">No more doses today</string>
-    <string name="widget_next_at">%1$s · %2$s</string>
-    <string name="widget_summary">%1$d/%2$d taken</string>
 
     <!-- UI v2 components -->
     <string name="status_low_stock">Running low</string>
@@ -540,4 +401,68 @@
     <string name="pro_buy_with_price">%1$s · One-time purchase</string>
     <string name="pro_price_unavailable_short">Price could not be loaded</string>
     <string name="pro_footnote">Payment through Google Play. No account needed.</string>
+
+    <!-- Widget v2 -->
+    <string name="widget_summary_today">Today %1$d/%2$d taken</string>
+    <string name="widget_header">%1$s · next</string>
+    <string name="widget_header_wide">%1$s · next · %2$s</string>
+    <string name="widget_more">%1$s +%2$d</string>
+    <string name="widget_tomorrow_first">First dose tomorrow %1$s</string>
+
+    <!-- Onboarding v2 -->
+    <string name="onboarding_welcome_title">Remembering your medication, as simple as keeping a notebook.</string>
+    <string name="onboarding_point_subscription">No subscription — set it up once, it keeps working.</string>
+    <string name="onboarding_point_account">No account — no sign-up, e-mail or password.</string>
+    <string name="onboarding_point_device">Your data stays only on this phone.</string>
+    <string name="onboarding_notif_title">We will send reminders as notifications.</string>
+    <string name="onboarding_notif_body">When it is time for a medication, you can tap \"Taken\" without opening the app. For that we need permission to show notifications.</string>
+    <string name="onboarding_sample_app">DozDefteri · now</string>
+    <string name="onboarding_sample_title">Metformin 500 mg</string>
+    <string name="onboarding_sample_text">At 20:00 · 1 tablet</string>
+    <string name="onboarding_sample_a11y">Sample notification: Metformin 500 mg at 20:00 with Taken, Snooze and Skip buttons</string>
+    <string name="onboarding_allow_notifications">Allow notifications</string>
+    <string name="onboarding_not_now">Not now</string>
+    <string name="onboarding_on_time_title">Reminders right on time</string>
+    <string name="onboarding_on_time_body">Your phone may put apps to sleep to save battery. Two small settings make reminders arrive to the minute.</string>
+    <string name="onboarding_step_exact">1. Permission to ring on time</string>
+    <string name="onboarding_status_granted">Status: allowed</string>
+    <string name="onboarding_status_denied">Status: not allowed</string>
+    <string name="onboarding_grant">Allow</string>
+    <string name="onboarding_step_battery">2. Remove the battery restriction</string>
+    <string name="onboarding_add_first">Add your first medication</string>
+    <string name="onboarding_page">Page %1$d of %2$d</string>
+    <string name="battery_open_settings_short">Open battery settings</string>
+    <string name="battery_step_numbered">%1$d. %2$s</string>
+    <string name="brand_xiaomi">Xiaomi</string>
+    <string name="brand_samsung">Samsung</string>
+    <string name="brand_huawei">Huawei</string>
+    <string name="brand_oppo">Oppo</string>
+    <string name="brand_other">Other</string>
+    <string name="battery_step_xiaomi_1">Settings › Apps</string>
+    <string name="battery_step_xiaomi_2">DozDefteri › Battery saver</string>
+    <string name="battery_step_xiaomi_3">Choose \"No restrictions\"</string>
+    <string name="battery_step_samsung_1">Settings › Battery</string>
+    <string name="battery_step_samsung_2">Background usage limits</string>
+    <string name="battery_step_samsung_3">Remove DozDefteri from sleeping apps</string>
+    <string name="battery_step_huawei_1">Settings › Battery › App launch</string>
+    <string name="battery_step_huawei_2">DozDefteri › turn off Manage automatically</string>
+    <string name="battery_step_huawei_3">Turn on all three options</string>
+    <string name="battery_step_oppo_1">Settings › Battery</string>
+    <string name="battery_step_oppo_2">DozDefteri › Battery usage</string>
+    <string name="battery_step_oppo_3">Allow background activity</string>
+    <string name="battery_step_other_1">Settings › Apps › DozDefteri</string>
+    <string name="battery_step_other_2">Battery</string>
+    <string name="battery_step_other_3">Choose \"Unrestricted\"</string>
+
+    <!-- Profiles v2 -->
+    <string name="profile_add_plus">+ Add profile</string>
+    <string name="profile_new">New profile</string>
+    <string name="profile_note">Note (optional)</string>
+    <string name="profile_note_placeholder">E.g. My father</string>
+    <string name="profile_save">Save profile</string>
+    <string name="profile_delete">Delete profile</string>
+    <plurals name="medication_count">
+        <item quantity="one">%d medication</item>
+        <item quantity="other">%d medications</item>
+    </plurals>
 </resources>

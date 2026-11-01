@@ -14,12 +14,6 @@
     <string name="action_taken">Aldım</string>
     <string name="action_snooze">Ertele</string>
     <string name="action_skip">Atla</string>
-    <plurals name="dose_summary_title">
-        <item quantity="one">%d doz bekliyor</item>
-        <item quantity="other">%d doz bekliyor</item>
-    </plurals>
-    <string name="low_stock_notification_title">%1$s azalıyor</string>
-    <string name="low_stock_notification_text">%1$s kaldı. Yenileme zamanı.</string>
     <string name="backup_reminder_title">Verilerini yedekle</string>
     <string name="backup_reminder_text">Verilerin yalnızca bu telefonda. Güvende tutmak için bir yedek dosyası kaydet.</string>
 
@@ -29,75 +23,25 @@
     <string name="save">Kaydet</string>
     <string name="saved">Kaydedildi</string>
     <string name="back">Geri</string>
-    <string name="more_options">Diğer seçenekler</string>
-    <string name="archive">Arşivle</string>
-    <string name="restore">Geri yükle</string>
-    <string name="open_settings">Ayarları aç</string>
     <string name="decrease">Azalt</string>
     <string name="increase">Artır</string>
-    <string name="character_count">%1$d/%2$d</string>
     <string name="disclaimer">DozDefteri tıbbi tavsiye vermez ve doktorunuzun talimatlarının yerini tutmaz. İlaç kullanımınızla ilgili kararlar için doktorunuza veya eczacınıza danışın.</string>
     <string name="battery_guide_title">Pil ayarları rehberi</string>
-    <string name="export_title">Dışa aktar ve yedekle</string>
     <string name="pro_title">DozDefteri Pro</string>
 
     <!-- Karşılama -->
-    <string name="onboarding_value_title">İlaçlarını unutma</string>
-    <string name="onboarding_value_body">İlaçların ve takviyelerin için sade hatırlatmalar.</string>
-    <string name="onboarding_point_no_subscription">Abonelik yok</string>
-    <string name="onboarding_point_no_account">Hesap yok</string>
-    <string name="onboarding_point_on_device">Verilerin telefonunda kalır</string>
-    <string name="onboarding_continue">Devam</string>
-    <string name="onboarding_notifications_title">Bildirimlere izin ver</string>
-    <string name="onboarding_notifications_body">Hatırlatmalar bildirim olarak gelir. Dozu doğrudan bildirimden alındı olarak işaretleyebilir, erteleyebilir veya atlayabilirsin.</string>
-    <string name="onboarding_notifications_denied">Bildirimler kapalı olduğu için hatırlatmalar gösterilemez. Ayarlardan açabilirsin.</string>
-    <string name="onboarding_allow">İzin ver</string>
-    <string name="onboarding_skip_for_now">Şimdilik geç</string>
-    <string name="onboarding_permission_granted">İzin verildi</string>
-    <string name="onboarding_exact_title">Tam zamanlı hatırlatma</string>
-    <string name="onboarding_exact_body">Seni tam dakikasında hatırlatabilmek için DozDefteri\'nin \"Alarmlar ve hatırlatıcılar\" iznine ihtiyacı var. Bu izin olmadan hatırlatmalar gecikebilir.</string>
     <string name="onboarding_start">Başla</string>
-    <string name="battery_guide_link">Pil ayarları rehberi</string>
 
     <!-- İlaçlar -->
-    <string name="tab_active">Aktif</string>
-    <string name="tab_archive">Arşiv</string>
     <string name="add_medication">İlaç ekle</string>
-    <string name="empty_medications">Henüz ilaç yok</string>
-    <string name="empty_archive">Arşivlenmiş ilaç yok</string>
-    <string name="stock_left">%1$s kaldı</string>
-    <string name="stock_low_left">Stok az: %1$s kaldı</string>
-    <plurals name="days_left">
-        <item quantity="one">yaklaşık %d gün</item>
-        <item quantity="other">yaklaşık %d gün</item>
-    </plurals>
     <string name="medication_add_title">İlaç ekle</string>
     <string name="medication_edit_title">İlacı düzenle</string>
     <string name="archive_confirm_title">İlaç arşive taşınsın mı?</string>
     <string name="archive_confirm_text">Hatırlatmalar durur ve gelecek dozlar kaldırılır. Geçmişi ve raporları bozulmaz; İlaçlarım > Arşiv sekmesinden tek dokunuşla geri alabilirsin.</string>
-    <string name="field_name">Ad</string>
-    <string name="field_dose_amount">Doz miktarı</string>
-    <string name="field_dose_unit">Birim</string>
     <string name="field_form">Form</string>
-    <string name="field_days">Günler</string>
-    <string name="field_interval">Aralık</string>
-    <string name="field_times">Saatler</string>
     <string name="field_start_date">Başlangıç tarihi</string>
-    <string name="field_end_date">Bitiş</string>
-    <string name="no_end_date">Bitiş yok</string>
-    <string name="clear_end_date">Bitiş tarihini temizle</string>
-    <string name="field_stock_tracking">Stok takibi</string>
-    <string name="field_stock_tracking_hint">Alınan her dozda azalır</string>
-    <string name="field_stock_quantity">Mevcut miktar</string>
-    <string name="field_low_stock_threshold">Uyarı eşiği</string>
-    <string name="field_low_stock_threshold_hint">İsteğe bağlı</string>
-    <string name="field_note">Not</string>
-    <string name="section_schedule">Plan</string>
-    <string name="add_time">Saat ekle</string>
-    <string name="remove_time">%1$s saatini kaldır</string>
     <string name="unit_tablet">tablet</string>
     <string name="unit_capsule">kapsül</string>
-    <string name="unit_mg">mg</string>
     <string name="unit_ml">ml</string>
     <string name="unit_drop">damla</string>
     <string name="unit_puff">puf</string>
@@ -109,14 +53,6 @@
     <string name="form_inhaler">Sprey</string>
     <string name="form_cream">Krem</string>
     <string name="form_other">Diğer</string>
-    <string name="schedule_type_daily">Her gün</string>
-    <string name="schedule_type_weekdays">Belirli günler</string>
-    <string name="schedule_type_every_n_days">X günde bir</string>
-    <string name="schedule_type_as_needed">Gerektiğinde (hatırlatmasız)</string>
-    <plurals name="every_n_days">
-        <item quantity="one">%d günde bir</item>
-        <item quantity="other">%d günde bir</item>
-    </plurals>
     <string name="schedule_summary_daily">Her gün %1$s</string>
     <string name="schedule_summary_weekdays">%1$s · %2$s</string>
     <plurals name="schedule_summary_every_n_days">
@@ -127,12 +63,10 @@
     <string name="error_name_required">Bir ad gir</string>
     <string name="error_too_long">En fazla %1$d karakter</string>
     <string name="error_amount_invalid">0\'dan büyük, en fazla 2 ondalıklı bir miktar gir</string>
-    <string name="error_unit_required">Bir birim gir</string>
     <string name="error_times_required">En az bir saat ekle</string>
     <string name="error_times_too_many">En fazla %1$d saat</string>
     <string name="error_days_required">En az bir gün seç</string>
     <string name="error_interval_range">%1$d ile %2$d gün arasında seç</string>
-    <string name="error_end_before_start">Bitiş tarihi başlangıçtan önce olamaz</string>
     <string name="error_number_invalid">0 veya daha büyük, en fazla 2 ondalıklı bir sayı gir</string>
 
     <!-- Bugün -->
@@ -141,50 +75,26 @@
     <string name="status_skipped">Atlandı</string>
     <string name="status_snoozed">Ertelendi</string>
     <string name="status_pending">Bekliyor</string>
-    <string name="warning_exact_alarms">Hatırlatmalar gecikebilir</string>
     <string name="fix">Düzelt</string>
-    <string name="warning_notifications_off">Bildirimler kapalı</string>
     <string name="turn_on">Aç</string>
     <string name="no_doses_today">Bugün için doz yok</string>
     <string name="section_as_needed">Gerektiğinde</string>
-    <string name="switch_profile">Profil değiştir</string>
-    <string name="overdue">Gecikti</string>
-    <string name="long_press_to_snooze">Ertelemek için uzun bas</string>
     <string name="undo">Geri al</string>
     <string name="take_now">Şimdi aldım</string>
-    <string name="low_stock_card_title">Stoku azalanlar</string>
 
     <!-- Geçmiş -->
-    <string name="monthly_adherence">Bu ayki uyum: %1$s</string>
     <string name="no_value">—</string>
     <string name="percent_value">%%%1$d</string>
     <string name="previous_month">Önceki ay</string>
     <string name="next_month">Sonraki ay</string>
-    <string name="day_all_taken">Tümü alındı</string>
-    <string name="day_partial">Kısmen alındı</string>
-    <string name="day_missed">Kaçırılan doz var</string>
     <string name="day_no_doses">Doz yok</string>
 
     <!-- Dışa aktar ve yedekle -->
     <string name="all_profiles">Tüm profiller</string>
     <string name="pro_required">Pro gerekli</string>
-    <string name="export_profile">Profil</string>
-    <string name="export_range">Tarih aralığı</string>
-    <string name="export_range_value">%1$s – %2$s</string>
-    <string name="range_7">Son 7 gün</string>
-    <string name="range_30">Son 30 gün</string>
-    <string name="range_90">Son 90 gün</string>
     <string name="range_custom">Özel</string>
-    <string name="export_csv">CSV olarak kaydet</string>
-    <string name="export_pdf">PDF rapor oluştur</string>
-    <string name="export_pdf_simple_hint">PDF rapor ilaçlarını ve dozlarını listeler. Pro, ilaç bazında uyum yüzdesini de ekler.</string>
-    <string name="export_pdf_detailed_hint">PDF rapor ilaç bazında ve genel uyum yüzdesini içerir.</string>
     <string name="export_failed">Dosya kaydedilemedi. Lütfen tekrar dene.</string>
-    <string name="file_saved">Dosya kaydedildi</string>
-    <string name="share">Paylaş</string>
     <string name="backup_section">Yedek</string>
-    <string name="backup_hint">Verilerin yalnızca bu telefonda saklanır. Taşımak veya kurtarmak için yedek dosyasını güvenli bir yere (ör. bulut depolama) kaydet.</string>
-    <string name="backup_create">Yedekle</string>
     <string name="backup_restore">Yedekten geri yükle</string>
     <string name="backup_restore_confirm_title">Yedek geri yüklensin mi?</string>
     <string name="backup_restore_confirm_text">Mevcut tüm veriler silinecek ve yedekteki verilerle değiştirilecek. Bu işlem geri alınamaz.</string>
@@ -200,15 +110,7 @@
     <string name="csv_action_time">işlem_zamanı</string>
     <string name="csv_profile">profil</string>
     <string name="pdf_title">DozDefteri · İlaç uyum özeti</string>
-    <string name="pdf_profile">Profil: %1$s</string>
-    <string name="pdf_range">Tarih aralığı: %1$s – %2$s</string>
     <string name="pdf_generated">Oluşturulma: %1$s</string>
-    <string name="pdf_medications">İlaçlar</string>
-    <string name="pdf_schedule">Plan</string>
-    <string name="pdf_doses">Dozlar</string>
-    <string name="pdf_time">Saat</string>
-    <string name="pdf_adherence">Uyum</string>
-    <string name="pdf_overall_adherence">Genel uyum: %1$s</string>
     <string name="pdf_empty">Kayıt yok</string>
     <string name="pdf_page">%1$d/%2$d</string>
 
@@ -218,78 +120,39 @@
     <string name="theme_system">Sistem ayarını izle</string>
     <string name="theme_light">Açık</string>
     <string name="theme_dark">Koyu</string>
-    <string name="settings_accent">Vurgu rengi</string>
-    <string name="settings_accent_pro_hint">Pro ile daha fazla renk</string>
-    <string name="accent_teal">Petrol mavisi</string>
-    <string name="accent_indigo">Çivit</string>
-    <string name="accent_orange">Turuncu</string>
-    <string name="accent_green">Yeşil</string>
     <string name="settings_reminders">Hatırlatmalar</string>
     <string name="settings_snooze">Erteleme süresi</string>
-    <string name="settings_missed_after">Kaçırıldı sayılma süresi</string>
-    <string name="settings_exact_alarms">Tam zamanlı hatırlatma</string>
-    <string name="settings_notifications">Bildirim ayarları</string>
-    <string name="settings_allowed">İzin verildi</string>
-    <string name="settings_not_allowed">İzin yok, düzeltmek için dokun</string>
-    <string name="settings_data">Veri</string>
-    <string name="settings_pro_status">Durum</string>
     <string name="settings_pro_active">Etkin · teşekkürler</string>
-    <string name="settings_pro_inactive">Ücretsiz sürüm</string>
     <string name="settings_about">Hakkında</string>
     <string name="settings_version">Sürüm</string>
-    <string name="settings_privacy_policy">Gizlilik politikası</string>
     <plurals name="minutes">
         <item quantity="one">%d dakika</item>
         <item quantity="other">%d dakika</item>
     </plurals>
-    <plurals name="hours">
-        <item quantity="one">%d saat</item>
-        <item quantity="other">%d saat</item>
-    </plurals>
 
     <!-- Profiller -->
     <string name="profiles_title">Profiller</string>
-    <string name="profile_add">Profil ekle</string>
     <string name="profile_edit">Profili düzenle</string>
     <string name="profile_edit_named">%1$s düzenle</string>
-    <string name="profile_delete_named">%1$s sil</string>
     <string name="profile_active">Aktif</string>
     <string name="profile_name">Ad</string>
     <string name="profile_color">Renk</string>
     <string name="profile_color_option">Renk %1$d</string>
     <string name="profile_delete_title">%1$s silinsin mi?</string>
     <string name="profile_delete_text">Bu profilin tüm ilaçları, geçmişi ve stok kayıtları kalıcı olarak silinecek.</string>
-    <string name="profiles_pro_hint">Ücretsiz sürüm bir profil içerir. Aile üyelerini Pro ile ekleyebilirsin.</string>
     <string name="delete">Sil</string>
 
     <!-- Pil rehberi -->
     <string name="battery_intro">Bazı telefonlar pil tasarrufu için uygulamaları arka planda durdurur; bu da hatırlatmaları geciktirebilir veya engelleyebilir. DozDefteri\'nin pil kısıtlaması olmadan çalışmasına izin vermek hatırlatmaların zamanında gelmesini sağlar.</string>
-    <string name="battery_open_settings">Pil optimizasyonu ayarlarını aç</string>
-    <string name="battery_brand_generic">Genel adımlar</string>
-    <string name="battery_brand_xiaomi">Xiaomi, Redmi, POCO</string>
-    <string name="battery_brand_samsung">Samsung</string>
-    <string name="battery_brand_huawei">Huawei, Honor</string>
-    <string name="battery_brand_oppo">OPPO, realme, OnePlus</string>
-    <string name="battery_brand_vivo">vivo</string>
     <string name="battery_steps_generic">1. Ayarlar > Uygulamalar > DozDefteri > Pil bölümünü aç.\n2. \"Kısıtlanmamış\" veya \"Optimize etme\" seçeneğini seç.\n3. DozDefteri için bildirimlerin açık olduğundan emin ol.</string>
     <string name="battery_steps_xiaomi">1. Ayarlar > Uygulamalar > Uygulamaları yönet > DozDefteri.\n2. \"Otomatik başlatma\"yı aç.\n3. Pil tasarrufu > \"Kısıtlama yok\".\n4. Son uygulamalarda DozDefteri\'ne uzun basıp kilit simgesine dokun.</string>
     <string name="battery_steps_samsung">1. Ayarlar > Pil > Arka plan kullanım sınırları.\n2. DozDefteri\'nin \"Uyuyan uygulamalar\" veya \"Derin uyuyan uygulamalar\" listesinde olmadığından emin ol.\n3. Ayarlar > Uygulamalar > DozDefteri > Pil > \"Kısıtlanmamış\".</string>
     <string name="battery_steps_huawei">1. Ayarlar > Pil > Uygulama başlatma.\n2. DozDefteri\'ni bul, \"Otomatik yönet\"i kapat.\n3. \"Otomatik başlatma\", \"İkincil başlatma\" ve \"Arka planda çalış\"ı aç.</string>
     <string name="battery_steps_oppo">1. Ayarlar > Pil > Diğer ayarlar > Pil kullanımını optimize et: DozDefteri için \"Optimize etme\"yi seç.\n2. Ayarlar > Uygulamalar > DozDefteri > Pil kullanımı: arka plan etkinliğine ve otomatik başlatmaya izin ver.</string>
-    <string name="battery_steps_vivo">1. Ayarlar > Pil > Arka plan güç tüketimi yönetimi.\n2. DozDefteri için yüksek arka plan güç kullanımına izin ver.\n3. Ayarlar > Uygulamalar > Otomatik başlatma: DozDefteri\'ni aç.</string>
 
     <!-- Pro -->
-    <string name="pro_headline">DozDefteri\'ni tek seferlik bir satın almayla destekle</string>
-    <string name="pro_feature_profiles">Aile üyeleri için sınırsız profil</string>
-    <string name="pro_feature_widget">Sıradaki dozu gösteren ana ekran widget\'ı</string>
-    <string name="pro_feature_pdf">İlaç bazında uyum yüzdeli detaylı PDF rapor</string>
-    <string name="pro_feature_colors">Ek vurgu renkleri</string>
-    <string name="pro_feature_all_profiles">Tüm profilleri birlikte dışa aktarma</string>
-    <string name="pro_price">Tek seferlik fiyat: %1$s</string>
-    <string name="pro_price_unavailable">Fiyat yüklenemedi. Google Play\'in erişilebilir olduğundan emin olup daha sonra tekrar dene.</string>
     <string name="pro_buy">Satın al</string>
     <string name="pro_restore">Satın alımı geri yükle</string>
-    <string name="pro_always_free">Hatırlatmalar ve ilaç sayısı her zaman ücretsizdir.</string>
     <string name="pro_active_thanks">Pro etkin. Teşekkürler!</string>
     <string name="pro_message_purchased">Pro açıldı. Teşekkürler!</string>
     <string name="pro_message_pending">Ödeme bekleniyor. Ödeme tamamlanınca Pro açılır.</string>
@@ -300,10 +163,8 @@
     <!-- Widget -->
     <string name="widget_name">Sıradaki doz</string>
     <string name="widget_description">Sıradaki dozunu ve bugünkü ilerlemeni gösterir</string>
-    <string name="widget_locked">Widget Pro ile kullanılabilir. Ayrıntılar için dokun.</string>
+    <string name="widget_locked">Widget Pro ile kullanılabilir</string>
     <string name="widget_no_more_doses">Bugün başka doz yok</string>
-    <string name="widget_next_at">%1$s · %2$s</string>
-    <string name="widget_summary">%1$d/%2$d alındı</string>
 
     <!-- UI v2 bileşenleri -->
     <string name="status_low_stock">Stok azalıyor</string>
@@ -530,4 +391,68 @@
     <string name="pro_buy_with_price">%1$s · Tek seferlik satın al</string>
     <string name="pro_price_unavailable_short">Fiyat yüklenemedi</string>
     <string name="pro_footnote">Ödeme Google Play üzerinden. Hesap gerekmez.</string>
+
+    <!-- Widget v2 -->
+    <string name="widget_summary_today">Bugün %1$d/%2$d alındı</string>
+    <string name="widget_header">%1$s · sıradaki</string>
+    <string name="widget_header_wide">%1$s · sıradaki · %2$s</string>
+    <string name="widget_more">%1$s +%2$d</string>
+    <string name="widget_tomorrow_first">Yarın ilk doz %1$s</string>
+
+    <!-- Karşılama v2 -->
+    <string name="onboarding_welcome_title">İlaçlarını hatırlamak, defter tutmak kadar sade.</string>
+    <string name="onboarding_point_subscription">Abonelik yok — bir kez kur, hep çalışsın.</string>
+    <string name="onboarding_point_account">Hesap yok — kayıt, e-posta, şifre istemez.</string>
+    <string name="onboarding_point_device">Verilerin yalnızca bu telefonda kalır.</string>
+    <string name="onboarding_notif_title">Hatırlatmaları bildirimle göndereceğiz.</string>
+    <string name="onboarding_notif_body">İlaç saatin geldiğinde, uygulamayı açmadan \"Aldım\" diyebilmen için bildirim iznine ihtiyacımız var.</string>
+    <string name="onboarding_sample_app">DozDefteri · şimdi</string>
+    <string name="onboarding_sample_title">Metformin 500 mg</string>
+    <string name="onboarding_sample_text">Saat 20:00 · 1 tablet</string>
+    <string name="onboarding_sample_a11y">Örnek bildirim: Metformin 500 mg, saat 20:00, Aldım, Ertele ve Atla düğmeleriyle</string>
+    <string name="onboarding_allow_notifications">Bildirimlere izin ver</string>
+    <string name="onboarding_not_now">Şimdi değil</string>
+    <string name="onboarding_on_time_title">Hatırlatmalar tam vaktinde çalsın</string>
+    <string name="onboarding_on_time_body">Telefonun pili korumak için uygulamaları uyutabilir. İki küçük ayarla hatırlatmalar dakikası dakikasına gelir.</string>
+    <string name="onboarding_step_exact">1. Tam vaktinde çalma izni</string>
+    <string name="onboarding_status_granted">Durum: verildi</string>
+    <string name="onboarding_status_denied">Durum: verilmedi</string>
+    <string name="onboarding_grant">İzin ver</string>
+    <string name="onboarding_step_battery">2. Pil kısıtlamasını kaldır</string>
+    <string name="onboarding_add_first">İlk ilacını ekle</string>
+    <string name="onboarding_page">Sayfa %1$d / %2$d</string>
+    <string name="battery_open_settings_short">Pil ayarını aç</string>
+    <string name="battery_step_numbered">%1$d. %2$s</string>
+    <string name="brand_xiaomi">Xiaomi</string>
+    <string name="brand_samsung">Samsung</string>
+    <string name="brand_huawei">Huawei</string>
+    <string name="brand_oppo">Oppo</string>
+    <string name="brand_other">Diğer</string>
+    <string name="battery_step_xiaomi_1">Ayarlar › Uygulamalar</string>
+    <string name="battery_step_xiaomi_2">DozDefteri › Pil tasarrufu</string>
+    <string name="battery_step_xiaomi_3">\"Kısıtlama yok\" seç</string>
+    <string name="battery_step_samsung_1">Ayarlar › Pil</string>
+    <string name="battery_step_samsung_2">Arka plan kullanım sınırları</string>
+    <string name="battery_step_samsung_3">DozDefteri\'ni uyuyanlardan çıkar</string>
+    <string name="battery_step_huawei_1">Ayarlar › Pil › Uygulama başlatma</string>
+    <string name="battery_step_huawei_2">DozDefteri › Otomatik yönet\'i kapat</string>
+    <string name="battery_step_huawei_3">Üç seçeneği de aç</string>
+    <string name="battery_step_oppo_1">Ayarlar › Pil</string>
+    <string name="battery_step_oppo_2">DozDefteri › Pil kullanımı</string>
+    <string name="battery_step_oppo_3">Arka plan etkinliğine izin ver</string>
+    <string name="battery_step_other_1">Ayarlar › Uygulamalar › DozDefteri</string>
+    <string name="battery_step_other_2">Pil</string>
+    <string name="battery_step_other_3">\"Kısıtlanmamış\" seç</string>
+
+    <!-- Profiller v2 -->
+    <string name="profile_add_plus">+ Profil ekle</string>
+    <string name="profile_new">Yeni profil</string>
+    <string name="profile_note">Not (isteğe bağlı)</string>
+    <string name="profile_note_placeholder">Ör. Babam</string>
+    <string name="profile_save">Profili kaydet</string>
+    <string name="profile_delete">Profili sil</string>
+    <plurals name="medication_count">
+        <item quantity="one">%d ilaç</item>
+        <item quantity="other">%d ilaç</item>
+    </plurals>
 </resources>

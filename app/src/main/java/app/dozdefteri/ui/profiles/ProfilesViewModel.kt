@@ -6,6 +6,7 @@ import app.dozdefteri.alarm.DoseNotifier
 import app.dozdefteri.alarm.DoseSync
 import app.dozdefteri.billing.ProStatus
 import app.dozdefteri.data.db.entity.ProfileEntity
+import app.dozdefteri.data.repository.MedicationRepository
 import app.dozdefteri.data.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -20,11 +21,15 @@ import javax.inject.Inject
 
 data class ProfilesUiState(
     val profiles: List<ProfileEntity> = emptyList(),
+    val medicationCounts: Map<Long, Int> = emptyMap(),
     val activeId: Long? = null,
     val isPro: Boolean = false
 ) {
     val canAdd: Boolean get() = isPro || profiles.size < ProStatus.FREE_PROFILE_LIMIT
     val canDelete: Boolean get() = profiles.size > 1
+
+    /** Colors other than the first are the Pro "profile colors". */
+    fun canUseColor(index: Int): Boolean = isPro || index == 0
 }
 
 sealed interface ProfilesEvent {
@@ -34,6 +39,7 @@ sealed interface ProfilesEvent {
 @HiltViewModel
 class ProfilesViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
+    medicationRepository: MedicationRepository,
     private val doseSync: DoseSync,
     private val notifier: DoseNotifier,
     proStatus: ProStatus,
@@ -42,30 +48,38 @@ class ProfilesViewModel @Inject constructor(
 
     val uiState: StateFlow<ProfilesUiState> = combine(
         profileRepository.profiles,
+        medicationRepository.observeActiveCounts(),
         profileRepository.activeProfile,
         proStatus.isPro
-    ) { profiles, active, pro ->
-        ProfilesUiState(profiles = profiles, activeId = active?.id, isPro = pro)
+    ) { profiles, counts, active, pro ->
+        ProfilesUiState(profiles = profiles, medicationCounts = counts, activeId = active?.id, isPro = pro)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProfilesUiState())
 
     private val _events = Channel<ProfilesEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
     /** Returns false (and asks to open the Pro screen) when another profile needs Pro. */
-    fun requestAdd(): Boolean {
-        if (uiState.value.canAdd) return true
-        viewModelScope.launch { _events.send(ProfilesEvent.OpenPro) }
-        return false
+    fun requestAdd(): Boolean = requirePro(uiState.value.canAdd)
+
+    /** Returns false (and asks to open the Pro screen) when the color needs Pro. */
+    fun requestColor(index: Int): Boolean = requirePro(uiState.value.canUseColor(index))
+
+    private fun requirePro(allowed: Boolean): Boolean {
+        if (!allowed) viewModelScope.launch { _events.send(ProfilesEvent.OpenPro) }
+        return allowed
     }
 
-    fun add(name: String, colorIndex: Int) {
-        if (!uiState.value.canAdd || name.isBlank()) return
-        viewModelScope.launch { profileRepository.add(name, colorIndex, clock.instant()) }
-    }
-
-    fun update(profile: ProfileEntity, name: String, colorIndex: Int) {
+    fun save(existing: ProfileEntity?, name: String, note: String, colorIndex: Int) {
         if (name.isBlank()) return
-        viewModelScope.launch { profileRepository.update(profile.copy(name = name, colorIndex = colorIndex)) }
+        val state = uiState.value
+        val color = if (state.canUseColor(colorIndex)) colorIndex else 0
+        viewModelScope.launch {
+            if (existing == null) {
+                if (state.canAdd) profileRepository.add(name, color, clock.instant(), note)
+            } else {
+                profileRepository.update(existing.copy(name = name, note = note, colorIndex = color))
+            }
+        }
     }
 
     fun setActive(profileId: Long) {
@@ -82,5 +96,6 @@ class ProfilesViewModel @Inject constructor(
 
     companion object {
         const val NAME_MAX = 30
+        const val NOTE_MAX = 40
     }
 }

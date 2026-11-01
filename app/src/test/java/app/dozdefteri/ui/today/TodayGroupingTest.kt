@@ -12,7 +12,12 @@ import java.time.LocalTime
 
 class TodayGroupingTest {
 
-    private fun dose(medicationId: Long, time: String, status: DoseStatus = DoseStatus.PENDING, snoozedTo: String? = null) =
+    private fun dose(
+        medicationId: Long,
+        time: String,
+        status: DoseStatus = DoseStatus.PENDING,
+        snoozedTo: String? = null
+    ) =
         TodayDose(
             details = DoseEventDetails(
                 event = DoseEventEntity(
